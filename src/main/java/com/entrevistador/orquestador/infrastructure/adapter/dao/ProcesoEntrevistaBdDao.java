@@ -4,7 +4,9 @@ import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
 
     private final ProcesoEntrevistaRepository procesoEntrevistaRepository;

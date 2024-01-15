@@ -6,7 +6,6 @@ public class ActualizarEstadoProvesoEntrevistaService {
 
     public void ejecutar(String idEvento, EstadoProcesoEnum estadoProcesoEnum){
 
-
     }
 
 }

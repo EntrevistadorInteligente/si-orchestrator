@@ -1,6 +1,7 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
+import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
@@ -27,7 +28,11 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
         this.validadorPdfService.ejecutar(hojaDeVida);
         var idEntrevista = this.crearEntrevistaService.ejecutar();
         var eventoEntrevista = procesoEntrevistaDao.crearEvento();
-        this.analizadorClient.enviarHojaDeVida(idEntrevista, eventoEntrevista.getId(), hojaDeVida);
+        this.analizadorClient.enviarHojaDeVida(PreparacionEntrevistaDto.builder()
+                        .idEntrevista(idEntrevista)
+                        .eventoEntrevistaId(eventoEntrevista.getId())
+                        .hojadevida(hojaDeVida)
+                .build());
 
     }
 
