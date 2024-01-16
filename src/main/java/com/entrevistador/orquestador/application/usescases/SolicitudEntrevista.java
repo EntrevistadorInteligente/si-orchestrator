@@ -1,7 +1,11 @@
 package com.entrevistador.orquestador.application.usescases;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public interface SolicitudEntrevista {
 
-    void generarSolicitudEntrevista(byte[] hojaDeVida);
+    void generarSolicitudEntrevista(MultipartFile file);
+
+    void generarOfertaLaboral(MultipartFile file);
 
 }
