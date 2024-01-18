@@ -1,11 +1,9 @@
 package com.entrevistador.orquestador.application.usescases;
 
-import org.springframework.web.multipart.MultipartFile;
+import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 
 public interface SolicitudEntrevista {
 
-    void generarSolicitudEntrevista(MultipartFile file);
-
-    void generarOfertaLaboral(MultipartFile file);
+    void generarSolicitudEntrevista(byte[] hojaDeVida, FormularioDto formulario);
 
 }
