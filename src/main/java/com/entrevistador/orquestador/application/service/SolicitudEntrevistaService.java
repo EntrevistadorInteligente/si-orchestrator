@@ -3,13 +3,15 @@ package com.entrevistador.orquestador.application.service;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
 import com.entrevistador.orquestador.infrastructure.adapter.client.AnalizadorClient;
 import com.entrevistador.orquestador.infrastructure.adapter.client.RecopiladorEmpresaClient;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class SolicitudEntrevistaService implements SolicitudEntrevista {
@@ -28,24 +30,30 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
         this.recopiladorEmpresaClient = recopiladorEmpresaClient;
     }
 
-    @Override
-    @Async
-    public void generarSolicitudEntrevista(byte[] hojaDeVida, FormularioDto formulario) {
-        this.validadorPdfService.ejecutar(hojaDeVida);
-        var idEntrevista = this.crearEntrevistaService.ejecutar();
-        var eventoEntrevista = procesoEntrevistaDao.crearEvento();
+    public Mono<Void> generarSolicitudEntrevista(Mono<FilePart> file, FormularioDto formulario) {
+        return file.flatMap(this.validadorPdfService::ejecutar)
+                .flatMap(bytes -> this.procesarHojaDeVida(bytes, formulario));
+    }
 
-        //FUTURE Simultaneamente
+    private Mono<Void> procesarHojaDeVida(byte[] hojaDeVidaBytes, FormularioDto formulario) {
+        return this.crearEntrevistaService.ejecutar()
+                .zipWith(this.procesoEntrevistaDao.crearEvento(), (idEntrevista, eventoEntrevista) ->
+                        this.enviarHojaDeVida(idEntrevista, eventoEntrevista, hojaDeVidaBytes)
+                )
+                .flatMap(result -> this.enviarInformacionEmpresa(formulario));
+    }
 
-        this.analizadorClient.enviarHojaDeVida(PreparacionEntrevistaDto.builder()
+    private Mono<Void> enviarHojaDeVida(String idEntrevista, ProcesoEntrevistaDto eventoEntrevista, byte[] hojaDeVidaBytes) {
+        return Mono.fromRunnable(() -> this.analizadorClient.enviarHojaDeVida(
+                PreparacionEntrevistaDto.builder()
                         .idEntrevista(idEntrevista)
                         .eventoEntrevistaId(eventoEntrevista.getId())
-                        .hojadevida(hojaDeVida)
-                .build());
+                        .hojadevida(hojaDeVidaBytes)
+                        .build()));
+    }
 
-        // formulario
-        this.recopiladorEmpresaClient.enviarInformacionEmpresa(formulario);
-
+    private Mono<Void> enviarInformacionEmpresa(FormularioDto formulario) {
+        return Mono.fromRunnable(() -> this.recopiladorEmpresaClient.enviarInformacionEmpresa(formulario));
     }
 
 }

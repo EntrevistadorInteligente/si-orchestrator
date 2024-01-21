@@ -1,14 +1,27 @@
 package com.entrevistador.orquestador.infrastructure.adapter.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
+@Table(name = "PROCESO_ENTREVISTA")
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProcesoEntrevistaEntity {
-    /**
-     * TODO
-     * Cambiar por uuid
-     */
+
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "proceso_entrevista_id")
+    private String procesoEntrevistaId;
+    @Column(name = "fecha_hora")
+    private String fechaHora;
+    private String estado;
+    private String fuente;
+    private String error;
+
 }

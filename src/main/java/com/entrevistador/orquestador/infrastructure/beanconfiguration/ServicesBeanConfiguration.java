@@ -9,15 +9,20 @@ import com.entrevistador.orquestador.dominio.service.NotificarFrontEntrevistaFal
 import com.entrevistador.orquestador.dominio.service.SolicitudPreparacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
+import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class ServicesBeanConfiguration {
+
+    private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
 
     @Bean
     public ActualizarEstadoProvesoEntrevistaService actualizarEstadoProvesoEntrevistaService(){
-        return new ActualizarEstadoProvesoEntrevistaService();
+        return new ActualizarEstadoProvesoEntrevistaService(procesoEntrevistaRepository);
     }
     @Bean
     public ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService(){
@@ -26,7 +31,7 @@ public class ServicesBeanConfiguration {
 
     @Bean
     public CrearEntrevistaAlternativaService crearEntrevistaAlternativaService(NotificarFrontEntrevistaFallidaService notificarFrontEntrevistaFallidaService){
-        return new CrearEntrevistaAlternativaService(notificarFrontEntrevistaFallidaService);
+        return new CrearEntrevistaAlternativaService(notificarFrontEntrevistaFallidaService, procesoEntrevistaRepository);
     }
 
     @Bean
