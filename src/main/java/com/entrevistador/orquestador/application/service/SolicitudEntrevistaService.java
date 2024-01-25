@@ -5,10 +5,10 @@ import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
+import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
+import com.entrevistador.orquestador.dominio.port.client.RecopiladorEmpresaClient;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
-import com.entrevistador.orquestador.infrastructure.adapter.client.AnalizadorClient;
-import com.entrevistador.orquestador.infrastructure.adapter.client.RecopiladorEmpresaClient;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -44,16 +44,16 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
     }
 
     private Mono<Void> enviarHojaDeVida(String idEntrevista, ProcesoEntrevistaDto eventoEntrevista, byte[] hojaDeVidaBytes) {
-        return Mono.fromRunnable(() -> this.analizadorClient.enviarHojaDeVida(
+        return this.analizadorClient.enviarHojaDeVida(
                 PreparacionEntrevistaDto.builder()
                         .idEntrevista(idEntrevista)
                         .eventoEntrevistaId(eventoEntrevista.getId())
                         .hojadevida(hojaDeVidaBytes)
-                        .build()));
+                        .build());
     }
 
     private Mono<Void> enviarInformacionEmpresa(FormularioDto formulario) {
-        return Mono.fromRunnable(() -> this.recopiladorEmpresaClient.enviarInformacionEmpresa(formulario));
+        return this.recopiladorEmpresaClient.enviarInformacionEmpresa(formulario);
     }
 
 }

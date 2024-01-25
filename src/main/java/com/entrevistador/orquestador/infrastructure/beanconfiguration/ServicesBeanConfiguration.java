@@ -12,6 +12,7 @@ import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class ServicesBeanConfiguration {
@@ -55,6 +56,12 @@ public class ServicesBeanConfiguration {
     @Bean
     public ValidadorPdfService validadorPdfService() {
         return new ValidadorPdfService();
+    }
+
+    //TODO: Tal vez cambiar el bean WebClient a otra Clase configuradora
+    @Bean
+    public WebClient webClient(WebClient.Builder builder) {
+        return builder.baseUrl("urlbase").build();
     }
 
 }
