@@ -5,6 +5,7 @@ import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Mono;
 
 @Repository
 public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
@@ -16,9 +17,9 @@ public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
     }
 
     @Override
-    public ProcesoEntrevistaDto crearEvento() {
+    public Mono<ProcesoEntrevistaDto> crearEvento() {
         ProcesoEntrevistaEntity asd = procesoEntrevistaRepository.save(new ProcesoEntrevistaEntity());
-        return new ProcesoEntrevistaDto();
+        return Mono.just(new ProcesoEntrevistaDto());
     }
 
     @Override
