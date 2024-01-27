@@ -58,10 +58,5 @@ public class ServicesBeanConfiguration {
         return new ValidadorPdfService();
     }
 
-    //TODO: Tal vez cambiar el bean WebClient a otra Clase configuradora
-    @Bean
-    public WebClient webClient(WebClient.Builder builder) {
-        return builder.baseUrl("urlbase").build();
-    }
 
 }
