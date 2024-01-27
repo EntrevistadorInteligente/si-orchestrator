@@ -1,9 +1,11 @@
 package com.entrevistador.orquestador.application.usescases;
 
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
+import org.springframework.http.codec.multipart.FilePart;
+import reactor.core.publisher.Mono;
 
 public interface SolicitudEntrevista {
 
-    void generarSolicitudEntrevista(byte[] hojaDeVida, FormularioDto formulario);
+    Mono<Void> generarSolicitudEntrevista(Mono<FilePart> file, FormularioDto formularioDto);
 
 }

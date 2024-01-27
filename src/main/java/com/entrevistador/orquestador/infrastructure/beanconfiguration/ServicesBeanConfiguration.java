@@ -1,7 +1,7 @@
 package com.entrevistador.orquestador.infrastructure.beanconfiguration;
 
 
-import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProvesoEntrevistaService;
+import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaService;
@@ -18,8 +18,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class ServicesBeanConfiguration {
 
     @Bean
-    public ActualizarEstadoProvesoEntrevistaService actualizarEstadoProvesoEntrevistaService(ProcesoEntrevistaRepository procesoEntrevistaRepository) {
-        return new ActualizarEstadoProvesoEntrevistaService(procesoEntrevistaRepository);
+    public ActualizarEstadoProcesoEntrevistaService actualizarEstadoProvesoEntrevistaService(ProcesoEntrevistaRepository procesoEntrevistaRepository) {
+        return new ActualizarEstadoProcesoEntrevistaService(procesoEntrevistaRepository);
     }
 
     @Bean

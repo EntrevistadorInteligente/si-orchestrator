@@ -6,7 +6,7 @@ import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEn
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ActualizarEstadoProvesoEntrevistaService {
+public class ActualizarEstadoProcesoEntrevistaService {
 
     private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
 

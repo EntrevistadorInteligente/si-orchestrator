@@ -6,7 +6,7 @@ import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.SolicitudPreparacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
-import com.entrevistador.orquestador.infrastructure.adapter.client.PreparadorClient;
+import com.entrevistador.orquestador.dominio.port.client.PreparadorClient;
 import org.springframework.stereotype.Service;
 
 @Service
