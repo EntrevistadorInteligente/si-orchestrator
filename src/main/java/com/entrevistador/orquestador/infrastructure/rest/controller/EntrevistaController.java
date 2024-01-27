@@ -25,9 +25,6 @@ public class EntrevistaController {
             @RequestPart("file") Mono<FilePart> file,
             @RequestPart("formulario") FormularioDto formularioDto
     ) {
-        // TODO: eliminar los sout y quitar el @ToString de la Clase FormularioDto
-        System.out.println(file);
-        System.out.println(formularioDto);
         return this.solicitudEntrevista.generarSolicitudEntrevista(file, formularioDto)
                 .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
                         .body("Archivo PDF cargado con exito")));
