@@ -1,10 +1,7 @@
 package com.entrevistador.orquestador.infrastructure.adapter.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -12,6 +9,7 @@ import lombok.Setter;
 @Table(name = "PROCESO_ENTREVISTA")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProcesoEntrevistaEntity {
 
     @Id

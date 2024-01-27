@@ -2,7 +2,13 @@ package com.entrevistador.orquestador.dominio.model;
 
 import lombok.Getter;
 
+import java.util.Date;
+
 @Getter
 public class ProcesoEntrevista {
-    public String uuid;
+    private String uuid;
+    private Date fechaYHora;
+    private String estado;
+    private String fuente;
+    private String error;
 }
