@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 
 @RestController
-@RequestMapping("/api/v1/entrevistador/orquestador")
+@RequestMapping("/v1/entrevistador")
 @RequiredArgsConstructor
 public class EntrevistaController {
 
@@ -29,6 +30,12 @@ public class EntrevistaController {
                 .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
                         .body("Archivo PDF cargado con exito")));
     }
+
+    @GetMapping(value = "/cv2")
+    public String crearSolicitudEntrevista() {
+        return "Listo parce";
+    }
+
 
 }
 
