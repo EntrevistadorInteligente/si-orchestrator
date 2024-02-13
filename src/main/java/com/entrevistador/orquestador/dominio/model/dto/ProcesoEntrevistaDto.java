@@ -1,14 +1,13 @@
 package com.entrevistador.orquestador.dominio.model.dto;
 
-
+import lombok.Builder;
 import lombok.Getter;
 
-import java.util.Date;
-
 @Getter
+@Builder
 public class ProcesoEntrevistaDto {
     private String uuid;
-    private Date fechaYHora;
+    private String fechaYHora;
     private String estado;
     private String fuente;
     private String error;

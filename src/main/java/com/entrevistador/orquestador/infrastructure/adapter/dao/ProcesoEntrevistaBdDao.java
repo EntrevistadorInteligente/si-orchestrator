@@ -7,6 +7,8 @@ import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEn
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+
 @Repository
 public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
 
@@ -18,8 +20,14 @@ public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
 
     @Override
     public Mono<ProcesoEntrevistaDto> crearEvento() {
-        ProcesoEntrevistaEntity asd = procesoEntrevistaRepository.save(new ProcesoEntrevistaEntity());
-        return Mono.just(new ProcesoEntrevistaDto());
+        ProcesoEntrevistaEntity procesoEntrevistaEntity = procesoEntrevistaRepository.save(new ProcesoEntrevistaEntity());
+        return Mono.just(ProcesoEntrevistaDto.builder()
+                .uuid(procesoEntrevistaEntity.getProcesoEntrevistaId())
+                .fechaYHora(LocalDate.now().toString())
+                .estado(procesoEntrevistaEntity.getEstado())
+                .fuente(procesoEntrevistaEntity.getFuente())
+                .error(procesoEntrevistaEntity.getError())
+                .build());
     }
 
     @Override
