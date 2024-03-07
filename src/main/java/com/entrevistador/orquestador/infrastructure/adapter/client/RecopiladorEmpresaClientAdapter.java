@@ -1,7 +1,7 @@
 package com.entrevistador.orquestador.infrastructure.adapter.client;
 
-import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
-import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
+import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
+import com.entrevistador.orquestador.dominio.port.client.RecopiladorEmpresaClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -10,17 +10,17 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class AnalizadorClientImp implements AnalizadorClient {
+public class RecopiladorEmpresaClientAdapter implements RecopiladorEmpresaClient {
 
     private final WebClient webClient;
 
     @Override
-    public Mono<Void> enviarHojaDeVida(PreparacionEntrevistaDto preparacionEntrevistaDto) {
+    public Mono<Void> enviarInformacionEmpresa(FormularioDto formulario) {
         return this.webClient
                 .post()
                 .uri("URI")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(preparacionEntrevistaDto), PreparacionEntrevistaDto.class)
+                .body(Mono.just(formulario), FormularioDto.class)
                 .retrieve()
                 .bodyToMono(Void.class);
     }

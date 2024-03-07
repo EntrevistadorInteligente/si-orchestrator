@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class PreparadorClientImp implements PreparadorClient {
+public class PreparadorClientAdapter implements PreparadorClient {
 
     private final WebClient webClient;
 
