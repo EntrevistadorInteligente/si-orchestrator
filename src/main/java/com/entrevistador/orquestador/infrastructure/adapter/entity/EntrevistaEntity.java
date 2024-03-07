@@ -2,7 +2,9 @@ package com.entrevistador.orquestador.infrastructure.adapter.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class EntrevistaEntity {
     /**
@@ -10,5 +12,6 @@ public class EntrevistaEntity {
      * Cambiar por uuid
      */
     @Id
-    private int id;
+    private String uuid;
+
 }
