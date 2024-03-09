@@ -16,9 +16,7 @@ public class ProcesoEntrevistaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "proceso_entrevista_id")
     private String procesoEntrevistaId;
-    @Column(name = "fecha_hora")
     private String fechaHora;
     private String estado;
     private String fuente;

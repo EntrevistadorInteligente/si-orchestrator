@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 @WebFluxTest
 class EntrevistaControllerTest {
 
-    private final StringBuilder URL = new StringBuilder("/api/v1/entrevistador/orquestador");
+    private final StringBuilder URL = new StringBuilder("/v1/entrevistador");
 
     @Autowired
     private WebTestClient webTestClient;
