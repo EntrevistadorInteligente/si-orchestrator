@@ -7,7 +7,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NonNull;
 
 import java.time.LocalDate;
 
@@ -16,7 +20,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "PROCESO_ENTREVISTA")
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class ProcesoEntrevistaEntity {
 
