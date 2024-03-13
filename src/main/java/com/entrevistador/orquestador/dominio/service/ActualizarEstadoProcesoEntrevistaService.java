@@ -1,8 +1,9 @@
 package com.entrevistador.orquestador.dominio.service;
 
 import com.entrevistador.orquestador.dominio.excepciones.IdEstadoException;
+import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
-import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
+import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -13,18 +14,20 @@ import java.time.LocalDate;
 public class ActualizarEstadoProcesoEntrevistaService {
 
     private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
-    private ProcesoEntrevistaEntity procesoEntrevistaEntity;
 
     public void ejecutar(String idEvento, EstadoProcesoEnum estadoProcesoEnum) {
-        this.procesoEntrevistaEntity = this.procesoEntrevistaRepository.getReferenceById(idEvento);
-
-        if (this.procesoEntrevistaEntity == null){
+        var procesoEntrevistaEntity = this.procesoEntrevistaRepository.getReferenceById(idEvento);
+        if (procesoEntrevistaEntity == null){
             throw new IdEstadoException("Id de estado no encontrado. ID: "+idEvento);
         } else {
-            this.procesoEntrevistaEntity.setFechaHora(LocalDate.now().toString());
-            this.procesoEntrevistaEntity.setEstado("");
-            this.procesoEntrevistaEntity.setFuente("");
-            this.procesoEntrevistaEntity.setError("");
+            procesoEntrevistaEntity.actualizar(ProcesoEntrevistaDto
+                    .builder()
+                    .uuid("")
+                    .fechaYHora("")
+                    .fuente(FuenteEnum.ANALIZADOR)
+                    .estado(EstadoProcesoEnum.AR)
+                    .error("")
+                    .build());
         }
 
         this.procesoEntrevistaRepository.save(procesoEntrevistaEntity);

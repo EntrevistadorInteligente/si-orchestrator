@@ -4,15 +4,23 @@ import lombok.Getter;
 
 @Getter
 public enum EstadoProcesoEnum {
-    ANALIZADOR(new String[]{"Analizando CV", "Analizando oferta de empleo", "Comprobando validez de archivo", "Analizando empresas"}),
-    GENERADOR_FEEDBACK(new String[]{"Generando feedback", "Generando feedback general"}),
-    ORQUESTADOR(new String[]{""}),
-    PREPARADOR_ENTREVISTA(new String[]{"Generando preguntas", "Obteniendo respuesta", "Analizando respuesta", "Acumular feedback"});
+    AC("Analizando CV"),
+    AOE("Analizando oferta de empleo"),
+    CVA("Comprobando validez de archivo"),
+    AE("Analizando empresas"),
 
-    String[] estados;
+    GF("Generando feedback"),
+    GFG("Generando feedback general"),
 
-    private EstadoProcesoEnum(String[] estados){
-        this.estados = estados;
+    GP("Generando preguntas"),
+    OR("Obteniendo respuesta"),
+    AR("Analizando respuesta"),
+    AF("Acumular feedback");
+
+    private String descripcion;
+
+    private EstadoProcesoEnum(String descripcion){
+        this.descripcion = descripcion;
     }
 
 }
