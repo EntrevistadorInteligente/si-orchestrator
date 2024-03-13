@@ -2,35 +2,32 @@ package com.entrevistador.orquestador.dominio.service;
 
 import com.entrevistador.orquestador.dominio.excepciones.IdEstadoException;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
-import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
-import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
+import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
+import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
 
 
 @RequiredArgsConstructor
 public class ActualizarEstadoProcesoEntrevistaService {
 
-    private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
+    private final ProcesoEntrevistaDao procesoEntrevistaDao;
 
-    public void ejecutar(String idEvento, EstadoProcesoEnum estadoProcesoEnum) {
-        var procesoEntrevistaEntity = this.procesoEntrevistaRepository.getReferenceById(idEvento);
-        if (procesoEntrevistaEntity == null){
-            throw new IdEstadoException("Id de estado no encontrado. ID: "+idEvento);
-        } else {
-            procesoEntrevistaEntity.actualizar(ProcesoEntrevistaDto
-                    .builder()
-                    .uuid("")
-                    .fechaYHora("")
-                    .fuente(FuenteEnum.ANALIZADOR)
-                    .estado(EstadoProcesoEnum.AR)
-                    .error("")
-                    .build());
-        }
+    public void ejecutar(ProcesoEntrevistaDto procesoEntrevistaDtoParam) {
+        ProcesoEntrevistaDto procesoEntrevistaDto = this.procesoEntrevistaDao
+                .obtenerEventoPorId(procesoEntrevistaDtoParam.getUuid());
 
-        this.procesoEntrevistaRepository.save(procesoEntrevistaEntity);
+        if (procesoEntrevistaDto == null)
+            throw new IdEstadoException("Id de estado no encontrado. ID: "+procesoEntrevistaDtoParam.getUuid());
+
+        procesoEntrevistaDto.actualizar(procesoEntrevistaDtoParam);
+
+        this.procesoEntrevistaDao.actualizar(ProcesoEntrevistaEntity.builder()
+                .procesoEntrevistaId(procesoEntrevistaDto.getUuid())
+                .fechaHora(procesoEntrevistaDto.getFechaYHora())
+                .estado(procesoEntrevistaDto.getEstado())
+                .fuente(procesoEntrevistaDto.getFuente())
+                .error(procesoEntrevistaDto.getError())
+                .build());
     }
 
 }

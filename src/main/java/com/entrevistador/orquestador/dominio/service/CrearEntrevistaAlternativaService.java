@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.dominio.service;
 
-import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
+import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +11,8 @@ public class CrearEntrevistaAlternativaService {
     private final NotificarFrontEntrevistaFallidaService notificarFrontEntrevistaFallidaService;
     private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
 
-    public String ejecutar(String idEvento, EstadoProcesoEnum estadoProcesoEnum, String idEntrevista){
-        this.procesoEntrevistaRepository.save(new ProcesoEntrevistaEntity());
+    public String ejecutar(ProcesoEntrevistaDto procesoEntrevistaDto, String idEntrevista){
+        this.procesoEntrevistaRepository.save(ProcesoEntrevistaEntity.builder().build());
         return null;
     }
 

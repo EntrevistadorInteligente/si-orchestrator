@@ -19,7 +19,7 @@ public enum EstadoProcesoEnum {
 
     private String descripcion;
 
-    private EstadoProcesoEnum(String descripcion){
+    EstadoProcesoEnum(String descripcion){
         this.descripcion = descripcion;
     }
 

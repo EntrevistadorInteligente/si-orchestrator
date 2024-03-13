@@ -15,8 +15,14 @@ public enum FuenteEnum {
 
     private List<EstadoProcesoEnum> estado;
 
-    private FuenteEnum(EstadoProcesoEnum[] estado){
+    FuenteEnum(EstadoProcesoEnum[] estado){
         this.estado = Arrays.asList(estado);
+    }
+
+    public EstadoProcesoEnum validarEstado(FuenteEnum fuenteEnum, EstadoProcesoEnum estadoProcesoEnum){
+        if(fuenteEnum.getEstado().contains(estadoProcesoEnum))
+            return estadoProcesoEnum;
+        return null;
     }
 
 }
