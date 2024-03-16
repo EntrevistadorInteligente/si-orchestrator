@@ -11,7 +11,6 @@ import com.entrevistador.orquestador.dominio.service.SolicitudPreparacionEntrevi
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
-import com.entrevistador.orquestador.infrastructure.adapter.jms.JmsListenerAdapter;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
