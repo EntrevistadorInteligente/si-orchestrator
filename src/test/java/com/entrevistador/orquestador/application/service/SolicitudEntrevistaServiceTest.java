@@ -38,7 +38,7 @@ class SolicitudEntrevistaServiceTest {
     void generarSolicitudEntrevistaTest() {
         when(this.validadorPdfService.ejecutar(any())).thenReturn(Mono.just(new byte[]{}));
         when(this.crearEntrevistaService.ejecutar()).thenReturn(Mono.just("any"));
-        when(this.procesoEntrevistaDao.crearEvento()).thenReturn(Mono.just(new ProcesoEntrevistaDto()));
+        when(this.procesoEntrevistaDao.crearEvento()).thenReturn(Mono.just(ProcesoEntrevistaDto.builder().build()));
         when(this.analizadorClient.enviarHojaDeVida(any())).thenReturn(Mono.empty());
         when(this.recopiladorEmpresaClient.enviarInformacionEmpresa(any())).thenReturn(Mono.empty());
 

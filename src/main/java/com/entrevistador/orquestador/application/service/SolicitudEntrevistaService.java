@@ -47,7 +47,7 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
         return this.analizadorClient.enviarHojaDeVida(
                 PreparacionEntrevistaDto.builder()
                         .idEntrevista(idEntrevista)
-                        .eventoEntrevistaId(eventoEntrevista.getId())
+                        .eventoEntrevistaId(eventoEntrevista.getUuid())
                         .hojadevida(hojaDeVidaBytes)
                         .build());
     }
