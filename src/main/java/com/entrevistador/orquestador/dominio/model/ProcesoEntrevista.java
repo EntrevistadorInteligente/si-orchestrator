@@ -1,6 +1,5 @@
 package com.entrevistador.orquestador.dominio.model;
 
-import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
 import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
 import lombok.Getter;

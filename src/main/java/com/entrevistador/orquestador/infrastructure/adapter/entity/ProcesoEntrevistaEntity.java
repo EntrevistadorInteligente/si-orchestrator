@@ -1,6 +1,5 @@
 package com.entrevistador.orquestador.infrastructure.adapter.entity;
 
-import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
 import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
 import jakarta.persistence.Entity;
@@ -9,9 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;
+
 import java.util.Date;
 
 @Getter

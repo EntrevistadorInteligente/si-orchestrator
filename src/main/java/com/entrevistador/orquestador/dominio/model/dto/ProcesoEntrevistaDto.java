@@ -6,7 +6,6 @@ import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 
 import java.util.Date;
 
