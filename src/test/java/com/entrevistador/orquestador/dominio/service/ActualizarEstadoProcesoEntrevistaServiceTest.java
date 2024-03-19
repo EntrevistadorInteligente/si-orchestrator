@@ -1,5 +1,6 @@
 package com.entrevistador.orquestador.dominio.service;
 
+import com.entrevistador.orquestador.dominio.excepciones.ActualizarEstadoEntrevistaException;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
 import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
@@ -27,7 +28,8 @@ public class ActualizarEstadoProcesoEntrevistaServiceTest {
 
     @Test
     public void dtoVacioActualizarTest() {
-        Assertions.assertEquals(null, this.procesoEntrevistaDtoActualizar.actualizar(procesoEntrevistaDtoVacio));
+        Assertions.assertThrows(ActualizarEstadoEntrevistaException.class, () ->
+                this.procesoEntrevistaDtoActualizar.actualizar(procesoEntrevistaDtoVacio));
     }
 
     @Test
