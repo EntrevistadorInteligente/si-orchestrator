@@ -6,11 +6,11 @@ import lombok.Data;
 
 @Builder
 @Data
-public class PreparacionEntrevistaDto {
+public class PerfilEntrevistaDto {
     @JsonProperty("id_entrevista")
     private String idEntrevista;
     @JsonProperty("evento_entrevista_id")
     private  String eventoEntrevistaId;
-    @JsonProperty("hoja_de_vida")
-    private  byte[] hojaDeVida;
+    @JsonProperty("formulario")
+    private  FormularioDto formulario;
 }

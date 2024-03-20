@@ -18,8 +18,10 @@ public class EntrevistaBdDao implements EntrevistaDao {
     @Override
     public Mono<String> crearEntrevista() {
         //TODO: Cambiar a una DBMS Reactivo
-        return Mono.just(this.entrevistaRepository.save(new EntrevistaEntity()))
-                .map(EntrevistaEntity::getUuid);
+        /*return Mono.just(this.entrevistaRepository.save(new EntrevistaEntity()))
+                .map(EntrevistaEntity::getUuid);*/
+
+        return Mono.just("9d2bf204-8f5f-48a1-beff-b83b9db49855");
     }
 
 }

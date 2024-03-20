@@ -9,7 +9,7 @@ public class WebClientConfig {
 
     @Bean
     public WebClient webClientAnalizador(WebClient.Builder builder) {
-        return builder.baseUrl("http://ANALIZADOR").build();
+        return builder.baseUrl("http://127.0.0.1:8000/analizador").build();
     }
 
     @Bean

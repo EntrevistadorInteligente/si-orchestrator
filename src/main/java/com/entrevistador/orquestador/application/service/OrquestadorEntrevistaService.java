@@ -25,14 +25,14 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     }
 
     @Override
-    public void receptorHojaDeVida(String idEntrevista, String eventoEntrevistaId , HojaDeVidaDto resume) {
+    public void receptorHojaDeVida(String idEntrevista, HojaDeVidaDto resume) {
         this.actualizarInformacionEntrevistaService.actualizarHojaDeVida(idEntrevista, resume);
         var eventosFinalizados = this.validadorEventosSimultaneosService.ejecutar(idEntrevista);
         enviarInformacionEntrevistaAPreparador(eventosFinalizados);
     }
 
     @Override
-    public void receptorInformacionEmpresa(String idEntrevista,String eventoEntrevistaId, InformacionEmpresaDto info) {
+    public void receptorInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info) {
         var eventosFinalizados = this.validadorEventosSimultaneosService.ejecutar(idEntrevista);
         this.actualizarInformacionEntrevistaService.actualizarInrfomacionEmpresa(idEntrevista, info);
         enviarInformacionEntrevistaAPreparador(eventosFinalizados);
@@ -48,6 +48,7 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
             this.solicitudPreparacionEntrevistaService.ejecutar();
             this.preparadorClient.generarEntrevista();
         }
+
     }
 
 }

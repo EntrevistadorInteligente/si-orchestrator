@@ -5,7 +5,7 @@ import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 
 public interface OrquestadorEntrevista {
 
-    void receptorHojaDeVida(String idEntrevista,String eventoEntrevistaId, HojaDeVidaDto resume);
-    void receptorInformacionEmpresa(String idEntrevista,String eventoEntrevistaId, InformacionEmpresaDto info);
+    void receptorHojaDeVida(String idEntrevista, HojaDeVidaDto resume);
+    void receptorInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info);
     void generarEntrevistaConDatosDummy(String idEntrevista);
 }

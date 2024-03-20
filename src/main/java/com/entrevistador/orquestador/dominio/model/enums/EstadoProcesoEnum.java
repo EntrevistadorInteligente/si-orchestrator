@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum EstadoProcesoEnum {
     AC("Analizando CV"),
+    FN ("Finalizado"),
     AOE("Analizando oferta de empleo"),
     CVA("Comprobando validez de archivo"),
     AE("Analizando empresas"),

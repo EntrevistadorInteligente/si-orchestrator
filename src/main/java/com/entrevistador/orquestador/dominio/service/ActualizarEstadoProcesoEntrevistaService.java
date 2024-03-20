@@ -17,10 +17,9 @@ public class ActualizarEstadoProcesoEntrevistaService {
                 .obtenerEventoPorId(procesoEntrevistaDtoParam.getUuid());
 
         if (procesoEntrevistaDto == null)
-            throw new IdEstadoException("Id de estado no encontrado. ID: "+procesoEntrevistaDtoParam.getUuid());
+            throw new IdEstadoException("Id de estado no encontrado. ID: " + procesoEntrevistaDtoParam.getUuid());
 
         procesoEntrevistaDto.actualizar(procesoEntrevistaDtoParam);
-
         this.procesoEntrevistaDao.actualizar(ProcesoEntrevistaEntity.builder()
                 .procesoEntrevistaId(procesoEntrevistaDto.getUuid())
                 .fechaHora(procesoEntrevistaDto.getFechaYHora())
