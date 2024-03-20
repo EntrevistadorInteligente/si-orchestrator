@@ -13,11 +13,12 @@ public class ActualizarEstadoProcesoEntrevistaService {
     private final ProcesoEntrevistaDao procesoEntrevistaDao;
 
     public void ejecutar(ProcesoEntrevistaDto procesoEntrevistaDtoParam) {
+        final String mensajeExcepcion = "Id de estado no encontrado. ID: %s";
         ProcesoEntrevistaDto procesoEntrevistaDto = this.procesoEntrevistaDao
                 .obtenerEventoPorId(procesoEntrevistaDtoParam.getUuid());
 
         if (procesoEntrevistaDto == null)
-            throw new IdEstadoException("Id de estado no encontrado. ID: "+procesoEntrevistaDtoParam.getUuid());
+            throw new IdEstadoException(String.format(mensajeExcepcion, procesoEntrevistaDtoParam.getUuid()));
 
         procesoEntrevistaDto.actualizar(procesoEntrevistaDtoParam);
 

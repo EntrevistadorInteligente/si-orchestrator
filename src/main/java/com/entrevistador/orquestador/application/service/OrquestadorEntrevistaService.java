@@ -9,6 +9,7 @@ import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneos
 import com.entrevistador.orquestador.dominio.port.client.PreparadorClient;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
 
@@ -33,8 +34,8 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
 
     @Override
     public void receptorInformacionEmpresa(String idEntrevista,String eventoEntrevistaId, InformacionEmpresaDto info) {
-        var eventosFinalizados = this.validadorEventosSimultaneosService.ejecutar(idEntrevista);
         this.actualizarInformacionEntrevistaService.actualizarInrfomacionEmpresa(idEntrevista, info);
+        var eventosFinalizados = this.validadorEventosSimultaneosService.ejecutar(idEntrevista);
         enviarInformacionEntrevistaAPreparador(eventosFinalizados);
     }
 
