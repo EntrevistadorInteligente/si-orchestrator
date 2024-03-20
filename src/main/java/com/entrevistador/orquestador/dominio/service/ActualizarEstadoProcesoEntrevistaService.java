@@ -19,15 +19,15 @@ public class ActualizarEstadoProcesoEntrevistaService {
         if (procesoEntrevistaDto == null)
             throw new IdEstadoException("Id de estado no encontrado. ID: "+procesoEntrevistaDtoParam.getUuid());
 
-        procesoEntrevistaDto.actualizar(procesoEntrevistaDtoParam);
-
-        this.procesoEntrevistaDao.actualizar(ProcesoEntrevistaEntity.builder()
+        //procesoEntrevistaDto.actualizar(procesoEntrevistaDtoParam);
+        System.out.println("AQUI");
+       /* this.procesoEntrevistaDao.actualizar(ProcesoEntrevistaEntity.builder()
                 .procesoEntrevistaId(procesoEntrevistaDto.getUuid())
                 .fechaHora(procesoEntrevistaDto.getFechaYHora())
                 .estado(procesoEntrevistaDto.getEstado())
                 .fuente(procesoEntrevistaDto.getFuente())
                 .error(procesoEntrevistaDto.getError())
-                .build());
+                .build());*/
     }
 
 }

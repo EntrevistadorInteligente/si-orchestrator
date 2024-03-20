@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Component
-public class AnalizadorClientAdapter implements AnalizadorClient {
+public class AnalizadorClientAdapter {
 
     private final WebClient webClient;
 
@@ -17,15 +17,15 @@ public class AnalizadorClientAdapter implements AnalizadorClient {
         this.webClient = webClient;
     }
 
-    @Override
     public Mono<Void> enviarHojaDeVida(PreparacionEntrevistaDto preparacionEntrevistaDto) {
-        return this.webClient
+        var asd =this.webClient
                 .post()
-                .uri("/api")
+                .uri("/procesar-cv")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(preparacionEntrevistaDto), PreparacionEntrevistaDto.class)
                 .retrieve()
                 .bodyToMono(Void.class);
+        return asd;
     }
 
 }
