@@ -1,12 +1,15 @@
 package com.entrevistador.orquestador.dominio.service;
 
+import com.entrevistador.orquestador.dominio.excepciones.ActualizarEstadoEntrevistaException;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
 import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ActualizarEstadoProcesoEntrevistaServiceTest {
 
@@ -27,13 +30,13 @@ public class ActualizarEstadoProcesoEntrevistaServiceTest {
 
     @Test
     public void dtoVacioActualizarTest() {
-        Assertions.assertEquals(null, this.procesoEntrevistaDtoActualizar.actualizar(procesoEntrevistaDtoVacio));
+        assertThrows(ActualizarEstadoEntrevistaException.class, () ->
+                this.procesoEntrevistaDtoActualizar.actualizar(procesoEntrevistaDtoVacio));
     }
 
     @Test
     public void dtoActualizarTest() {
-        Assertions.assertEquals(true, this.procesoEntrevistaDtoVacio.actualizar(procesoEntrevistaDtoActualizar));
-
+        assertTrue(this.procesoEntrevistaDtoVacio.actualizar(procesoEntrevistaDtoActualizar));
     }
 
 }
