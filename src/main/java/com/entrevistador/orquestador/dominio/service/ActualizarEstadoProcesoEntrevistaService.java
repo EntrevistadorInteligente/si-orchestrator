@@ -21,7 +21,6 @@ public class ActualizarEstadoProcesoEntrevistaService {
             throw new IdEstadoException(String.format(mensajeExcepcion, procesoEntrevistaDtoParam.getUuid()));
 
         procesoEntrevistaDto.actualizar(procesoEntrevistaDtoParam);
-
         this.procesoEntrevistaDao.actualizar(ProcesoEntrevistaEntity.builder()
                 .procesoEntrevistaId(procesoEntrevistaDto.getUuid())
                 .fechaHora(procesoEntrevistaDto.getFechaYHora())
