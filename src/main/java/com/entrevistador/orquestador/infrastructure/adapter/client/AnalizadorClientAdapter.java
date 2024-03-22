@@ -11,16 +11,15 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class AnalizadorClientAdapter implements AnalizadorClient {
+public class AnalizadorClientAdapter {
 
     @Qualifier("webClientAnalizador")
     private final WebClient webClient;
 
-    @Override
     public Mono<Void> enviarHojaDeVida(PreparacionEntrevistaDto preparacionEntrevistaDto) {
         return this.webClient
                 .post()
-                .uri("/api")
+                .uri("/procesar-cv")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(preparacionEntrevistaDto), PreparacionEntrevistaDto.class)
                 .retrieve()
