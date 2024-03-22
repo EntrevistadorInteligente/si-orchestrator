@@ -7,11 +7,10 @@ import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Service
 public class JmsListenerAdapter {
