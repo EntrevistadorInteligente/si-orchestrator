@@ -2,7 +2,7 @@ package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
-import com.entrevistador.orquestador.dominio.model.dto.PerfilEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.VistaPreviaEntrevistaDto;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
                         this.procesoEntrevistaDao.crearEvento(),
                         (idEntrevista, procesoEntrevistaDto) ->
                                 this.enviarHojaDeVida(idEntrevista, procesoEntrevistaDto, hojaDeVidaBytes)
+
                 )
                 .flatMap(tuple2Mono -> tuple2Mono.flatMap(tuple -> this.enviarInformacionEmpresa(tuple.getT1(), tuple.getT2(), formulario)));
     }
@@ -53,6 +55,14 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
                                 .hojaDeVida(hojaDeVidaBytes)
                                 .build())
                 .then(Mono.just(Tuples.of(idEntrevista, eventoEntrevista.getUuid())));
+    }
+
+    private Mono<Void> enviarInformacionEmpresa(String idEntrevista, String idEventoEntrevista, FormularioDto formulario) {
+        return this.analizadorClient.enviarInformacionEmpresa(PosicionEntrevistaDto.builder()
+                .eventoEntrevistaId(idEventoEntrevista)
+                .idEntrevista(idEntrevista)
+                .formulario(formulario)
+                .build());
     }
 
     @Override
@@ -69,42 +79,20 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
 
     private List<VistaPreviaEntrevistaDto> generarPreguntasFrontend() {
         return List.of(
-            new VistaPreviaEntrevistaDto(
-                "Describe un proyecto complejo en el que hayas trabajado que incluyera tanto el desarrollo del frontend como del backend. ¿Cómo abordaste los desafíos técnicos y cómo aseguraste la cohesión entre ambas partes del proyecto?")
+                new VistaPreviaEntrevistaDto(
+                        "Describe un proyecto complejo en el que hayas trabajado que incluyera tanto el desarrollo del frontend como del backend. ¿Cómo abordaste los desafíos técnicos y cómo aseguraste la cohesión entre ambas partes del proyecto?")
         );
     }
 
     private List<VistaPreviaEntrevistaDto> generarPreguntasBackend() {
         return List.of(
-            new VistaPreviaEntrevistaDto(
-                "Describe un proyecto complejo en el que hayas trabajado que incluyera tanto el desarrollo del frontend como del backend. ¿Cómo abordaste los desafíos técnicos y cómo aseguraste la cohesión entre ambas partes del proyecto?"),
-            new VistaPreviaEntrevistaDto(
-                "Describe una situación en la que hayas tenido un desacuerdo con un miembro del equipo sobre la implementación de una característica. ¿Cómo lo resolviste y qué aprendiste de esa experiencia?"),
-            new VistaPreviaEntrevistaDto(
-                "El mundo del desarrollo web está constantemente evolucionando con nuevas herramientas y prácticas. ¿Cómo te mantienes actualizado con las últimas tendencias y tecnologías, y podrías compartir un ejemplo de cómo aplicaste una nueva tecnología o práctica en un proyecto reciente?"
-            ));
+                new VistaPreviaEntrevistaDto(
+                        "Describe un proyecto complejo en el que hayas trabajado que incluyera tanto el desarrollo del frontend como del backend. ¿Cómo abordaste los desafíos técnicos y cómo aseguraste la cohesión entre ambas partes del proyecto?"),
+                new VistaPreviaEntrevistaDto(
+                        "Describe una situación en la que hayas tenido un desacuerdo con un miembro del equipo sobre la implementación de una característica. ¿Cómo lo resolviste y qué aprendiste de esa experiencia?"),
+                new VistaPreviaEntrevistaDto(
+                        "El mundo del desarrollo web está constantemente evolucionando con nuevas herramientas y prácticas. ¿Cómo te mantienes actualizado con las últimas tendencias y tecnologías, y podrías compartir un ejemplo de cómo aplicaste una nueva tecnología o práctica en un proyecto reciente?"
+                ));
     }
-
-    private Mono<Void> procesarHojaDeVida(byte[] hojaDeVidaBytes, FormularioDto formulario) {
-        return this.crearEntrevistaService.ejecutar()
-                .zipWith(this.procesoEntrevistaDao.crearEvento(), (idEntrevista, eventoEntrevista) ->
-                        this.enviarHojaDeVida(idEntrevista, eventoEntrevista, hojaDeVidaBytes))
-                .flatMap(result -> {
-                    String idEntrevista = Objects.requireNonNull(result.block()).getT1();
-                    String idEventoEntrevista = Objects.requireNonNull(result.block()).getT2();
-                    return this.enviarInformacionEmpresa(idEntrevista, idEventoEntrevista, formulario);
-                });
-                .thenReturn(Tuples.of(idEntrevista, eventoEntrevista.getUuid()));
-    }
-
-
-    private Mono<Void> enviarInformacionEmpresa(String idEntrevista, String idEventoEntrevista, FormularioDto formulario) {
-        return this.analizadorClient.enviarInformacionEmpresa(PerfilEntrevistaDto.builder()
-                .eventoEntrevistaId(idEventoEntrevista)
-                .idEntrevista(idEntrevista)
-                .formulario(formulario)
-                .build());
-    }
-
 }
 
