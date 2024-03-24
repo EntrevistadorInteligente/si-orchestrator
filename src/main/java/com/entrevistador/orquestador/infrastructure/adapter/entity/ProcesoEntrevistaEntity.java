@@ -18,7 +18,6 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "PROCESO_ENTREVISTA")
 @AllArgsConstructor
