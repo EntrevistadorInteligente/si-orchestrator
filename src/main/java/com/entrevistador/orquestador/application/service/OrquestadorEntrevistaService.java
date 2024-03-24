@@ -1,16 +1,17 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
-import com.entrevistador.orquestador.dominio.model.Entrevista;
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
+import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.SolicitudPreparacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
 import com.entrevistador.orquestador.dominio.port.client.PreparadorClient;
-import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
+
+import java.util.List;
 
 @Service
 public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
@@ -28,19 +29,15 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     }
 
     @Override
-    public void receptorHojaDeVida(String idEntrevista, HojaDeVidaDto resume) {
-        String campoInformacionEmpresa;
-        campoInformacionEmpresa = this.actualizarInformacionEntrevistaService.actualizarHojaDeVida(idEntrevista, resume);
-        var eventosFinalizados = this.validadorEventosSimultaneosService.ejecutar(idEntrevista, campoInformacionEmpresa, "hojadevida");
-        enviarInformacionEntrevistaAPreparador(eventosFinalizados);
+    public Mono<Void> receptorHojaDeVida(String idEntrevista, HojaDeVidaDto resume) {
+        return this.actualizarInformacionEntrevistaService.actualizarHojaDeVida(idEntrevista, resume).flatMap(data ->
+                this.validadorEventosSimultaneosService.ejecutar(data)).flatMap(this::enviarInformacionEntrevistaAPreparador);
     }
 
     @Override
-    public void receptorInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info) {
-        String campoHojaDeVida;
-        campoHojaDeVida = this.actualizarInformacionEntrevistaService.actualizarInrfomacionEmpresa(idEntrevista, info);
-        var eventosFinalizados = this.validadorEventosSimultaneosService.ejecutar(idEntrevista, campoHojaDeVida, "infoempresa");
-        enviarInformacionEntrevistaAPreparador(eventosFinalizados);
+    public Mono<Void> receptorInformacionEmpresa(String idEntrevista, FormularioDto info, List<String> preguntas) {
+        return this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(idEntrevista, info, preguntas).flatMap(data ->
+                this.validadorEventosSimultaneosService.ejecutar(data)).flatMap(this::enviarInformacionEntrevistaAPreparador);
     }
 
     @Override
@@ -48,12 +45,12 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
         enviarInformacionEntrevistaAPreparador(true);
     }
 
-    private void enviarInformacionEntrevistaAPreparador(boolean eventosFinalizados){
+    private Mono<Void> enviarInformacionEntrevistaAPreparador(boolean eventosFinalizados){
         if(eventosFinalizados){
             this.solicitudPreparacionEntrevistaService.ejecutar();
             this.preparadorClient.generarEntrevista();
         }
-
+        return Mono.empty();
     }
 
 }

@@ -5,6 +5,8 @@ import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class Entrevista {
@@ -12,4 +14,9 @@ public class Entrevista {
     private String idEvento;
     private HojaDeVidaDto hojaDeVidaDto;
     private InformacionEmpresaDto informacionEmpresaDto;
+
+    public String listToString(List<String> lista){
+        return String.join("-", lista);
+    }
+
 }

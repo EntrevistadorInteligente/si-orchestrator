@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class PerfilEntrevistaDto {
+public class PosicionEntrevistaDto {
     @JsonProperty("id_entrevista")
     private String idEntrevista;
     @JsonProperty("evento_entrevista_id")

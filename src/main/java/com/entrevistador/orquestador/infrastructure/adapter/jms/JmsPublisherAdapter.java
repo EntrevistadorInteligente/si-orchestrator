@@ -1,7 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.adapter.jms;
 
-import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
-import com.entrevistador.orquestador.dominio.model.dto.PerfilEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
 import lombok.extern.slf4j.Slf4j;
@@ -21,16 +20,17 @@ public final class JmsPublisherAdapter  implements AnalizadorClient {
     @Autowired
     private KafkaTemplate<String,Object> kafkaTemplate;
 
-    @Value("${kafka.topic}")
-    private String topic;
-    @Value("${kafka.topic.empresa}")
+    @Value("${kafka.topic-analizador-publisher}")
+    private String hojaDeVidaPublisherTopic;
+
+    @Value("${kafka.topic-recopilador-publisher}")
     private String topicEmpresa;
 
     @Override
     public Mono<Void> enviarHojaDeVida(PreparacionEntrevistaDto preparacionEntrevistaDto) {
 
         try {
-            CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topic, preparacionEntrevistaDto);
+            CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(hojaDeVidaPublisherTopic, preparacionEntrevistaDto);
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
                     System.out.println("Sent message=[" + preparacionEntrevistaDto.getIdEntrevista() +
@@ -49,7 +49,7 @@ public final class JmsPublisherAdapter  implements AnalizadorClient {
     }
 
     @Override
-    public Mono<Void> enviarInformacionEmpresa(PerfilEntrevistaDto perfil) {
+    public Mono<Void> enviarInformacionEmpresa(PosicionEntrevistaDto perfil) {
 
         try {
             CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topicEmpresa, perfil);

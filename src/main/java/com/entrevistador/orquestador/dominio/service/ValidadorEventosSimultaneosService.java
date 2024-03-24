@@ -1,24 +1,15 @@
 package com.entrevistador.orquestador.dominio.service;
 
-
-import com.entrevistador.orquestador.dominio.model.Entrevista;
+import com.entrevistador.orquestador.dominio.excepciones.CvOInfoEmpresaException;
+import reactor.core.publisher.Mono;
 
 public class ValidadorEventosSimultaneosService {
 
-    public boolean ejecutar(String idEntrevista, String campoDeEventoAValidar, String seActualizo){
-        var ambosEventosHanSidoCompletados = false;
-        if (seActualizo.equals("hojadevida")){
-            if(campoDeEventoAValidar.equals(null)){
-                ambosEventosHanSidoCompletados = true;
-            }
+    public Mono<Boolean> ejecutar(String campoDeEventoAValidar){
+        if (campoDeEventoAValidar.equals("")){
+            throw new CvOInfoEmpresaException("Hoja de vida o informacion empresa fue nulo");
         }
-        if (seActualizo.equals("infoempresa")){
-            if(campoDeEventoAValidar.equals(null)){
-                ambosEventosHanSidoCompletados = true;
-            }
-        }
-        return ambosEventosHanSidoCompletados;
-
+        return Mono.just(campoDeEventoAValidar == null);
     }
 
 }

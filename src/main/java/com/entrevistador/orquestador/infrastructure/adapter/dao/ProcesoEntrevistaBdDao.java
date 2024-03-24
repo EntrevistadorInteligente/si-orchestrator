@@ -4,11 +4,10 @@ import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
-import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Mono;
-
 import java.util.Date;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Mono;
 
 @Repository
 public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
@@ -34,20 +33,13 @@ public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
     @Override
     public ProcesoEntrevistaDto obtenerEventoPorId(String idEvento) {
         Optional<ProcesoEntrevistaEntity> procesoEntrevistaEntity = procesoEntrevistaRepository.findById(idEvento);
-        if (procesoEntrevistaEntity.isPresent())
-            return ProcesoEntrevistaDto.builder()
-                    .uuid(procesoEntrevistaEntity.get().getProcesoEntrevistaId())
-                    .fechaYHora(procesoEntrevistaEntity.get().getFechaHora())
-                    .fuente(procesoEntrevistaEntity.get().getFuente())
-                    .estado(procesoEntrevistaEntity.get().getEstado())
-                    .error(procesoEntrevistaEntity.get().getError())
-                    .build();
-        return null;
-    }
-
-    @Override
-    public ProcesoEntrevistaDto obtenerEventoPornombre() {
-        return null;
+        return procesoEntrevistaEntity.map(entrevistaEntity -> ProcesoEntrevistaDto.builder()
+                .uuid(entrevistaEntity.getProcesoEntrevistaId())
+                .fechaYHora(entrevistaEntity.getFechaHora())
+                .fuente(entrevistaEntity.getFuente())
+                .estado(entrevistaEntity.getEstado())
+                .error(entrevistaEntity.getError())
+                .build()).orElse(null);
     }
 
     @Override

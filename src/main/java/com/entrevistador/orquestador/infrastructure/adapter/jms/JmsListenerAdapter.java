@@ -3,15 +3,16 @@ package com.entrevistador.orquestador.infrastructure.adapter.jms;
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.MensajeAnalizadorDto;
+import com.entrevistador.orquestador.dominio.model.dto.MensajeAnalizadorEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
+import reactor.core.publisher.Mono;
 
 @Service
 public class JmsListenerAdapter {
@@ -19,8 +20,7 @@ public class JmsListenerAdapter {
     private final OrquestadorEntrevista orquestadorEntrevista;
     private final ActualizarEstadoProcesoEntrevistaService actualizarEstadoProcesoEntrevistaService;
     private final CrearEntrevistaAlternativaService crearEntrevistaAlternativaService;
-    @Value("${kafka.topic}")
-    private String topic;
+
 
     public JmsListenerAdapter(OrquestadorEntrevista orquestadorEntrevista, ActualizarEstadoProcesoEntrevistaService actualizarEstadoProcesoEntrevistaService, CrearEntrevistaAlternativaService crearEntrevistaAlternativaService) {
         this.orquestadorEntrevista = orquestadorEntrevista;
@@ -28,11 +28,12 @@ public class JmsListenerAdapter {
         this.crearEntrevistaAlternativaService = crearEntrevistaAlternativaService;
     }
 
-    @KafkaListener(topics = "resumeTopic", groupId = "resumeGroup")
+    @KafkaListener(topics = "hojaDeVidaListenerTopic", groupId = "resumeGroup")
     public void receptorHojaDevida(String mensajeJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             MensajeAnalizadorDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorDto.class);
+            //Mono.just(mensajeAnalizadorDto);
             this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista());
             this.orquestadorEntrevista.receptorHojaDeVida(mensajeAnalizadorDto.getIdEntrevista(), mensajeAnalizadorDto.getHojaDeVida());
         } catch (IOException e) {
@@ -40,10 +41,18 @@ public class JmsListenerAdapter {
         }
     }
 
-    @KafkaListener(topics = "resumeTopic2", groupId = "informacionEmpresa")
-    public void receptorInformacionEmpresa(ProcesoEntrevistaDto procesoEntrevistaDto,String idEntrevista, InformacionEmpresaDto info) {
-        this.actualizarEstadoProcesoEntrevistaService.ejecutar(procesoEntrevistaDto);
-        this.orquestadorEntrevista.receptorInformacionEmpresa(idEntrevista, info);
+    @KafkaListener(topics = "empresaListenerTopic", groupId = "resumeGroup")
+    public void receptorInformacionEmpresa(String mensajeJson) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            MensajeAnalizadorEmpresaDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorEmpresaDto.class);
+            //Mono.just(mensajeAnalizadorDto);
+            this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista());
+            this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizadorDto.getIdEntrevista(), mensajeAnalizadorDto.getFormulario(), mensajeAnalizadorDto.getPreguntas());
+        } catch (IOException e) {
+            throw new RuntimeException("Error al deserializar el mensaje JSON", e);
+        }
+
     }
 
     @KafkaListener(topics = "resumeTopic2", groupId = "actualizacionEstados")

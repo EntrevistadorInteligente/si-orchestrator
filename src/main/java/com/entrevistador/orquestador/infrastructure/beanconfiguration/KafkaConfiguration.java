@@ -31,6 +31,17 @@ public class KafkaConfiguration {
     @Value("${spring.kafka.consumer.group-id}")
     private String consumerGroupId;
 
+    @Value("${kafka.topic-analizador-publisher}")
+    private String hojaDeVidaPublisherTopic;
+
+    @Value("${kafka.topic-analizador-listener}")
+    private String hojaDeVidaListenerTopic;
+
+    @Value("${kafka.topic-recopilador-publisher}")
+    private String empresaPublisherTopic;
+
+    @Value("${kafka.topic-recopilador-listener}")
+    private String empresaListenerTopic;
 
     @Bean
     public Map<String,Object> producerConfig(){
@@ -72,16 +83,17 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public NewTopic topic() {
-        return TopicBuilder.name("kafkaTopic")
+    public NewTopic hojaDeVidaPublisher() {
+        return TopicBuilder.name(hojaDeVidaPublisherTopic)
                 .partitions(2)
                 .replicas(1)
                 .build();
     }
 
     @Bean
-    public NewTopic topic2() {
-        return TopicBuilder.name("resumeTopic")
+    public NewTopic hojaDeVidaListener
+            () {
+        return TopicBuilder.name(hojaDeVidaListenerTopic)
                 .partitions(2)
                 .replicas(1)
                 .build();
@@ -89,7 +101,15 @@ public class KafkaConfiguration {
 
     @Bean
     public NewTopic topic3() {
-        return TopicBuilder.name("empresaTopic")
+        return TopicBuilder.name(empresaPublisherTopic)
+                .partitions(2)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic topic4() {
+        return TopicBuilder.name(empresaListenerTopic)
                 .partitions(2)
                 .replicas(1)
                 .build();

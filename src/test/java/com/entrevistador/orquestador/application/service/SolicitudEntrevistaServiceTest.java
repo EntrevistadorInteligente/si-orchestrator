@@ -4,7 +4,6 @@ import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
-import com.entrevistador.orquestador.dominio.port.client.RecopiladorEmpresaClient;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
 import org.junit.jupiter.api.Test;
@@ -31,16 +30,14 @@ class SolicitudEntrevistaServiceTest {
     private ProcesoEntrevistaDao procesoEntrevistaDao;
     @Mock
     private CrearEntrevistaService crearEntrevistaService;
-    @Mock
-    private RecopiladorEmpresaClient recopiladorEmpresaClient;
 
     @Test
     void generarSolicitudEntrevistaTest() {
         when(this.validadorPdfService.ejecutar(any())).thenReturn(Mono.just(new byte[]{}));
         when(this.crearEntrevistaService.ejecutar()).thenReturn(Mono.just("any"));
-        when(this.procesoEntrevistaDao.crearEvento()).thenReturn(Mono.just(ProcesoEntrevistaDto.builder().build()));
+        when(this.procesoEntrevistaDao.crearEvento()).thenReturn(Mono.just(ProcesoEntrevistaDto.builder().uuid("any").build()));
         when(this.analizadorClient.enviarHojaDeVida(any())).thenReturn(Mono.empty());
-        when(this.recopiladorEmpresaClient.enviarInformacionEmpresa(any())).thenReturn(Mono.empty());
+        when(this.analizadorClient.enviarInformacionEmpresa(any())).thenReturn(Mono.empty());
 
         Mono<Void> publisher = this.solicitudEntrevistaService.generarSolicitudEntrevista(Mono.just(mock(FilePart.class)), new FormularioDto());
 
@@ -52,6 +49,7 @@ class SolicitudEntrevistaServiceTest {
         verify(this.crearEntrevistaService, times(1)).ejecutar();
         verify(this.procesoEntrevistaDao, times(1)).crearEvento();
         verify(this.analizadorClient, times(1)).enviarHojaDeVida(any());
-        verify(this.recopiladorEmpresaClient, times(1)).enviarInformacionEmpresa(any());
+        verify(this.analizadorClient, times(1)).enviarInformacionEmpresa(any());
     }
+
 }
