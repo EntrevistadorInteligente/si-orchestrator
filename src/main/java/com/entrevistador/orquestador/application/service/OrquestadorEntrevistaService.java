@@ -1,6 +1,7 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
+import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
@@ -8,6 +9,8 @@ import com.entrevistador.orquestador.dominio.service.SolicitudPreparacionEntrevi
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
 import com.entrevistador.orquestador.dominio.port.client.PreparadorClient;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
@@ -32,9 +35,9 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     }
 
     @Override
-    public void receptorInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info) {
+    public void receptorInformacionEmpresa(String idEntrevista, FormularioDto info, List<String> preguntas) {
+        this.actualizarInformacionEntrevistaService.actualizarInrfomacionEmpresa(idEntrevista, info, preguntas);
         var eventosFinalizados = this.validadorEventosSimultaneosService.ejecutar(idEntrevista);
-        this.actualizarInformacionEntrevistaService.actualizarInrfomacionEmpresa(idEntrevista, info);
         enviarInformacionEntrevistaAPreparador(eventosFinalizados);
     }
 

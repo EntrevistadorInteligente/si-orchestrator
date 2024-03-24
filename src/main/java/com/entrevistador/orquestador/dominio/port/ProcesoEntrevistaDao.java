@@ -10,8 +10,6 @@ public interface ProcesoEntrevistaDao {
 
     ProcesoEntrevistaDto obtenerEventoPorId(String idEvento);
 
-    ProcesoEntrevistaDto obtenerEventoPornombre();
-
     ProcesoEntrevistaDto actualizar(ProcesoEntrevistaEntity procesoEntrevistaEntity);
 
 }

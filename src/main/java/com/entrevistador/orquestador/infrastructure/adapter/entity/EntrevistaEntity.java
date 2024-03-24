@@ -1,6 +1,8 @@
 package com.entrevistador.orquestador.infrastructure.adapter.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 
@@ -12,6 +14,7 @@ public class EntrevistaEntity {
      * Cambiar por uuid
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String uuid;
 
 
