@@ -9,12 +9,14 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
 @Configuration
 public class ReactiveMongoConfiguration {
-
     @Value("${mongo.username}")
     private String username;
 
     @Value("${mongo.password}")
     private String password;
+
+    @Value("${mongo.database.name}")
+    private String databaseName;
 
     @Bean
     public MongoClient mongoClient() {
@@ -24,7 +26,6 @@ public class ReactiveMongoConfiguration {
 
     @Bean
     public ReactiveMongoTemplate reactiveMongoTemplate(MongoClient mongoClient) {
-        return new ReactiveMongoTemplate(mongoClient, "orquestador");
+        return new ReactiveMongoTemplate(mongoClient, databaseName);
     }
-
 }
