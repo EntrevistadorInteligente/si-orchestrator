@@ -1,18 +1,19 @@
 package com.entrevistador.orquestador.infrastructure.adapter.jms;
 
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.MensajeAnalizadorDto;
 import com.entrevistador.orquestador.dominio.model.dto.MensajeAnalizadorEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
+@Slf4j
 @Service
 public class JmsListenerAdapter {
 
@@ -27,8 +28,9 @@ public class JmsListenerAdapter {
         this.crearEntrevistaAlternativaService = crearEntrevistaAlternativaService;
     }
 
-    @KafkaListener(topics = "hojaDeVidaListenerTopic", groupId = "resumeGroup")
+    @KafkaListener(topics = "hojaDeVidaTopic", groupId = "resumeGroup")
     public void receptorHojaDevida(String mensajeJson) {
+        log.info("Recibiendo mensaje de topic hojaDeVidaListenerTopic, message: {}", mensajeJson);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             MensajeAnalizadorDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorDto.class);
@@ -39,8 +41,9 @@ public class JmsListenerAdapter {
         }
     }
 
-    @KafkaListener(topics = "empresaListenerTopic", groupId = "resumeGroup")
+    @KafkaListener(topics = "empresaTopic", groupId = "resumeGroup")
     public void receptorInformacionEmpresa(String mensajeJson) {
+        log.info("Recibiendo mensaje de topic empresaListenerTopic, message: {}", mensajeJson);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             MensajeAnalizadorEmpresaDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorEmpresaDto.class);

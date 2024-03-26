@@ -31,13 +31,13 @@ public class KafkaConfiguration {
     @Value("${spring.kafka.consumer.group-id}")
     private String consumerGroupId;
 
-    @Value("${kafka.topic-analizador-publisher}")
+    @Value("${kafka.topic-analizador}")
     private String hojaDeVidaPublisherTopic;
 
     @Value("${kafka.topic-analizador-listener}")
     private String hojaDeVidaListenerTopic;
 
-    @Value("${kafka.topic-recopilador-publisher}")
+    @Value("${kafka.topic-recopilador}")
     private String empresaPublisherTopic;
 
     @Value("${kafka.topic-recopilador-listener}")

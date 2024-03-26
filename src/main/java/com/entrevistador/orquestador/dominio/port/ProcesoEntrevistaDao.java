@@ -8,8 +8,8 @@ public interface ProcesoEntrevistaDao {
 
     Mono<ProcesoEntrevistaDto> crearEvento();
 
-    ProcesoEntrevistaDto obtenerEventoPorId(String idEvento);
+    Mono<ProcesoEntrevistaDto> obtenerEventoPorId(String idEvento);
 
-    ProcesoEntrevistaDto actualizar(ProcesoEntrevistaEntity procesoEntrevistaEntity);
+    Mono<ProcesoEntrevistaDto> actualizar(ProcesoEntrevistaEntity procesoEntrevistaEntity);
 
 }

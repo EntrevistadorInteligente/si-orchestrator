@@ -1,17 +1,18 @@
 package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
+import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
-import java.util.Date;
-import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import java.util.Date;
+
 @Repository
 public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
-
     private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
 
     public ProcesoEntrevistaBdDao(ProcesoEntrevistaRepository procesoEntrevistaRepository) {
@@ -20,38 +21,45 @@ public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
 
     @Override
     public Mono<ProcesoEntrevistaDto> crearEvento() {
-        ProcesoEntrevistaEntity procesoEntrevistaEntity = procesoEntrevistaRepository.save(ProcesoEntrevistaEntity.builder().build());
-        return Mono.just(ProcesoEntrevistaDto.builder()
-                .uuid(procesoEntrevistaEntity.getProcesoEntrevistaId())
-                .fechaYHora(new Date())
-                .estado(procesoEntrevistaEntity.getEstado())
-                .fuente(procesoEntrevistaEntity.getFuente())
-                .error(procesoEntrevistaEntity.getError())
-                .build());
+        return this.procesoEntrevistaRepository.save(ProcesoEntrevistaEntity.builder()
+                        .fechaHora(new Date())
+                        .estado(EstadoProcesoEnum.AC)
+                        .fuente(FuenteEnum.ANALIZADOR)
+                        .error("any")
+                        .build())
+                .map(procesoEntrevistaEntity -> ProcesoEntrevistaDto.builder()
+                        .uuid(procesoEntrevistaEntity.getUuid())
+                        .fechaYHora(new Date())
+                        .estado(procesoEntrevistaEntity.getEstado())
+                        .fuente(procesoEntrevistaEntity.getFuente())
+                        .error(procesoEntrevistaEntity.getError())
+                        .build());
     }
 
     @Override
-    public ProcesoEntrevistaDto obtenerEventoPorId(String idEvento) {
-        Optional<ProcesoEntrevistaEntity> procesoEntrevistaEntity = procesoEntrevistaRepository.findById(idEvento);
-        return procesoEntrevistaEntity.map(entrevistaEntity -> ProcesoEntrevistaDto.builder()
-                .uuid(entrevistaEntity.getProcesoEntrevistaId())
-                .fechaYHora(entrevistaEntity.getFechaHora())
-                .fuente(entrevistaEntity.getFuente())
-                .estado(entrevistaEntity.getEstado())
-                .error(entrevistaEntity.getError())
-                .build()).orElse(null);
+    public Mono<ProcesoEntrevistaDto> obtenerEventoPorId(String idEvento) {
+        return this.procesoEntrevistaRepository.findById(idEvento)
+                .map(procesoEntrevistaEntity ->
+                        ProcesoEntrevistaDto.builder()
+                                .uuid(procesoEntrevistaEntity.getUuid())
+                                .fechaYHora(procesoEntrevistaEntity.getFechaHora())
+                                .fuente(procesoEntrevistaEntity.getFuente())
+                                .estado(procesoEntrevistaEntity.getEstado())
+                                .error(procesoEntrevistaEntity.getError())
+                                .build());
     }
 
     @Override
-    public ProcesoEntrevistaDto actualizar(ProcesoEntrevistaEntity procesoEntrevistaEntity){
-        ProcesoEntrevistaEntity procesoEntrevistaEntity1 = procesoEntrevistaRepository.save(procesoEntrevistaEntity);
-        return ProcesoEntrevistaDto.builder()
-                .uuid(procesoEntrevistaEntity1.getProcesoEntrevistaId())
-                .fechaYHora(procesoEntrevistaEntity1.getFechaHora())
-                .fuente(procesoEntrevistaEntity1.getFuente())
-                .estado(procesoEntrevistaEntity1.getEstado())
-                .error(procesoEntrevistaEntity1.getError())
-                .build();
+    public Mono<ProcesoEntrevistaDto> actualizar(ProcesoEntrevistaEntity procesoEntrevistaEntity) {
+        return this.procesoEntrevistaRepository.save(procesoEntrevistaEntity)
+                .map(procesoEntrevistaEntity1 ->
+                        ProcesoEntrevistaDto.builder()
+                                .uuid(procesoEntrevistaEntity1.getUuid())
+                                .fechaYHora(procesoEntrevistaEntity1.getFechaHora())
+                                .fuente(procesoEntrevistaEntity1.getFuente())
+                                .estado(procesoEntrevistaEntity1.getEstado())
+                                .error(procesoEntrevistaEntity1.getError())
+                                .build()
+                );
     }
-
 }

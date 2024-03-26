@@ -8,7 +8,6 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public class EntrevistaBdDao implements EntrevistaDao {
-
     private final EntrevistaRepository entrevistaRepository;
 
     public EntrevistaBdDao(EntrevistaRepository entrevistaRepository) {
@@ -17,11 +16,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
 
     @Override
     public Mono<String> crearEntrevista() {
-        //TODO: Cambiar a una DBMS Reactivo
-        return Mono.just(this.entrevistaRepository.save(new EntrevistaEntity()))
+        return this.entrevistaRepository.save(EntrevistaEntity.builder().build())
                 .map(EntrevistaEntity::getUuid);
-
     }
-
-
 }

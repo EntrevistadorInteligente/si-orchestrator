@@ -20,10 +20,10 @@ public final class JmsPublisherAdapter  implements AnalizadorClient {
     @Autowired
     private KafkaTemplate<String,Object> kafkaTemplate;
 
-    @Value("${kafka.topic-analizador-publisher}")
+    @Value("${kafka.topic-analizador}")
     private String hojaDeVidaPublisherTopic;
 
-    @Value("${kafka.topic-recopilador-publisher}")
+    @Value("${kafka.topic-recopilador}")
     private String topicEmpresa;
 
     @Override

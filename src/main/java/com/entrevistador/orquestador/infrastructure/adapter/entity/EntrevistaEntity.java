@@ -1,20 +1,19 @@
 package com.entrevistador.orquestador.infrastructure.adapter.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
-@Entity
+@Builder
+@Document(collection = "entrevista")
 public class EntrevistaEntity {
     /**
      * TODO
      * Cambiar por uuid
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String uuid;
 
 
