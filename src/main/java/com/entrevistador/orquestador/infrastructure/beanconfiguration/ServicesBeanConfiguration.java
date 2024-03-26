@@ -24,8 +24,8 @@ public class ServicesBeanConfiguration {
     }
 
     @Bean
-    public ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService() {
-        return new ActualizarInformacionEntrevistaService();
+    public ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService(EntrevistaDao entrevistaDao) {
+        return new ActualizarInformacionEntrevistaService(entrevistaDao);
     }
 
     @Bean

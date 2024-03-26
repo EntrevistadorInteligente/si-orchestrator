@@ -1,21 +1,42 @@
 package com.entrevistador.orquestador.dominio.service;
 
+import com.entrevistador.orquestador.dominio.model.Entrevista;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
+import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
+import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
+import lombok.AllArgsConstructor;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+@AllArgsConstructor
 public class ActualizarInformacionEntrevistaService {
-
-    public void actualizarHojaDeVida(String idEntrevista, HojaDeVidaDto resume){
-
-
+    private final EntrevistaDao entrevistaDao;
+    public Mono<String> actualizarHojaDeVida(String idEntrevista, HojaDeVidaDto resume){
+        Entrevista entrevista = Entrevista.builder()
+                .uuid(idEntrevista)
+                .idEvento("")
+                .hojaDeVidaDto(resume)
+                .informacionEmpresaDto(null)
+                .build();
+        return entrevistaDao.actualizarEntrevista(entrevista);
     }
 
-    public void actualizarInrfomacionEmpresa(String idEntrevista, FormularioDto info, List<String> preguntas){
-
-
+    public Mono<String> actualizarInformacionEmpresa(String idEntrevista, FormularioDto info, List<String> preguntas){
+        Entrevista entrevista = Entrevista.builder()
+                .uuid(idEntrevista)
+                .idEvento("")
+                .hojaDeVidaDto(null)
+                .informacionEmpresaDto(InformacionEmpresaDto.builder()
+                        .empresa(info.getEmpresa())
+                        .pais(info.getPais())
+                        .perfil(info.getPerfil())
+                        .seniority(info.getSeniority())
+                        .preguntas(preguntas)
+                        .build())
+                .build();
+        return entrevistaDao.actualizarEntrevista(entrevista);
     }
 
 }

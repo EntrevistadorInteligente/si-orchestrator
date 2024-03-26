@@ -9,6 +9,7 @@ import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaS
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 
@@ -31,6 +32,7 @@ public class JmsListenerAdapter {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             MensajeAnalizadorDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorDto.class);
+            //Mono.just(mensajeAnalizadorDto);
             this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista());
             this.orquestadorEntrevista.receptorHojaDeVida(mensajeAnalizadorDto.getIdEntrevista(), mensajeAnalizadorDto.getHojaDeVida());
         } catch (IOException e) {
@@ -43,6 +45,7 @@ public class JmsListenerAdapter {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             MensajeAnalizadorEmpresaDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorEmpresaDto.class);
+            //Mono.just(mensajeAnalizadorDto);
             this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista());
             this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizadorDto.getIdEntrevista(), mensajeAnalizadorDto.getFormulario(), mensajeAnalizadorDto.getPreguntas());
         } catch (IOException e) {

@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Getter
-@Setter
 @Document(collection = "proceso_entrevista")
 @AllArgsConstructor
 @Builder
