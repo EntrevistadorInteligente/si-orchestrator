@@ -2,6 +2,7 @@ package com.entrevistador.orquestador.infrastructure.beanconfiguration;
 
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -9,9 +10,16 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 @Configuration
 public class ReactiveMongoConfiguration {
 
+    @Value("${mongo.username}")
+    private String username;
+
+    @Value("${mongo.password}")
+    private String password;
+
     @Bean
     public MongoClient mongoClient() {
-        return MongoClients.create("mongodb://root:secret@localhost:27017");
+        String connectionString = String.format("mongodb://%s:%s@localhost:27017", username, password);
+        return MongoClients.create(connectionString);
     }
 
     @Bean
