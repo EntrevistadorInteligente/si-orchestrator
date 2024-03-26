@@ -28,22 +28,23 @@ public class ProcesoEntrevistaDto {
     private String error;
 
     public boolean actualizar(ProcesoEntrevistaDto procesoEntrevistaDto){
+        final String mensajeErrorAlActualizar = "Error al intentar actualizar el estado. %s";
         this.fechaYHora= new Date();
 
         if(procesoEntrevistaDto.getEstado() == null)
-            throw new ActualizarEstadoEntrevistaException("Error al intentar actualizar el " +
-                    "estado. El dato \"estado\" fue nulo.");
+            throw new ActualizarEstadoEntrevistaException(String.format(mensajeErrorAlActualizar,
+                    "El dato \"estado\" fue nulo."));
         this.estado = procesoEntrevistaDto.getEstado();
 
         if(procesoEntrevistaDto.getFuente() == null)
-            throw new ActualizarEstadoEntrevistaException("Error al intentar actualizar el " +
-                    "estado. El dato \"fuente\" fue nulo.");
+            throw new ActualizarEstadoEntrevistaException(String.format(mensajeErrorAlActualizar,
+                    "El dato \"fuente\" fue nulo."));
         this.fuente = procesoEntrevistaDto.getFuente();
 
         if(procesoEntrevistaDto.getFuente().validarEstado(procesoEntrevistaDto.getFuente(),
                 procesoEntrevistaDto.getEstado()) == null)
-            throw new ActualizarEstadoEntrevistaException("Error al intentar actualizar el " +
-                    "estado. El estado ingresado no pertenece a la fuente ingresada.");
+            throw new ActualizarEstadoEntrevistaException(String.format(mensajeErrorAlActualizar,
+                    "El estado ingresado no pertenece a la fuente ingresada."));
 
         this.error = procesoEntrevistaDto.getError();
 

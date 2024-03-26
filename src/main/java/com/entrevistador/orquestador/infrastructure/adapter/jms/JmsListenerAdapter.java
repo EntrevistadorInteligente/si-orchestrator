@@ -12,6 +12,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class JmsListenerAdapter {
@@ -32,6 +33,7 @@ public class JmsListenerAdapter {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             MensajeAnalizadorDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorDto.class);
+            //Mono.just(mensajeAnalizadorDto);
             this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista());
             this.orquestadorEntrevista.receptorHojaDeVida(mensajeAnalizadorDto.getIdEntrevista(), mensajeAnalizadorDto.getHojaDeVida());
         } catch (IOException e) {
@@ -44,6 +46,7 @@ public class JmsListenerAdapter {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             MensajeAnalizadorEmpresaDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorEmpresaDto.class);
+            //Mono.just(mensajeAnalizadorDto);
             this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista());
             this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizadorDto.getIdEntrevista(), mensajeAnalizadorDto.getFormulario(), mensajeAnalizadorDto.getPreguntas());
         } catch (IOException e) {

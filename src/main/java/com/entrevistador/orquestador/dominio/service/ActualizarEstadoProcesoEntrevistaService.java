@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.dominio.service;
 
-import com.entrevistador.orquestador.dominio.excepciones.IdEstadoException;
+import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
@@ -13,11 +13,12 @@ public class ActualizarEstadoProcesoEntrevistaService {
     private final ProcesoEntrevistaDao procesoEntrevistaDao;
 
     public void ejecutar(ProcesoEntrevistaDto procesoEntrevistaDtoParam) {
+        final String mensajeExcepcion = "Id de estado no encontrado. ID: %s";
         ProcesoEntrevistaDto procesoEntrevistaDto = this.procesoEntrevistaDao
                 .obtenerEventoPorId(procesoEntrevistaDtoParam.getUuid());
 
         if (procesoEntrevistaDto == null)
-            throw new IdEstadoException("Id de estado no encontrado. ID: " + procesoEntrevistaDtoParam.getUuid());
+            throw new IdNoEncontradoException(String.format(mensajeExcepcion, procesoEntrevistaDtoParam.getUuid()));
 
         procesoEntrevistaDto.actualizar(procesoEntrevistaDtoParam);
         this.procesoEntrevistaDao.actualizar(ProcesoEntrevistaEntity.builder()
