@@ -1,8 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
-import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
@@ -22,10 +20,6 @@ public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
     @Override
     public Mono<ProcesoEntrevistaDto> crearEvento() {
         return this.procesoEntrevistaRepository.save(ProcesoEntrevistaEntity.builder()
-                        .fechaHora(new Date())
-                        .estado(EstadoProcesoEnum.AC)
-                        .fuente(FuenteEnum.ANALIZADOR)
-                        .error("any")
                         .build())
                 .map(procesoEntrevistaEntity -> ProcesoEntrevistaDto.builder()
                         .uuid(procesoEntrevistaEntity.getUuid())

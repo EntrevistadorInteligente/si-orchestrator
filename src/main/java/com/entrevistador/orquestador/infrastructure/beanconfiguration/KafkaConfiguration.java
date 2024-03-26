@@ -24,17 +24,24 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 public class KafkaConfiguration {
+
     @Value("${spring.kafka.bootstrap-servers}")
     private String server;
 
     @Value("${spring.kafka.consumer.group-id}")
     private String consumerGroupId;
 
-    @Value("${kafka.topic-analizador}")
+    @Value("${kafka.topic-analizador-publisher}")
     private String hojaDeVidaPublisherTopic;
 
-    @Value("${kafka.topic-recopilador}")
+    @Value("${kafka.topic-analizador-listener}")
+    private String hojaDeVidaListenerTopic;
+
+    @Value("${kafka.topic-recopilador-publisher}")
     private String empresaPublisherTopic;
+
+    @Value("${kafka.topic-recopilador-listener}")
+    private String empresaListenerTopic;
 
     @Bean
     public Map<String,Object> producerConfig(){
@@ -84,10 +91,28 @@ public class KafkaConfiguration {
     }
 
     @Bean
+    public NewTopic hojaDeVidaListener
+            () {
+        return TopicBuilder.name(hojaDeVidaListenerTopic)
+                .partitions(2)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
     public NewTopic topic3() {
         return TopicBuilder.name(empresaPublisherTopic)
                 .partitions(2)
                 .replicas(1)
                 .build();
     }
+
+    @Bean
+    public NewTopic topic4() {
+        return TopicBuilder.name(empresaListenerTopic)
+                .partitions(2)
+                .replicas(1)
+                .build();
+    }
+
 }
