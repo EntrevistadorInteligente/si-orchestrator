@@ -31,10 +31,10 @@ public class JmsListenerAdapter {
     public void receptorHojaDevida(String mensajeJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            MensajeAnalizadorDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorDto.class);
-            //Mono.just(mensajeAnalizadorDto);
-            this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista());
-            this.orquestadorEntrevista.receptorHojaDeVida(mensajeAnalizadorDto.getIdEntrevista(), mensajeAnalizadorDto.getHojaDeVida());
+            MensajeAnalizadorDto mensajeAnalizador = objectMapper.readValue(mensajeJson, MensajeAnalizadorDto.class);
+            Mono.just(mensajeAnalizador).flatMap(mensajeAnalizadorDto -> this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista()))
+                    .then(this.orquestadorEntrevista.receptorHojaDeVida(mensajeAnalizador.getIdEntrevista(), mensajeAnalizador.getHojaDeVida())).block();
+
         } catch (IOException e) {
             throw new RuntimeException("Error al deserializar el mensaje JSON", e);
         }
@@ -44,10 +44,12 @@ public class JmsListenerAdapter {
     public void receptorInformacionEmpresa(String mensajeJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            MensajeAnalizadorEmpresaDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorEmpresaDto.class);
-            //Mono.just(mensajeAnalizadorDto);
-            this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista());
-            this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizadorDto.getIdEntrevista(), mensajeAnalizadorDto.getFormulario(), mensajeAnalizadorDto.getPreguntas());
+
+            MensajeAnalizadorEmpresaDto mensajeAnalizador = objectMapper.readValue(mensajeJson, MensajeAnalizadorEmpresaDto.class);
+            Mono.just(mensajeAnalizador).flatMap(mensajeAnalizadorDto -> this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista()))
+                    .then(this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizador.getIdEntrevista(),
+                            mensajeAnalizador.getFormulario(), mensajeAnalizador.getPreguntas())).block();
+
         } catch (IOException e) {
             throw new RuntimeException("Error al deserializar el mensaje JSON", e);
         }

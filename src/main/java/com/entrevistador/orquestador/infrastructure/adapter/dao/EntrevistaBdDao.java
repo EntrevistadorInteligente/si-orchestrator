@@ -2,15 +2,11 @@ package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
 import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.Entrevista;
-import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.EntrevistaRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
-
-import java.util.Optional;
 
 @Repository
 public class EntrevistaBdDao implements EntrevistaDao {
@@ -51,7 +47,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
                                         .pais(entrevista.getInformacionEmpresaDto().getPais())
                                         .preguntas(entrevista.listToString(entrevista.getInformacionEmpresaDto().getPreguntas()))
                                         .build())
-                                .thenReturn(entrevistaEntity.getSeniority());
+                                .map(EntrevistaEntity::getSeniorityEmpresa);
                     }
 
                     if (entrevista.getInformacionEmpresaDto() == null) {
@@ -73,10 +69,11 @@ public class EntrevistaBdDao implements EntrevistaDao {
                                         .pais(entrevistaEntity.getPais())
                                         .preguntas(entrevistaEntity.getPreguntas())
                                         .build())
-                                .thenReturn(entrevistaEntity.getPerfilEmpresa());
+                                .map(EntrevistaEntity::getSeniority);
                     } else {
                         return Mono.just("");
                     }
+
                 });
     }
 

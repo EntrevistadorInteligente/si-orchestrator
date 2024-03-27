@@ -46,6 +46,7 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     }
 
     private Mono<Void> enviarInformacionEntrevistaAPreparador(boolean eventosFinalizados){
+        System.out.println(eventosFinalizados);
         if(eventosFinalizados){
             this.solicitudPreparacionEntrevistaService.ejecutar();
             this.preparadorClient.generarEntrevista();

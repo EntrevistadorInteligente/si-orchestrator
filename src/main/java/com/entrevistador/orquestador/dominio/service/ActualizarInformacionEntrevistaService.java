@@ -16,9 +16,7 @@ public class ActualizarInformacionEntrevistaService {
     public Mono<String> actualizarHojaDeVida(String idEntrevista, HojaDeVidaDto resume){
         Entrevista entrevista = Entrevista.builder()
                 .uuid(idEntrevista)
-                .idEvento("")
                 .hojaDeVidaDto(resume)
-                .informacionEmpresaDto(null)
                 .build();
         return entrevistaDao.actualizarEntrevista(entrevista);
     }
@@ -26,8 +24,6 @@ public class ActualizarInformacionEntrevistaService {
     public Mono<String> actualizarInformacionEmpresa(String idEntrevista, FormularioDto info, List<String> preguntas){
         Entrevista entrevista = Entrevista.builder()
                 .uuid(idEntrevista)
-                .idEvento("")
-                .hojaDeVidaDto(null)
                 .informacionEmpresaDto(InformacionEmpresaDto.builder()
                         .empresa(info.getEmpresa())
                         .pais(info.getPais())
