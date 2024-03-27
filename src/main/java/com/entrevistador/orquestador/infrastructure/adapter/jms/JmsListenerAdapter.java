@@ -1,18 +1,17 @@
 package com.entrevistador.orquestador.infrastructure.adapter.jms;
 
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.MensajeAnalizadorDto;
 import com.entrevistador.orquestador.dominio.model.dto.MensajeAnalizadorEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
 
 @Service
 public class JmsListenerAdapter {
@@ -32,10 +31,10 @@ public class JmsListenerAdapter {
     public void receptorHojaDevida(String mensajeJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            MensajeAnalizadorDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorDto.class);
-            //Mono.just(mensajeAnalizadorDto);
-            this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista());
-            this.orquestadorEntrevista.receptorHojaDeVida(mensajeAnalizadorDto.getIdEntrevista(), mensajeAnalizadorDto.getHojaDeVida());
+            MensajeAnalizadorDto mensajeAnalizador = objectMapper.readValue(mensajeJson, MensajeAnalizadorDto.class);
+            Mono.just(mensajeAnalizador).flatMap(mensajeAnalizadorDto -> this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista()))
+                    .then(this.orquestadorEntrevista.receptorHojaDeVida(mensajeAnalizador.getIdEntrevista(), mensajeAnalizador.getHojaDeVida())).block();
+
         } catch (IOException e) {
             throw new RuntimeException("Error al deserializar el mensaje JSON", e);
         }
@@ -45,10 +44,12 @@ public class JmsListenerAdapter {
     public void receptorInformacionEmpresa(String mensajeJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            MensajeAnalizadorEmpresaDto mensajeAnalizadorDto = objectMapper.readValue(mensajeJson, MensajeAnalizadorEmpresaDto.class);
-            //Mono.just(mensajeAnalizadorDto);
-            this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista());
-            this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizadorDto.getIdEntrevista(), mensajeAnalizadorDto.getFormulario(), mensajeAnalizadorDto.getPreguntas());
+
+            MensajeAnalizadorEmpresaDto mensajeAnalizador = objectMapper.readValue(mensajeJson, MensajeAnalizadorEmpresaDto.class);
+            Mono.just(mensajeAnalizador).flatMap(mensajeAnalizadorDto -> this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista()))
+                    .then(this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizador.getIdEntrevista(),
+                            mensajeAnalizador.getFormulario(), mensajeAnalizador.getPreguntas())).block();
+
         } catch (IOException e) {
             throw new RuntimeException("Error al deserializar el mensaje JSON", e);
         }

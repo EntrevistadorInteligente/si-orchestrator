@@ -1,27 +1,23 @@
 package com.entrevistador.orquestador.infrastructure.adapter.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @Getter
-@Entity
-@Table(name = "ENTREVISTA")
 @Builder
+@Document(collection = "entrevista")
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class EntrevistaEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String uuid;
-
     private String nombre;
     private String perfil;
     private String seniority;
@@ -32,12 +28,10 @@ public class EntrevistaEntity {
     private String proyectos;
     private String nivelIngles;
     private String otrasHabilidades;
-
     private String empresa;
     private String perfilEmpresa;
     private String seniorityEmpresa;
     private String pais;
     private String preguntas;
-
 
 }
