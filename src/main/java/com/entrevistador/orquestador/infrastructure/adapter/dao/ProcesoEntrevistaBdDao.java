@@ -44,15 +44,22 @@ public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
     }
 
     @Override
-    public Mono<ProcesoEntrevistaDto> actualizar(ProcesoEntrevistaEntity procesoEntrevistaEntity) {
-        return this.procesoEntrevistaRepository.save(procesoEntrevistaEntity)
-                .map(procesoEntrevistaEntity1 ->
+    public Mono<ProcesoEntrevistaDto> actualizar(ProcesoEntrevistaDto procesoEntrevistaDto) {
+        return Mono.just(ProcesoEntrevistaEntity.builder()
+                        .uuid(procesoEntrevistaDto.getUuid())
+                        .fechaHora(procesoEntrevistaDto.getFechaYHora())
+                        .estado(procesoEntrevistaDto.getEstado())
+                        .fuente(procesoEntrevistaDto.getFuente())
+                        .error(procesoEntrevistaDto.getError())
+                        .build())
+                .flatMap(this.procesoEntrevistaRepository::save)
+                .map(procesoEntrevistaEntity ->
                         ProcesoEntrevistaDto.builder()
-                                .uuid(procesoEntrevistaEntity1.getUuid())
-                                .fechaYHora(procesoEntrevistaEntity1.getFechaHora())
-                                .fuente(procesoEntrevistaEntity1.getFuente())
-                                .estado(procesoEntrevistaEntity1.getEstado())
-                                .error(procesoEntrevistaEntity1.getError())
+                                .uuid(procesoEntrevistaEntity.getUuid())
+                                .fechaYHora(procesoEntrevistaEntity.getFechaHora())
+                                .fuente(procesoEntrevistaEntity.getFuente())
+                                .estado(procesoEntrevistaEntity.getEstado())
+                                .error(procesoEntrevistaEntity.getError())
                                 .build()
                 );
     }

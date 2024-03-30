@@ -28,9 +28,10 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
 
     private final AnalizadorClient analizadorClient;
     private final ValidadorPdfService validadorPdfService;
-    private final ProcesoEntrevistaDao procesoEntrevistaDao; //TODO: Crear servicio para el puerto ProcesoEntrevistaDao
+    private final ProcesoEntrevistaDao procesoEntrevistaDao;
     private final CrearEntrevistaService crearEntrevistaService;
 
+    @Override
     public Mono<Void> generarSolicitudEntrevista(Mono<FilePart> file, FormularioDto formulario) {
         return file.flatMap(this.validadorPdfService::ejecutar)
                 .flatMap(bytes -> this.procesarHojaDeVida(bytes, formulario));
