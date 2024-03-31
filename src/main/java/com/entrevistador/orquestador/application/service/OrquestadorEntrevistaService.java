@@ -3,10 +3,12 @@ package com.entrevistador.orquestador.application.service;
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
+import com.entrevistador.orquestador.dominio.port.sse.SseService;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.SolicitudPreparacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
 import com.entrevistador.orquestador.dominio.port.client.PreparadorClient;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -20,24 +22,30 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     private final ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService;
     private final ValidadorEventosSimultaneosService validadorEventosSimultaneosService;
     private final PreparadorClient preparadorClient;
+    private final SseService sseService;
 
-    public OrquestadorEntrevistaService(SolicitudPreparacionEntrevistaService solicitudPreparacionEntrevistaService, ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService, ValidadorEventosSimultaneosService validadorEventosSimultaneosService, PreparadorClient preparadorClient) {
+    public OrquestadorEntrevistaService(SolicitudPreparacionEntrevistaService solicitudPreparacionEntrevistaService, ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService, ValidadorEventosSimultaneosService validadorEventosSimultaneosService, PreparadorClient preparadorClient, SseService sseService) {
         this.solicitudPreparacionEntrevistaService = solicitudPreparacionEntrevistaService;
         this.actualizarInformacionEntrevistaService = actualizarInformacionEntrevistaService;
         this.validadorEventosSimultaneosService = validadorEventosSimultaneosService;
         this.preparadorClient = preparadorClient;
+        this.sseService = sseService;
     }
 
     @Override
     public Mono<Void> receptorHojaDeVida(String idEntrevista, HojaDeVidaDto resume) {
-        return this.actualizarInformacionEntrevistaService.actualizarHojaDeVida(idEntrevista, resume).flatMap(data ->
-                this.validadorEventosSimultaneosService.ejecutar(data)).flatMap(this::enviarInformacionEntrevistaAPreparador);
+        return this.actualizarInformacionEntrevistaService
+                .actualizarHojaDeVida(idEntrevista, resume)
+                .flatMap(this.validadorEventosSimultaneosService::ejecutar)
+                .flatMap(this::enviarInformacionEntrevistaAPreparador);
     }
 
     @Override
     public Mono<Void> receptorInformacionEmpresa(String idEntrevista, FormularioDto info, List<String> preguntas) {
-        return this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(idEntrevista, info, preguntas).flatMap(data ->
-                this.validadorEventosSimultaneosService.ejecutar(data)).flatMap(this::enviarInformacionEntrevistaAPreparador);
+        return this.actualizarInformacionEntrevistaService
+                .actualizarInformacionEmpresa(idEntrevista, info, preguntas)
+                .flatMap(this.validadorEventosSimultaneosService::ejecutar)
+                .flatMap(this::enviarInformacionEntrevistaAPreparador);
     }
 
     @Override
@@ -46,8 +54,12 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     }
 
     private Mono<Void> enviarInformacionEntrevistaAPreparador(boolean eventosFinalizados){
-        System.out.println(eventosFinalizados);
         if(eventosFinalizados){
+            ServerSentEvent<String> event = ServerSentEvent.<String>builder()
+                    .data("La entrevista está lista.")
+                    .build();
+
+            sseService.emitEvent(event);
             this.solicitudPreparacionEntrevistaService.ejecutar();
             this.preparadorClient.generarEntrevista();
         }
