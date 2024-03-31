@@ -15,10 +15,10 @@ import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
-public final class JmsPublisherAdapter  implements AnalizadorClient {
+public final class JmsPublisherAdapter implements AnalizadorClient {
 
     @Autowired
-    private KafkaTemplate<String,Object> kafkaTemplate;
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Value("${kafka.topic-analizador-publisher}")
     private String hojaDeVidaPublisherTopic;
@@ -42,7 +42,7 @@ public final class JmsPublisherAdapter  implements AnalizadorClient {
             });
 
         } catch (Exception ex) {
-            System.out.println("ERROR : "+ ex.getMessage());
+            System.out.println("ERROR : " + ex.getMessage());
         }
 
         return Mono.empty();
@@ -64,7 +64,7 @@ public final class JmsPublisherAdapter  implements AnalizadorClient {
             });
 
         } catch (Exception ex) {
-            System.out.println("ERROR : "+ ex.getMessage());
+            System.out.println("ERROR : " + ex.getMessage());
         }
 
         return Mono.empty();

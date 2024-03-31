@@ -7,20 +7,20 @@ import java.util.List;
 
 @Getter
 public enum FuenteEnum {
-    ANALIZADOR(new EstadoProcesoEnum[] {EstadoProcesoEnum.AC, EstadoProcesoEnum.AOE,
-            EstadoProcesoEnum.CVA, EstadoProcesoEnum.AE,EstadoProcesoEnum.FN }),
-    GENERADOR_FEEDBACK(new EstadoProcesoEnum[] {EstadoProcesoEnum.GF, EstadoProcesoEnum.GFG}),
-    PREPARADOR_ENTREVISTA(new EstadoProcesoEnum[] {EstadoProcesoEnum.GP, EstadoProcesoEnum.OR,
+    ANALIZADOR(new EstadoProcesoEnum[]{EstadoProcesoEnum.AC, EstadoProcesoEnum.AOE,
+            EstadoProcesoEnum.CVA, EstadoProcesoEnum.AE, EstadoProcesoEnum.FN}),
+    GENERADOR_FEEDBACK(new EstadoProcesoEnum[]{EstadoProcesoEnum.GF, EstadoProcesoEnum.GFG}),
+    PREPARADOR_ENTREVISTA(new EstadoProcesoEnum[]{EstadoProcesoEnum.GP, EstadoProcesoEnum.OR,
             EstadoProcesoEnum.AR, EstadoProcesoEnum.AF});
 
     private List<EstadoProcesoEnum> estado;
 
-    FuenteEnum(EstadoProcesoEnum[] estado){
+    FuenteEnum(EstadoProcesoEnum[] estado) {
         this.estado = Arrays.asList(estado);
     }
 
-    public EstadoProcesoEnum validarEstado(FuenteEnum fuenteEnum, EstadoProcesoEnum estadoProcesoEnum){
-        if(fuenteEnum.getEstado().contains(estadoProcesoEnum))
+    public EstadoProcesoEnum validarEstado(FuenteEnum fuenteEnum, EstadoProcesoEnum estadoProcesoEnum) {
+        if (fuenteEnum.getEstado().contains(estadoProcesoEnum))
             return estadoProcesoEnum;
         return null;
     }

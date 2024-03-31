@@ -7,5 +7,6 @@ import reactor.core.publisher.Mono;
 public interface AnalizadorClient {
 
     Mono<Void> enviarHojaDeVida(PreparacionEntrevistaDto preparacionEntrevistaDto);
+
     Mono<Void> enviarInformacionEmpresa(PosicionEntrevistaDto perfil);
 }

@@ -16,7 +16,7 @@ public class MensajeAnalizadorEmpresaDto {
     @JsonProperty("id_entrevista")
     private String idEntrevista;
     @JsonProperty("formulario")
-    private  FormularioDto formulario;
+    private FormularioDto formulario;
     @JsonProperty("preguntas")
     private List<String> preguntas;
 }

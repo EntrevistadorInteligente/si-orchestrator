@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum EstadoProcesoEnum {
     AC("Analizando CV"),
-    FN ("Finalizado"),
+    FN("Finalizado"),
     AOE("Analizando oferta de empleo"),
     CVA("Comprobando validez de archivo"),
     AE("Analizando empresas"),
@@ -20,7 +20,7 @@ public enum EstadoProcesoEnum {
 
     private String descripcion;
 
-    EstadoProcesoEnum(String descripcion){
+    EstadoProcesoEnum(String descripcion) {
         this.descripcion = descripcion;
     }
 

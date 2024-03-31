@@ -3,8 +3,10 @@ package com.entrevistador.orquestador.infrastructure.rest.controller;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.VistaPreviaEntrevistaDto;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,23 +25,23 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class EntrevistaController {
 
-  private final SolicitudEntrevista solicitudEntrevista;
+    private final SolicitudEntrevista solicitudEntrevista;
 
-  @PostMapping(value = "/cv")
-  public Mono<ResponseEntity<String>> crearSolicitudEntrevista(
-      @RequestPart("file") Mono<FilePart> file,
-      @RequestPart("formulario") FormularioDto formularioDto
-  ) {
-    return this.solicitudEntrevista.generarSolicitudEntrevista(file, formularioDto)
-        .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
-            .body("Archivo PDF cargado con exito")));
-  }
+    @PostMapping(value = "/cv")
+    public Mono<ResponseEntity<String>> crearSolicitudEntrevista(
+            @RequestPart("file") Mono<FilePart> file,
+            @RequestPart("formulario") FormularioDto formularioDto
+    ) {
+        return this.solicitudEntrevista.generarSolicitudEntrevista(file, formularioDto)
+                .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
+                        .body("Archivo PDF cargado con exito")));
+    }
 
-  @GetMapping(value = "/preguntas")
-  public List<VistaPreviaEntrevistaDto> crearSolicitudEntrevista(
-      @RequestParam("posicion") String posicion) {
-    return new ArrayList<>(solicitudEntrevista.generarPreguntas(posicion));
-  }
+    @GetMapping(value = "/preguntas")
+    public List<VistaPreviaEntrevistaDto> crearSolicitudEntrevista(
+            @RequestParam("posicion") String posicion) {
+        return new ArrayList<>(solicitudEntrevista.generarPreguntas(posicion));
+    }
 
 }
 

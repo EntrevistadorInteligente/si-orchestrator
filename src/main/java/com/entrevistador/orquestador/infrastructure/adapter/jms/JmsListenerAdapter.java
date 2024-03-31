@@ -63,7 +63,7 @@ public class JmsListenerAdapter {
 
     @KafkaListener(topics = "resumeTopic2", groupId = "investigacionEmpresa")
     public void receptorErrorInvestigacionEmpresa(ProcesoEntrevistaDto procesoEntrevistaDto, String idEntrevista) {
-        this.crearEntrevistaAlternativaService.ejecutar(procesoEntrevistaDto ,idEntrevista);
+        this.crearEntrevistaAlternativaService.ejecutar(procesoEntrevistaDto, idEntrevista);
     }
 
 }

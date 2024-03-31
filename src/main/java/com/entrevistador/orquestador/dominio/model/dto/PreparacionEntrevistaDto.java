@@ -10,7 +10,7 @@ public class PreparacionEntrevistaDto {
     @JsonProperty("id_entrevista")
     private String idEntrevista;
     @JsonProperty("evento_entrevista_id")
-    private  String eventoEntrevistaId;
+    private String eventoEntrevistaId;
     @JsonProperty("hoja_de_vida")
-    private  byte[] hojaDeVida;
+    private byte[] hojaDeVida;
 }

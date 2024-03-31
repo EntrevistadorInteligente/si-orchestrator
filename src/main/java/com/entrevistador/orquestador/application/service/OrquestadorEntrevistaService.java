@@ -49,12 +49,12 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     }
 
     @Override
-    public void generarEntrevistaConDatosDummy(String idEntrevista){
+    public void generarEntrevistaConDatosDummy(String idEntrevista) {
         enviarInformacionEntrevistaAPreparador(true);
     }
 
-    private Mono<Void> enviarInformacionEntrevistaAPreparador(boolean eventosFinalizados){
-        if(eventosFinalizados){
+    private Mono<Void> enviarInformacionEntrevistaAPreparador(boolean eventosFinalizados) {
+        if (eventosFinalizados) {
             ServerSentEvent<String> event = ServerSentEvent.<String>builder()
                     .data("La entrevista está lista.")
                     .build();
