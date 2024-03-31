@@ -13,7 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ActualizarInformacionEntrevistaService {
     private final EntrevistaDao entrevistaDao;
-    public Mono<String> actualizarHojaDeVida(String idEntrevista, HojaDeVidaDto resume){
+
+    public Mono<String> actualizarHojaDeVida(String idEntrevista, HojaDeVidaDto resume) {
         Entrevista entrevista = Entrevista.builder()
                 .uuid(idEntrevista)
                 .hojaDeVidaDto(resume)
@@ -21,7 +22,7 @@ public class ActualizarInformacionEntrevistaService {
         return entrevistaDao.actualizarEntrevista(entrevista);
     }
 
-    public Mono<String> actualizarInformacionEmpresa(String idEntrevista, FormularioDto info, List<String> preguntas){
+    public Mono<String> actualizarInformacionEmpresa(String idEntrevista, FormularioDto info, List<String> preguntas) {
         Entrevista entrevista = Entrevista.builder()
                 .uuid(idEntrevista)
                 .informacionEmpresaDto(InformacionEmpresaDto.builder()
@@ -34,5 +35,4 @@ public class ActualizarInformacionEntrevistaService {
                 .build();
         return entrevistaDao.actualizarEntrevista(entrevista);
     }
-
 }
