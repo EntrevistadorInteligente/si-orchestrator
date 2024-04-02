@@ -5,12 +5,12 @@ import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ActualizarInformacionEntrevistaService {
     private final EntrevistaDao entrevistaDao;
 

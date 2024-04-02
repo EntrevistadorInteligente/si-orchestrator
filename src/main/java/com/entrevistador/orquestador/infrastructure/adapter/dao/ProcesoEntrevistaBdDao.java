@@ -4,18 +4,16 @@ import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
 
 @Repository
+@RequiredArgsConstructor
 public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
     private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
-
-    public ProcesoEntrevistaBdDao(ProcesoEntrevistaRepository procesoEntrevistaRepository) {
-        this.procesoEntrevistaRepository = procesoEntrevistaRepository;
-    }
 
     @Override
     public Mono<ProcesoEntrevistaDto> crearEvento() {

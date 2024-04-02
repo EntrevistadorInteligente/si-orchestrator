@@ -5,16 +5,14 @@ import com.entrevistador.orquestador.dominio.model.Entrevista;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.EntrevistaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
 @Repository
+@RequiredArgsConstructor
 public class EntrevistaBdDao implements EntrevistaDao {
     private final EntrevistaRepository entrevistaRepository;
-
-    public EntrevistaBdDao(EntrevistaRepository entrevistaRepository) {
-        this.entrevistaRepository = entrevistaRepository;
-    }
 
     @Override
     public Mono<String> crearEntrevista() {
@@ -76,5 +74,4 @@ public class EntrevistaBdDao implements EntrevistaDao {
 
                 });
     }
-
 }

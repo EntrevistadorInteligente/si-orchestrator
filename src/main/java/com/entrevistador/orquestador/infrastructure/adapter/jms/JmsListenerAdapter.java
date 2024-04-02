@@ -7,6 +7,7 @@ import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -14,18 +15,11 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 
 @Service
+@RequiredArgsConstructor
 public class JmsListenerAdapter {
-
     private final OrquestadorEntrevista orquestadorEntrevista;
     private final ActualizarEstadoProcesoEntrevistaService actualizarEstadoProcesoEntrevistaService;
     private final CrearEntrevistaAlternativaService crearEntrevistaAlternativaService;
-
-
-    public JmsListenerAdapter(OrquestadorEntrevista orquestadorEntrevista, ActualizarEstadoProcesoEntrevistaService actualizarEstadoProcesoEntrevistaService, CrearEntrevistaAlternativaService crearEntrevistaAlternativaService) {
-        this.orquestadorEntrevista = orquestadorEntrevista;
-        this.actualizarEstadoProcesoEntrevistaService = actualizarEstadoProcesoEntrevistaService;
-        this.crearEntrevistaAlternativaService = crearEntrevistaAlternativaService;
-    }
 
     @KafkaListener(topics = "hojaDeVidaListenerTopic", groupId = "resumeGroup")
     public void receptorHojaDevida(String mensajeJson) {
@@ -65,5 +59,4 @@ public class JmsListenerAdapter {
     public void receptorErrorInvestigacionEmpresa(ProcesoEntrevistaDto procesoEntrevistaDto, String idEntrevista) {
         this.crearEntrevistaAlternativaService.ejecutar(procesoEntrevistaDto, idEntrevista);
     }
-
 }
