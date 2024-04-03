@@ -11,7 +11,7 @@ public class CrearEntrevistaAlternativaService {
     private final NotificarFrontEntrevistaFallidaService notificarFrontEntrevistaFallidaService;
     private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
 
-    public String ejecutar(ProcesoEntrevistaDto procesoEntrevistaDto, String idEntrevista){
+    public String ejecutar(ProcesoEntrevistaDto procesoEntrevistaDto, String idEntrevista) {
         this.procesoEntrevistaRepository.save(ProcesoEntrevistaEntity.builder().build());
         return null;
     }

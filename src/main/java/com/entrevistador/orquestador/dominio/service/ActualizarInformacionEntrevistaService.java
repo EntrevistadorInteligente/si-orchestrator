@@ -5,15 +5,16 @@ import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ActualizarInformacionEntrevistaService {
     private final EntrevistaDao entrevistaDao;
-    public Mono<String> actualizarHojaDeVida(String idEntrevista, HojaDeVidaDto resume){
+
+    public Mono<String> actualizarHojaDeVida(String idEntrevista, HojaDeVidaDto resume) {
         Entrevista entrevista = Entrevista.builder()
                 .uuid(idEntrevista)
                 .hojaDeVidaDto(resume)
@@ -21,7 +22,7 @@ public class ActualizarInformacionEntrevistaService {
         return entrevistaDao.actualizarEntrevista(entrevista);
     }
 
-    public Mono<String> actualizarInformacionEmpresa(String idEntrevista, FormularioDto info, List<String> preguntas){
+    public Mono<String> actualizarInformacionEmpresa(String idEntrevista, FormularioDto info, List<String> preguntas) {
         Entrevista entrevista = Entrevista.builder()
                 .uuid(idEntrevista)
                 .informacionEmpresaDto(InformacionEmpresaDto.builder()
@@ -34,5 +35,4 @@ public class ActualizarInformacionEntrevistaService {
                 .build();
         return entrevistaDao.actualizarEntrevista(entrevista);
     }
-
 }

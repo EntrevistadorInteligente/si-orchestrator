@@ -10,6 +10,7 @@ import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,9 +29,10 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
 
     private final AnalizadorClient analizadorClient;
     private final ValidadorPdfService validadorPdfService;
-    private final ProcesoEntrevistaDao procesoEntrevistaDao; //TODO: Crear servicio para el puerto ProcesoEntrevistaDao
+    private final ProcesoEntrevistaDao procesoEntrevistaDao;
     private final CrearEntrevistaService crearEntrevistaService;
 
+    @Override
     public Mono<Void> generarSolicitudEntrevista(Mono<FilePart> file, FormularioDto formulario) {
         return file.flatMap(this.validadorPdfService::ejecutar)
                 .flatMap(bytes -> this.procesarHojaDeVida(bytes, formulario));

@@ -15,7 +15,7 @@ public class Entrevista {
     private HojaDeVidaDto hojaDeVidaDto;
     private InformacionEmpresaDto informacionEmpresaDto;
 
-    public String listToString(List<String> lista){
+    public String listToString(List<String> lista) {
         return String.join("-", lista);
     }
 

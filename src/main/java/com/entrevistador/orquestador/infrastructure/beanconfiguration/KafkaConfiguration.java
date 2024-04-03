@@ -44,8 +44,8 @@ public class KafkaConfiguration {
     private String empresaListenerTopic;
 
     @Bean
-    public Map<String,Object> producerConfig(){
-        Map<String,Object> props=new HashMap<>();
+    public Map<String, Object> producerConfig() {
+        Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 server);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
@@ -56,12 +56,12 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public ProducerFactory<String,Object> producerFactory(){
+    public ProducerFactory<String, Object> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String,Object> kafkaTemplate(){
+    public KafkaTemplate<String, Object> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
