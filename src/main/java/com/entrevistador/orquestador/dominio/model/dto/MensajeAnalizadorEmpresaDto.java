@@ -11,12 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MensajeAnalizadorEmpresaDto {
+
     @JsonProperty("proceso_entrevista")
     private ProcesoEntrevistaDto procesoEntrevista;
     @JsonProperty("id_entrevista")
     private String idEntrevista;
-    @JsonProperty("formulario")
-    private FormularioDto formulario;
-    @JsonProperty("preguntas")
-    private List<String> preguntas;
+    @JsonProperty("informacion_empresa")
+    private InformacionEmpresaDto informacionEmpresa;
 }

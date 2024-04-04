@@ -1,5 +1,6 @@
 package com.entrevistador.orquestador.dominio.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class InformacionEmpresaDto {
+    @JsonProperty("id_informacion_empresa_rag")
+    private String idInformacionEmpresaRag;
     private String empresa;
     private String perfil;
     private String seniority;

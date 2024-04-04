@@ -7,8 +7,8 @@ import java.util.List;
 
 @Getter
 public enum FuenteEnum {
-    ANALIZADOR(new EstadoProcesoEnum[]{EstadoProcesoEnum.AC, EstadoProcesoEnum.AOE,
-            EstadoProcesoEnum.CVA, EstadoProcesoEnum.AE, EstadoProcesoEnum.FN}),
+    ANALIZADOR(new EstadoProcesoEnum[]{EstadoProcesoEnum.AC, EstadoProcesoEnum.CVA, EstadoProcesoEnum.FN}),
+    ANALIZADOR_EMPRESA(new EstadoProcesoEnum[]{ EstadoProcesoEnum.AOE, EstadoProcesoEnum.AE, EstadoProcesoEnum.FN}),
     GENERADOR_FEEDBACK(new EstadoProcesoEnum[]{EstadoProcesoEnum.GF, EstadoProcesoEnum.GFG}),
     PREPARADOR_ENTREVISTA(new EstadoProcesoEnum[]{EstadoProcesoEnum.GP, EstadoProcesoEnum.OR,
             EstadoProcesoEnum.AR, EstadoProcesoEnum.AF});

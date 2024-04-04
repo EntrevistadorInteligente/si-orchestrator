@@ -29,6 +29,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
                     if (entrevista.getHojaDeVidaDto() == null) {
                         return entrevistaRepository.save(EntrevistaEntity.builder()
                                         .uuid(entrevistaEntity.getUuid())
+                                        .idHojaDeVidaRag(entrevistaEntity.getIdHojaDeVidaRag())
                                         .nombre(entrevistaEntity.getNombre())
                                         .perfil(entrevistaEntity.getPerfil())
                                         .seniority(entrevistaEntity.getSeniority())
@@ -39,6 +40,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
                                         .proyectos(entrevistaEntity.getProyectos())
                                         .nivelIngles(entrevistaEntity.getNivelIngles())
                                         .otrasHabilidades(entrevistaEntity.getOtrasHabilidades())
+                                        .idInformacionEmpresaRag(entrevista.getInformacionEmpresaDto().getIdInformacionEmpresaRag())
                                         .empresa(entrevista.getInformacionEmpresaDto().getEmpresa())
                                         .perfilEmpresa(entrevista.getInformacionEmpresaDto().getPerfil())
                                         .seniorityEmpresa(entrevista.getInformacionEmpresaDto().getSeniority())
@@ -51,6 +53,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
                     if (entrevista.getInformacionEmpresaDto() == null) {
                         return entrevistaRepository.save(EntrevistaEntity.builder()
                                         .uuid(entrevistaEntity.getUuid())
+                                        .idHojaDeVidaRag(entrevista.getHojaDeVidaDto().getIdHojaDeVidaRag())
                                         .nombre(entrevista.getHojaDeVidaDto().getNombre())
                                         .perfil(entrevista.getHojaDeVidaDto().getPerfil())
                                         .seniority(entrevista.getHojaDeVidaDto().getSeniority())
@@ -61,6 +64,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
                                         .proyectos(entrevista.listToString(entrevista.getHojaDeVidaDto().getProyectos()))
                                         .nivelIngles(entrevista.getHojaDeVidaDto().getNivelIngles())
                                         .otrasHabilidades(entrevista.listToString(entrevista.getHojaDeVidaDto().getOtrasHabilidades()))
+                                        .idInformacionEmpresaRag(entrevistaEntity.getIdInformacionEmpresaRag())
                                         .empresa(entrevistaEntity.getEmpresa())
                                         .perfilEmpresa(entrevistaEntity.getPerfilEmpresa())
                                         .seniorityEmpresa(entrevistaEntity.getSeniorityEmpresa())

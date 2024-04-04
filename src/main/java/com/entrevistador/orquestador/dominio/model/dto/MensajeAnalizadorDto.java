@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MensajeAnalizadorDto {
+    @JsonProperty("id_hoja_de_vida_rag")
+    private String idHojaDeVidaRag;
     @JsonProperty("proceso_entrevista")
     private ProcesoEntrevistaDto procesoEntrevista;
     @JsonProperty("id_entrevista")

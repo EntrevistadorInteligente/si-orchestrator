@@ -1,12 +1,10 @@
 package com.entrevistador.orquestador.dominio.model.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Getter
@@ -14,7 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class HojaDeVidaDto {
-
+    @JsonProperty("id_hoja_de_vida_rag")
+    private String idHojaDeVidaRag;
     private String nombre;
     private String perfil;
     private String seniority;

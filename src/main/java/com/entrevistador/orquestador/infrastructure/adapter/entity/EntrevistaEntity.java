@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class EntrevistaEntity {
     @Id
     private String uuid;
+    private String idHojaDeVidaRag;
     private String nombre;
     private String perfil;
     private String seniority;
@@ -28,6 +29,7 @@ public class EntrevistaEntity {
     private String proyectos;
     private String nivelIngles;
     private String otrasHabilidades;
+    private String idInformacionEmpresaRag;
     private String empresa;
     private String perfilEmpresa;
     private String seniorityEmpresa;

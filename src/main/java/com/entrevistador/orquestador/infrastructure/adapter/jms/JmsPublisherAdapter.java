@@ -2,6 +2,7 @@ package com.entrevistador.orquestador.infrastructure.adapter.jms;
 
 import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.SolicitudGeneracionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,9 @@ public final class JmsPublisherAdapter implements AnalizadorClient {
 
     @Value("${kafka.topic-recopilador-publisher}")
     private String topicEmpresa;
+
+    @Value("${kafka.topic-generador-publisher}")
+    private String topicGenerador;
 
     @Override
     public Mono<Void> enviarHojaDeVida(PreparacionEntrevistaDto preparacionEntrevistaDto) {
@@ -59,6 +63,27 @@ public final class JmsPublisherAdapter implements AnalizadorClient {
                 } else {
                     System.out.println("Unable to send message=[" +
                             perfil.toString() + "] due to : " + ex.getMessage());
+                }
+            });
+
+        } catch (Exception ex) {
+            System.out.println("ERROR : " + ex.getMessage());
+        }
+
+        return Mono.empty();
+    }
+
+    @Override
+    public Mono<Void> generarEntrevista(SolicitudGeneracionEntrevistaDto solicitudGeneracionEntrevista) {
+        try {
+            CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topicGenerador, solicitudGeneracionEntrevista);
+            future.whenComplete((result, ex) -> {
+                if (ex == null) {
+                    System.out.println("Sent message=[" + solicitudGeneracionEntrevista.getIdEntrevista() +
+                            "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                } else {
+                    System.out.println("Unable to send message=[" +
+                            solicitudGeneracionEntrevista.toString() + "] due to : " + ex.getMessage());
                 }
             });
 
