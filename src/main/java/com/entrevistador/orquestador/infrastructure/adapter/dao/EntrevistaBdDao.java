@@ -2,6 +2,7 @@ package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
 import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.Entrevista;
+import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.EntrevistaRepository;
@@ -77,5 +78,10 @@ public class EntrevistaBdDao implements EntrevistaDao {
                     }
 
                 });
+    }
+
+    @Override
+    public Mono<RagsIdsDto> consultarRagsId(String idEntrevista) {
+        return entrevistaRepository.findIdHojaDeVidaAndInformacionEmpresaIdById(idEntrevista);
     }
 }
