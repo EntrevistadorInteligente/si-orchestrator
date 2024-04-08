@@ -58,11 +58,11 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     }
 
     private Mono<Void> enviarInformacionEntrevistaAPreparador(String idEntrevista, RagsIdsDto ragsIdsDto) {
-        if (ragsIdsDto.getidHojaDeVidaRag() != null && ragsIdsDto.getidInformacionEmpresaRag() != null) {
+        if (ragsIdsDto.getIdHojaDeVidaRag() != null && ragsIdsDto.getIdInformacionEmpresaRag() != null) {
             return this.analizadorClient.generarEntrevista(SolicitudGeneracionEntrevistaDto.builder()
                             .idEntrevista(idEntrevista)
-                            .idHojaDeVida(ragsIdsDto.getidHojaDeVidaRag())
-                            .idInformacionEmpresa(ragsIdsDto.getidInformacionEmpresaRag())
+                            .idHojaDeVida(ragsIdsDto.getIdHojaDeVidaRag())
+                            .idInformacionEmpresa(ragsIdsDto.getIdInformacionEmpresaRag())
                             .build())
                     .then();
         }
