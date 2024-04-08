@@ -10,11 +10,11 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 public interface OrquestadorEntrevista {
-    Mono<Void> receptorHojaDeVida(String idEntrevista, HojaDeVidaDto resume, RagsIdsDto ragsIdsDto);
+    Mono<Void> receptorHojaDeVida(String idEntrevista, HojaDeVidaDto resume);
 
-    Mono<Void> receptorInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info, RagsIdsDto ragsIdsDto);
+    Mono<Void> receptorInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info);
 
-    void generarEntrevistaConDatosDummy(String idEntrevista, RagsIdsDto ragsIdsDto);
+    void generarEntrevistaConDatosDummy(String idEntrevistao, RagsIdsDto ragsIdsDto);
 
     Mono<Void> enviarPreguntasFront(List<String> preguntas);
 }
