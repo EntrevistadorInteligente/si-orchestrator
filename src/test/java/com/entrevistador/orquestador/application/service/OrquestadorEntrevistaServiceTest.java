@@ -2,6 +2,8 @@ package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
+import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
+import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.port.client.PreparadorClient;
 import com.entrevistador.orquestador.dominio.port.sse.SseService;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
@@ -12,10 +14,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -42,8 +47,15 @@ class OrquestadorEntrevistaServiceTest {
 
     @Test
     void testReceptorHojaDeVida_WhenSolicitudEventosSimultaneosServiceRetornaTrue() {
+        ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
+        Map<String, String> map = Map.of(
+                "idHojaDeVidaRag", "theTitle",
+                "idInformacionEmpresaRag", "theUrl"
+        );
+        RagsIdsDto projection = factory.createProjection(RagsIdsDto.class, map);
+
         when(this.actualizarInformacionEntrevistaService.actualizarHojaDeVida(anyString(), any())).thenReturn(Mono.just("any"));
-        when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(Boolean.TRUE));
+        when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(projection));
         when(this.solicitudPreparacionEntrevistaService.ejecutar()).thenReturn("any");
         when(this.preparadorClient.generarEntrevista()).thenReturn(Mono.empty());
 
@@ -62,8 +74,15 @@ class OrquestadorEntrevistaServiceTest {
 
     @Test
     void testReceptorHojaDeVida_WhenSolicitudEventosSimultaneosServiceRetornaFalse() {
+        ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
+        Map<String, String> map = Map.of(
+                "idHojaDeVidaRag", "theTitle",
+                "idInformacionEmpresaRag", "theUrl"
+        );
+        RagsIdsDto projection = factory.createProjection(RagsIdsDto.class, map);
+
         when(this.actualizarInformacionEntrevistaService.actualizarHojaDeVida(anyString(), any())).thenReturn(Mono.just("any"));
-        when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(Boolean.FALSE));
+        when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(projection));
 
         Mono<Void> publisher = this.orquestadorEntrevistaService.receptorHojaDeVida("any", HojaDeVidaDto.builder().build());
 
@@ -80,18 +99,25 @@ class OrquestadorEntrevistaServiceTest {
 
     @Test
     void testReceptorInformacionEmpresa_WhenSolicitudEventosSimultaneosServiceRetornaTrue() {
-        when(this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(anyString(), any(), anyList())).thenReturn(Mono.just("any"));
-        when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(Boolean.TRUE));
+        ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
+        Map<String, String> map = Map.of(
+                "idHojaDeVidaRag", "theTitle",
+                "idInformacionEmpresaRag", "theUrl"
+        );
+        RagsIdsDto projection = factory.createProjection(RagsIdsDto.class, map);
+
+        when(this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(anyString(), any())).thenReturn(Mono.just("any"));
+        when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(projection));
         when(this.solicitudPreparacionEntrevistaService.ejecutar()).thenReturn("any");
         when(this.preparadorClient.generarEntrevista()).thenReturn(Mono.empty());
 
-        Mono<Void> publisher = this.orquestadorEntrevistaService.receptorInformacionEmpresa("any", FormularioDto.builder().build(), List.of("any"));
+        Mono<Void> publisher = this.orquestadorEntrevistaService.receptorInformacionEmpresa("any", InformacionEmpresaDto.builder().build());
 
         StepVerifier
                 .create(publisher)
                 .verifyComplete();
 
-        verify(this.actualizarInformacionEntrevistaService, times(1)).actualizarInformacionEmpresa(anyString(), any(), anyList());
+        verify(this.actualizarInformacionEntrevistaService, times(1)).actualizarInformacionEmpresa(anyString(), any());
         verify(this.validadorEventosSimultaneosService, timeout(1)).ejecutar(anyString());
         verify(this.sseService, times(1)).emitEvent(any());
         verify(this.solicitudPreparacionEntrevistaService, times(1)).ejecutar();
@@ -100,16 +126,23 @@ class OrquestadorEntrevistaServiceTest {
 
     @Test
     void testReceptorInformacionEmpresa_WhenSolicitudEventosSimultaneosServiceRetornaFalse() {
-        when(this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(anyString(), any(), anyList())).thenReturn(Mono.just("any"));
-        when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(Boolean.FALSE));
+        ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
+        Map<String, String> map = Map.of(
+                "idHojaDeVidaRag", "theTitle",
+                "idInformacionEmpresaRag", "theUrl"
+        );
+        RagsIdsDto projection = factory.createProjection(RagsIdsDto.class, map);
 
-        Mono<Void> publisher = this.orquestadorEntrevistaService.receptorInformacionEmpresa("any", FormularioDto.builder().build(), List.of("any"));
+        when(this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(anyString(), any())).thenReturn(Mono.just("any"));
+        when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(projection));
+
+        Mono<Void> publisher = this.orquestadorEntrevistaService.receptorInformacionEmpresa("any", InformacionEmpresaDto.builder().build());
 
         StepVerifier
                 .create(publisher)
                 .verifyComplete();
 
-        verify(this.actualizarInformacionEntrevistaService, times(1)).actualizarInformacionEmpresa(anyString(), any(), anyList());
+        verify(this.actualizarInformacionEntrevistaService, times(1)).actualizarInformacionEmpresa(anyString(), any());
         verify(this.validadorEventosSimultaneosService, timeout(1)).ejecutar(anyString());
         verify(this.sseService, times(0)).emitEvent(any());
         verify(this.solicitudPreparacionEntrevistaService, times(0)).ejecutar();

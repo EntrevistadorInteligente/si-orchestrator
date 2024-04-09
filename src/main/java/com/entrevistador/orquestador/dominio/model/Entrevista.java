@@ -12,7 +12,7 @@ import java.util.List;
 public class Entrevista {
     public String uuid;
     private String idEvento;
-    private HojaDeVidaDto hojaDeVidaDto;
+    private String idHojaDeVidaRag;
     private InformacionEmpresaDto informacionEmpresaDto;
 
     public String listToString(List<String> lista) {

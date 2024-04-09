@@ -13,4 +13,5 @@ public interface SolicitudEntrevista {
     Mono<Void> generarSolicitudEntrevista(Mono<FilePart> file, FormularioDto formularioDto);
 
     List<VistaPreviaEntrevistaDto> generarPreguntas(String posicion);
+
 }

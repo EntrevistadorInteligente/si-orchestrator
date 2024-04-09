@@ -3,6 +3,7 @@ package com.entrevistador.orquestador.infrastructure.adapter.jms;
 import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.SolicitudGeneracionEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.SolicitudHojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,17 +31,17 @@ public final class JmsPublisherAdapter implements AnalizadorClient {
     private String topicGenerador;
 
     @Override
-    public Mono<Void> enviarHojaDeVida(PreparacionEntrevistaDto preparacionEntrevistaDto) {
+    public Mono<Void> enviarHojaDeVida(SolicitudHojaDeVidaDto solicitudHojaDeVidaDto) {
 
         try {
-            CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(hojaDeVidaPublisherTopic, preparacionEntrevistaDto);
+            CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(hojaDeVidaPublisherTopic, solicitudHojaDeVidaDto);
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
-                    System.out.println("Sent message=[" + preparacionEntrevistaDto.getIdEntrevista() +
+                    System.out.println("Sent message=[" + solicitudHojaDeVidaDto.getUsername() +
                             "] with offset=[" + result.getRecordMetadata().offset() + "]");
                 } else {
                     System.out.println("Unable to send message=[" +
-                            preparacionEntrevistaDto.toString() + "] due to : " + ex.getMessage());
+                            solicitudHojaDeVidaDto.toString() + "] due to : " + ex.getMessage());
                 }
             });
 

@@ -13,8 +13,8 @@ public class ValidadorEventosSimultaneosService {
     public Mono<RagsIdsDto> ejecutar(String idEntrevista) {
       return entrevistaDao.consultarRagsId(idEntrevista)
           .flatMap(ragsIdsDto -> {
-            String idHojaDeVida = ragsIdsDto.getidHojaDeVidaRag();
-            String idInformacionEmpresa = ragsIdsDto.getidInformacionEmpresaRag();
+            String idHojaDeVida = ragsIdsDto.getIdHojaDeVidaRag();
+            String idInformacionEmpresa = ragsIdsDto.getIdInformacionEmpresaRag();
             if (Objects.nonNull(idHojaDeVida) && Objects.nonNull(idInformacionEmpresa))
               return Mono.just(ragsIdsDto);
             else

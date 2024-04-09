@@ -8,7 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FormularioDto {
-
     private String empresa;
     private String perfil;
     private String seniority;

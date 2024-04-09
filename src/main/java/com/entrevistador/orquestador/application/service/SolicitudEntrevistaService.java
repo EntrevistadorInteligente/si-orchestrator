@@ -32,7 +32,6 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
     private final ProcesoEntrevistaDao procesoEntrevistaDao;
     private final CrearEntrevistaService crearEntrevistaService;
 
-    @Override
     public Mono<Void> generarSolicitudEntrevista(Mono<FilePart> file, FormularioDto formulario) {
         return file.flatMap(this.validadorPdfService::ejecutar)
                 .flatMap(bytes -> this.procesarHojaDeVida(bytes, formulario));
@@ -43,20 +42,10 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
                         this.crearEntrevistaService.ejecutar(),
                         this.procesoEntrevistaDao.crearEvento(),
                         (idEntrevista, procesoEntrevistaDto) ->
-                                this.enviarHojaDeVida(idEntrevista, procesoEntrevistaDto, hojaDeVidaBytes)
+                                Mono.just(Tuples.of(idEntrevista, procesoEntrevistaDto.getUuid())) //TODO: reemplazar por validar match
 
                 )
                 .flatMap(tuple2Mono -> tuple2Mono.flatMap(tuple -> this.enviarInformacionEmpresa(tuple.getT1(), tuple.getT2(), formulario)));
-    }
-
-    private Mono<Tuple2<String, String>> enviarHojaDeVida(String idEntrevista, ProcesoEntrevistaDto eventoEntrevista, byte[] hojaDeVidaBytes) {
-        return this.analizadorClient.enviarHojaDeVida(
-                        PreparacionEntrevistaDto.builder()
-                                .idEntrevista(idEntrevista)
-                                .eventoEntrevistaId(eventoEntrevista.getUuid())
-                                .hojaDeVida(hojaDeVidaBytes)
-                                .build())
-                .then(Mono.just(Tuples.of(idEntrevista, eventoEntrevista.getUuid())));
     }
 
     private Mono<Void> enviarInformacionEmpresa(String idEntrevista, String idEventoEntrevista, FormularioDto formulario) {

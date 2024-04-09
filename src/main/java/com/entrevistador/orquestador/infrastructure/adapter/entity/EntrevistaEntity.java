@@ -8,6 +8,8 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 
 @Getter
 @Builder
@@ -19,21 +21,11 @@ public class EntrevistaEntity {
     @Id
     private String uuid;
     private String idHojaDeVidaRag;
-    private String nombre;
-    private String perfil;
-    private String seniority;
-    private String tecnologiasPrincipales;
-    private String experienciasLaborales;
-    private String habilidadesTecnicas;
-    private String certificaciones;
-    private String proyectos;
-    private String nivelIngles;
-    private String otrasHabilidades;
     private String idInformacionEmpresaRag;
     private String empresa;
     private String perfilEmpresa;
     private String seniorityEmpresa;
     private String pais;
-    private String preguntas;
+    private List<String> preguntas;
 
 }
