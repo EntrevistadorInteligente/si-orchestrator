@@ -2,7 +2,6 @@ package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.SolicitudHojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;

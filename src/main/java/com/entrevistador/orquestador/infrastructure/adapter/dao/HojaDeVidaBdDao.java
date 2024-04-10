@@ -37,10 +37,8 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
         final String idRagError = "El campo idHojaDeVidaRag del username \"%s\" es nulo";
         return this.hojaDeVidaRepository.findByUsername(username)
                 .switchIfEmpty(Mono.error(new UsernameNoEncontradoException(String.format(usernameError, username))))
-                .flatMap(entity -> entity.getIdHojaDeVidaRag() == null ?
-                        Mono.error(new IdHojaDeVidaRagNuloException(String.format(idRagError, username)))
-                        :
-                        Mono.just(entity.getIdHojaDeVidaRag()));
+                .map(HojaDeVidaEntity::getIdHojaDeVidaRag)
+                .switchIfEmpty(Mono.error(new IdHojaDeVidaRagNuloException(String.format(idRagError, username))));
     }
 
     public Mono<HojaDeVidaDto> obtenerHojaDeVida(String username){

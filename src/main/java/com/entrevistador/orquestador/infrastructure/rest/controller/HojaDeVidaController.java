@@ -1,11 +1,7 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
-import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
-import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
-import com.entrevistador.orquestador.dominio.model.dto.SolicitudHojaDeVidaDto;
-import com.entrevistador.orquestador.infrastructure.adapter.dao.HojaDeVidaBdDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

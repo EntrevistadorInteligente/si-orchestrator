@@ -3,8 +3,6 @@ package com.entrevistador.orquestador.application.service;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.VistaPreviaEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
@@ -20,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 @Service

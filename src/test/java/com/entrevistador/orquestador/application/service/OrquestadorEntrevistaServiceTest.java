@@ -3,11 +3,8 @@ package com.entrevistador.orquestador.application.service;
 import com.entrevistador.orquestador.dominio.model.dto.*;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
-import com.entrevistador.orquestador.dominio.port.client.PreparadorClient;
 import com.entrevistador.orquestador.dominio.port.sse.SseService;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
-import com.entrevistador.orquestador.dominio.service.SolicitudPreparacionEntrevistaService;
-import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,13 +15,10 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

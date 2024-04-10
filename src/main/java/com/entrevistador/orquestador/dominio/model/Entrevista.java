@@ -1,6 +1,5 @@
 package com.entrevistador.orquestador.dominio.model;
 
-import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import lombok.Builder;
 import lombok.Getter;
