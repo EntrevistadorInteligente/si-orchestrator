@@ -10,25 +10,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/v1/hojadevida")
+@RequestMapping("/v1/hojas-de-vidas")
 @RequiredArgsConstructor
 public class HojaDeVidaController {
 
     private final HojaDeVida hojaDeVida;
-    @GetMapping("/obtener/{username}")
-    public Mono<HojaDeVidaDto> obtenerHojaDeVida(@RequestParam String username){
+    @GetMapping("/{username}")
+    public Mono<HojaDeVidaDto> obtenerHojaDeVida(@PathVariable String username){
         return hojaDeVida.obtenerHojaDeVida(username);
     }
+
     @PutMapping("/corregir-datos")
     public Mono<ResponseEntity<String>> corregirHojaDeVida(
             @RequestPart("hojaDeVida") HojaDeVidaDto hojaDeVidaDto

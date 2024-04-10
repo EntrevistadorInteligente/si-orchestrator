@@ -2,17 +2,20 @@ package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
+import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.SolicitudHojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class HojaDeVidaService implements HojaDeVida {
 
     private final AnalizadorClient analizadorClient;
@@ -25,6 +28,14 @@ public class HojaDeVidaService implements HojaDeVida {
                 .flatMap(bytes -> this.procesarHojaDeVida(bytes, username));
     }
 
+    private Mono<Void> procesarHojaDeVida(byte[] hojaDeVidaBytes, String username) {
+        return this.analizadorClient.enviarHojaDeVida(
+                SolicitudHojaDeVidaDto.builder()
+                        .username(username)
+                        .hojaDeVida(hojaDeVidaBytes)
+                        .build());
+    }
+
     @Override
     public Mono<HojaDeVidaDto> obtenerHojaDeVida(String username) {
         return hojaDeVidaDao.obtenerHojaDeVida(username);
@@ -35,12 +46,5 @@ public class HojaDeVidaService implements HojaDeVida {
         return hojaDeVidaDao.guardarHojaDeVida(hojaDeVidaDto);
     }
 
-    private Mono<Void> procesarHojaDeVida(byte[] hojaDeVidaBytes, String username) {
-        return this.analizadorClient.enviarHojaDeVida(
-                        SolicitudHojaDeVidaDto.builder()
-                                .username(username)
-                                .hojaDeVida(hojaDeVidaBytes)
-                                .build());
-    }
 }
 

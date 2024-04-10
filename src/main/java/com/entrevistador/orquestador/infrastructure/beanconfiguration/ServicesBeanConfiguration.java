@@ -52,8 +52,8 @@ public class ServicesBeanConfiguration {
     }
 
     @Bean
-    public ValidadorEventosSimultaneosService validadorEventosSimultaneosService() {
-        return new ValidadorEventosSimultaneosService();
+    public ValidadorEventosSimultaneosService validadorEventosSimultaneosService(EntrevistaDao entrevistaDao) {
+        return new ValidadorEventosSimultaneosService(entrevistaDao);
     }
 
     @Bean

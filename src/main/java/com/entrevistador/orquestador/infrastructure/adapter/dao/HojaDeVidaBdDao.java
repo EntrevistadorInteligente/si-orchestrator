@@ -17,11 +17,17 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
 
     public Mono<Void> guardarHojaDeVida(HojaDeVidaDto hojaDeVidaDto){
         return this.hojaDeVidaRepository.save(HojaDeVidaEntity.builder()
+                .username(hojaDeVidaDto.getUsername())
                 .idHojaDeVidaRag(hojaDeVidaDto.getIdHojaDeVidaRag())
-                .certificaciones(hojaDeVidaDto.getCertificaciones())
-                .habilidadesTecnicas(hojaDeVidaDto.getHabilidadesTecnicas())
-                .nivelIngles(hojaDeVidaDto.getNivelIngles())
+                .nombre(hojaDeVidaDto.getNombre())
+                .perfil(hojaDeVidaDto.getPerfil())
+                .seniority(hojaDeVidaDto.getSeniority())
+                .tecnologiasPrincipales(hojaDeVidaDto.getTecnologiasPrincipales())
                 .experienciasLaborales(hojaDeVidaDto.getExperienciasLaborales())
+                .habilidadesTecnicas(hojaDeVidaDto.getHabilidadesTecnicas())
+                .certificaciones(hojaDeVidaDto.getCertificaciones())
+                .proyectos(hojaDeVidaDto.getProyectos())
+                .nivelIngles(hojaDeVidaDto.getNivelIngles())
                 .otrasHabilidades(hojaDeVidaDto.getOtrasHabilidades())
                 .build()).then(Mono.empty());
     }

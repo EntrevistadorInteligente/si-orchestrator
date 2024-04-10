@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Builder
-@Document(collection = "entrevista")
+@Document(collection = "hoja_de_vida")
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString

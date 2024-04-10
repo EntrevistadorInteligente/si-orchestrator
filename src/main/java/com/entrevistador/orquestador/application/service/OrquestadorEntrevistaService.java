@@ -28,15 +28,6 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     private final EntrevistaDao entrevistaDao;
 
     @Override
-    public Mono<Void> receptorHojaDeVida(String idEntrevista, HojaDeVidaDto resume) {
-        log.info("Recibiendo informacion hoja de vida");
-        return this.actualizarInformacionEntrevistaService
-                .actualizarHojaDeVida(idEntrevista, resume)
-                .flatMap(ragsIdDto ->  this.entrevistaDao.consultarRagsId(idEntrevista))
-                .flatMap(ragsIdDto -> enviarInformacionEntrevistaAPreparador(idEntrevista, ragsIdDto));
-    }
-
-    @Override
     public Mono<Void> receptorInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info) {
         log.info("Recibiendo informacion empresa");
         return this.actualizarInformacionEntrevistaService
