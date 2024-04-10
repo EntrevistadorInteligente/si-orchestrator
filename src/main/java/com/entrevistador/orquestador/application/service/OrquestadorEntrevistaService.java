@@ -1,7 +1,6 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
-import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.model.dto.SolicitudGeneracionEntrevistaDto;
@@ -26,15 +25,6 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     private final AnalizadorClient analizadorClient;
     private final SseService sseService;
     private final EntrevistaDao entrevistaDao;
-
-    @Override
-    public Mono<Void> receptorHojaDeVida(String idEntrevista, HojaDeVidaDto resume) {
-        log.info("Recibiendo informacion hoja de vida");
-        return this.actualizarInformacionEntrevistaService
-                .actualizarHojaDeVida(idEntrevista, resume)
-                .flatMap(ragsIdDto ->  this.entrevistaDao.consultarRagsId(idEntrevista))
-                .flatMap(ragsIdDto -> enviarInformacionEntrevistaAPreparador(idEntrevista, ragsIdDto));
-    }
 
     @Override
     public Mono<Void> receptorInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info) {

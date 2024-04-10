@@ -3,8 +3,6 @@ package com.entrevistador.orquestador.application.service;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.VistaPreviaEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
@@ -20,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 @Service
@@ -32,7 +29,6 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
     private final ProcesoEntrevistaDao procesoEntrevistaDao;
     private final CrearEntrevistaService crearEntrevistaService;
 
-    @Override
     public Mono<Void> generarSolicitudEntrevista(Mono<FilePart> file, FormularioDto formulario) {
         return file.flatMap(this.validadorPdfService::ejecutar)
                 .flatMap(bytes -> this.procesarHojaDeVida(bytes, formulario));
@@ -43,20 +39,10 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
                         this.crearEntrevistaService.ejecutar(),
                         this.procesoEntrevistaDao.crearEvento(),
                         (idEntrevista, procesoEntrevistaDto) ->
-                                this.enviarHojaDeVida(idEntrevista, procesoEntrevistaDto, hojaDeVidaBytes)
+                                Mono.just(Tuples.of(idEntrevista, procesoEntrevistaDto.getUuid())) //TODO: reemplazar por validar match
 
                 )
                 .flatMap(tuple2Mono -> tuple2Mono.flatMap(tuple -> this.enviarInformacionEmpresa(tuple.getT1(), tuple.getT2(), formulario)));
-    }
-
-    private Mono<Tuple2<String, String>> enviarHojaDeVida(String idEntrevista, ProcesoEntrevistaDto eventoEntrevista, byte[] hojaDeVidaBytes) {
-        return this.analizadorClient.enviarHojaDeVida(
-                        PreparacionEntrevistaDto.builder()
-                                .idEntrevista(idEntrevista)
-                                .eventoEntrevistaId(eventoEntrevista.getUuid())
-                                .hojaDeVida(hojaDeVidaBytes)
-                                .build())
-                .then(Mono.just(Tuples.of(idEntrevista, eventoEntrevista.getUuid())));
     }
 
     private Mono<Void> enviarInformacionEmpresa(String idEntrevista, String idEventoEntrevista, FormularioDto formulario) {

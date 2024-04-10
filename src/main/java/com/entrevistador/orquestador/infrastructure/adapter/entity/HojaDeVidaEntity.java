@@ -1,34 +1,34 @@
-package com.entrevistador.orquestador.dominio.model.dto;
+package com.entrevistador.orquestador.infrastructure.adapter.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
 
 @Getter
+@Builder
+@Document(collection = "hoja_de_vida")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class HojaDeVidaDto {
+@ToString
+public class HojaDeVidaEntity {
+    @Id
     private String uuid;
     private String username;
-    @JsonProperty("id_hoja_de_vida_rag")
     private String idHojaDeVidaRag;
     private String nombre;
     private String perfil;
     private String seniority;
-    @JsonProperty("tecnologias_principales")
     private List<String> tecnologiasPrincipales;
-    @JsonProperty("experiencias_laborales")
     private List<String> experienciasLaborales;
-    @JsonProperty("habilidades_tecnicas")
     private List<String> habilidadesTecnicas;
     private List<String> certificaciones;
     private List<String> proyectos;
-    @JsonProperty("nivel_ingles")
     private String nivelIngles;
-    @JsonProperty("otras_habilidades")
     private List<String> otrasHabilidades;
 }
