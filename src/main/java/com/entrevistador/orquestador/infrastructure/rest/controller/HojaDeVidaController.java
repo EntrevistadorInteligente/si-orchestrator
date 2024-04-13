@@ -15,25 +15,23 @@ import reactor.core.publisher.Mono;
 public class HojaDeVidaController {
 
     private final HojaDeVida hojaDeVida;
+
     @GetMapping("/{username}")
-    public Mono<HojaDeVidaDto> obtenerHojaDeVida(@PathVariable String username){
+    public Mono<HojaDeVidaDto> obtenerHojaDeVida(@PathVariable String username) {
         return hojaDeVida.obtenerHojaDeVida(username);
     }
 
     @PutMapping("/corregir-datos")
-    public Mono<ResponseEntity<String>> corregirHojaDeVida(
-            @RequestPart("hojaDeVida") HojaDeVidaDto hojaDeVidaDto
-    ) {
+    public Mono<ResponseEntity<String>> corregirHojaDeVida(@RequestBody HojaDeVidaDto hojaDeVidaDto) {
         return hojaDeVida.guardarHojaDeVida(hojaDeVidaDto)
                 .then(Mono.just(ResponseEntity.status(HttpStatus.OK)
-                .body("Perfil guardado con exito")));
+                        .body("Perfil actualizado con exito")));
     }
 
-    @PostMapping("/cargar")
+    @PostMapping("/cargas")
     public Mono<ResponseEntity<String>> cargarHojaDeVida(
             @RequestPart("file") Mono<FilePart> file,
-            @RequestPart("username") String username
-    ) {
+            @RequestPart("username") String username) {
         return this.hojaDeVida.generarSolicitudHojaDeVida(file, username)
                 .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
                         .body("Archivo PDF cargado con exito")));

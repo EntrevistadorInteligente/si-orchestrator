@@ -2,6 +2,7 @@ package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
+import com.entrevistador.orquestador.dominio.model.dto.MensajeValidacionMatch;
 import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.model.dto.SolicitudGeneracionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
@@ -47,8 +48,17 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
                 .build());
     }
 
+    @Override
+    public Mono<Void> receptorHojaDeVidaMatch(MensajeValidacionMatch mensajeValidacionMatch) {
+        log.info("Recibiendo informacion validacion hoja de vida");
+        return this.actualizarInformacionEntrevistaService
+                .actualizarEstadoEntrevistaSegunMatch(mensajeValidacionMatch.getIdEntrevista(), mensajeValidacionMatch.isMatchValido())
+                .then(this.entrevistaDao.consultarRagsId(mensajeValidacionMatch.getIdEntrevista()))
+                .flatMap(ragsIdDto -> enviarInformacionEntrevistaAPreparador(mensajeValidacionMatch.getIdEntrevista(), ragsIdDto));
+    }
+
     private Mono<Void> enviarInformacionEntrevistaAPreparador(String idEntrevista, RagsIdsDto ragsIdsDto) {
-        if (ragsIdsDto.getIdHojaDeVidaRag() != null && ragsIdsDto.getIdInformacionEmpresaRag() != null) {
+        if (ragsIdsDto.getIdInformacionEmpresaRag() != null && ragsIdsDto.getIdHojaDeVidaRag() != null && ragsIdsDto.isIsHojaDeVidaValida()) {
             return this.analizadorClient.generarEntrevista(SolicitudGeneracionEntrevistaDto.builder()
                             .idEntrevista(idEntrevista)
                             .idHojaDeVida(ragsIdsDto.getIdHojaDeVidaRag())

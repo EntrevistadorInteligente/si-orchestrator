@@ -12,5 +12,5 @@ public class FormularioDto {
     private String perfil;
     private String seniority;
     private String pais;
-
+    private String descripcionVacante;
 }

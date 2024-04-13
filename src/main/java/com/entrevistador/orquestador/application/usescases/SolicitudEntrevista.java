@@ -10,7 +10,7 @@ import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Mono;
 
 public interface SolicitudEntrevista {
-    Mono<Void> generarSolicitudEntrevista(Mono<FilePart> file, FormularioDto formularioDto);
+    Mono<Void> generarSolicitudEntrevista(String username, FormularioDto formulario);
 
     List<VistaPreviaEntrevistaDto> generarPreguntas(String posicion);
 

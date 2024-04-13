@@ -26,11 +26,11 @@ class ActualizarInformacionEntrevistaServiceTest {
     private EntrevistaDao entrevistaDao;
 
     @Test
-    void testActualizarHojaDeVida() {
+    void testActualizarEstadoEntrevistaSegunMatch() {
         String result = "result";
         when(this.entrevistaDao.actualizarEntrevista(any())).thenReturn(Mono.just(result));
 
-        Mono<String> publisher = this.actualizarInformacionEntrevistaService.actualizarHojaDeVida(
+        Mono<String> publisher = this.actualizarInformacionEntrevistaService.actualizarEstadoEntrevistaSegunMatch(
                 "any",
                 HojaDeVidaDto.builder().build()
         );

@@ -3,11 +3,13 @@ package com.entrevistador.orquestador.application.service;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.SolicitudMatchDto;
 import com.entrevistador.orquestador.dominio.model.dto.VistaPreviaEntrevistaDto;
+import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
+import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
-import com.entrevistador.orquestador.dominio.service.CrearEntrevistaService;
-import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,9 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 @Service
@@ -25,24 +27,34 @@ import reactor.util.function.Tuples;
 public class SolicitudEntrevistaService implements SolicitudEntrevista {
 
     private final AnalizadorClient analizadorClient;
-    private final ValidadorPdfService validadorPdfService;
     private final ProcesoEntrevistaDao procesoEntrevistaDao;
-    private final CrearEntrevistaService crearEntrevistaService;
+    private final EntrevistaDao entrevistaDao;
+    private final HojaDeVidaDao hojaDeVidaDao;
 
-    public Mono<Void> generarSolicitudEntrevista(Mono<FilePart> file, FormularioDto formulario) {
-        return file.flatMap(this.validadorPdfService::ejecutar)
-                .flatMap(bytes -> this.procesarHojaDeVida(bytes, formulario));
+    public Mono<Void> generarSolicitudEntrevista(String username, FormularioDto formulario) {
+        return this.hojaDeVidaDao.obtenerIdHojaDeVidaRag(username)
+                .flatMap(idHojaDeVidaRag -> this.procesarHojaDeVida(idHojaDeVidaRag,username, formulario));
     }
 
-    private Mono<Void> procesarHojaDeVida(byte[] hojaDeVidaBytes, FormularioDto formulario) {
+    private Mono<Void> procesarHojaDeVida(String idHojaDeVidaRag, String username, FormularioDto formulario) {
         return Mono.zip(
-                        this.crearEntrevistaService.ejecutar(),
+                        this.entrevistaDao.crearEntrevistaBase(idHojaDeVidaRag),
                         this.procesoEntrevistaDao.crearEvento(),
                         (idEntrevista, procesoEntrevistaDto) ->
-                                Mono.just(Tuples.of(idEntrevista, procesoEntrevistaDto.getUuid())) //TODO: reemplazar por validar match
-
+                                this.enviarMatch(idEntrevista, idHojaDeVidaRag, procesoEntrevistaDto, formulario)
                 )
                 .flatMap(tuple2Mono -> tuple2Mono.flatMap(tuple -> this.enviarInformacionEmpresa(tuple.getT1(), tuple.getT2(), formulario)));
+    }
+
+    private Mono<Tuple2<String, String>> enviarMatch(String idEntrevista, String idHojaDeVidaRag,
+                                                     ProcesoEntrevistaDto eventoEntrevista, FormularioDto formulario) {
+
+        return this.analizadorClient.validarmatchHojaDeVida(SolicitudMatchDto.builder()
+                        .idEntrevista(idEntrevista)
+                        .idHojaDeVidaRag(idHojaDeVidaRag)
+                        .formulario(formulario)
+                        .build())
+                .then(Mono.just(Tuples.of(idEntrevista, eventoEntrevista.getUuid())));
     }
 
     private Mono<Void> enviarInformacionEmpresa(String idEntrevista, String idEventoEntrevista, FormularioDto formulario) {

@@ -1,8 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.adapter.jms;
 
-import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.PreparacionEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.SolicitudGeneracionEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.*;
 import com.entrevistador.orquestador.dominio.model.dto.SolicitudHojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +27,9 @@ public final class JmsPublisherAdapter implements AnalizadorClient {
 
     @Value("${kafka.topic-generador-publisher}")
     private String topicGenerador;
+
+    @Value("${kafka.topic-analizador-validador-publisher}")
+    private String topicValidador;
 
     @Override
     public Mono<Void> enviarHojaDeVida(SolicitudHojaDeVidaDto solicitudHojaDeVidaDto) {
@@ -85,6 +86,27 @@ public final class JmsPublisherAdapter implements AnalizadorClient {
                 } else {
                     System.out.println("Unable to send message=[" +
                             solicitudGeneracionEntrevista.toString() + "] due to : " + ex.getMessage());
+                }
+            });
+
+        } catch (Exception ex) {
+            System.out.println("ERROR : " + ex.getMessage());
+        }
+
+        return Mono.empty();
+    }
+
+    @Override
+    public Mono<Void> validarmatchHojaDeVida(SolicitudMatchDto solicitudMatchDto) {
+        try {
+            CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send("hojaDeVidaValidaPublisherTopic2", solicitudMatchDto);
+            future.whenComplete((result, ex) -> {
+                if (ex == null) {
+                    System.out.println("Sent message=[" + solicitudMatchDto.getIdEntrevista() +
+                            "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                } else {
+                    System.out.println("Unable to send message=[" +
+                            solicitudMatchDto.toString() + "] due to : " + ex.getMessage());
                 }
             });
 

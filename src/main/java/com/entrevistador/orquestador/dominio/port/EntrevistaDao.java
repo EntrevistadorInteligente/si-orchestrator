@@ -6,10 +6,11 @@ import reactor.core.publisher.Mono;
 
 public interface EntrevistaDao {
 
-    Mono<String> crearEntrevista();
+    Mono<String> crearEntrevistaBase(String idHojaDeVidaRag);
 
-    Mono<String> actualizarEntrevista(Entrevista entrevista);
+    Mono<Void> actualizarEntrevista(Entrevista entrevista);
 
     Mono<RagsIdsDto> consultarRagsId(String idEntrevista);
+    Mono<Void> actualizarEstadoEntrevista(String idEntrevista, boolean esEntrevistaValida);
 
 }
