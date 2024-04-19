@@ -15,9 +15,10 @@ import java.util.List;
 public class InformacionEmpresaDto {
     @JsonProperty("id_informacion_empresa_rag")
     private String idInformacionEmpresaRag;
+    @JsonProperty("descripcion_vacante")
+    private String descripcionVacante;
     private String empresa;
     private String perfil;
     private String seniority;
     private String pais;
-    private List<String> preguntas;
 }

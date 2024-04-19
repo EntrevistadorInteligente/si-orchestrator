@@ -2,6 +2,7 @@ package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
+import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.SolicitudMatchDto;
@@ -9,7 +10,7 @@ import com.entrevistador.orquestador.dominio.model.dto.VistaPreviaEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
-import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
+import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import reactor.util.function.Tuples;
 @RequiredArgsConstructor
 public class SolicitudEntrevistaService implements SolicitudEntrevista {
 
-    private final AnalizadorClient analizadorClient;
+    private final JmsPublisherClient jmsPublisherClient;
     private final ProcesoEntrevistaDao procesoEntrevistaDao;
     private final EntrevistaDao entrevistaDao;
     private final HojaDeVidaDao hojaDeVidaDao;
@@ -38,18 +39,25 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
 
     private Mono<Void> procesarHojaDeVida(String idHojaDeVidaRag, String username, FormularioDto formulario) {
         return Mono.zip(
-                        this.entrevistaDao.crearEntrevistaBase(idHojaDeVidaRag),
+                        this.entrevistaDao.crearEntrevistaBase(idHojaDeVidaRag, username, formulario),
                         this.procesoEntrevistaDao.crearEvento(),
                         (idEntrevista, procesoEntrevistaDto) ->
-                                this.enviarMatch(idEntrevista, idHojaDeVidaRag, procesoEntrevistaDto, formulario)
+                                this.enviarMatch2(idEntrevista, idHojaDeVidaRag, procesoEntrevistaDto, formulario)
+
                 )
                 .flatMap(tuple2Mono -> tuple2Mono.flatMap(tuple -> this.enviarInformacionEmpresa(tuple.getT1(), tuple.getT2(), formulario)));
+    }
+
+    private Mono<Tuple2<String, String>> enviarMatch2(String idEntrevista, String idHojaDeVidaRag,
+                                                     ProcesoEntrevistaDto eventoEntrevista, FormularioDto formulario) {
+
+        return Mono.just(Tuples.of(idEntrevista, eventoEntrevista.getUuid()));
     }
 
     private Mono<Tuple2<String, String>> enviarMatch(String idEntrevista, String idHojaDeVidaRag,
                                                      ProcesoEntrevistaDto eventoEntrevista, FormularioDto formulario) {
 
-        return this.analizadorClient.validarmatchHojaDeVida(SolicitudMatchDto.builder()
+        return this.jmsPublisherClient.validarmatchHojaDeVida(SolicitudMatchDto.builder()
                         .idEntrevista(idEntrevista)
                         .idHojaDeVidaRag(idHojaDeVidaRag)
                         .formulario(formulario)
@@ -58,10 +66,16 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
     }
 
     private Mono<Void> enviarInformacionEmpresa(String idEntrevista, String idEventoEntrevista, FormularioDto formulario) {
-        return this.analizadorClient.enviarInformacionEmpresa(PosicionEntrevistaDto.builder()
+        return this.jmsPublisherClient.enviarInformacionEmpresa(PosicionEntrevistaDto.builder()
                 .eventoEntrevistaId(idEventoEntrevista)
                 .idEntrevista(idEntrevista)
-                .formulario(formulario)
+                .formulario(InformacionEmpresaDto.builder()
+                        .empresa(formulario.getEmpresa())
+                        .pais(formulario.getPais())
+                        .seniority(formulario.getSeniority())
+                        .perfil(formulario.getPerfil())
+                        .descripcionVacante(formulario.getDescripcionVacante())
+                        .build())
                 .build());
     }
 

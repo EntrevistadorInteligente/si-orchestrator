@@ -2,7 +2,7 @@ package com.entrevistador.orquestador.infrastructure.adapter.jms;
 
 import com.entrevistador.orquestador.dominio.model.dto.*;
 import com.entrevistador.orquestador.dominio.model.dto.SolicitudHojaDeVidaDto;
-import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
+import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,8 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public final class JmsPublisherAdapter implements AnalizadorClient {
+public final class JmsPublisherAdapter implements JmsPublisherClient {
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Value("${kafka.topic-analizador-publisher}")
@@ -99,7 +100,7 @@ public final class JmsPublisherAdapter implements AnalizadorClient {
     @Override
     public Mono<Void> validarmatchHojaDeVida(SolicitudMatchDto solicitudMatchDto) {
         try {
-            CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send("hojaDeVidaValidaPublisherTopic2", solicitudMatchDto);
+            CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topicValidador, solicitudMatchDto);
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
                     System.out.println("Sent message=[" + solicitudMatchDto.getIdEntrevista() +

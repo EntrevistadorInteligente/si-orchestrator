@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -16,6 +15,6 @@ public class MensajeAnalizadorEmpresaDto {
     private ProcesoEntrevistaDto procesoEntrevista;
     @JsonProperty("id_entrevista")
     private String idEntrevista;
-    @JsonProperty("informacion_empresa")
-    private InformacionEmpresaDto informacionEmpresa;
+    @JsonProperty("id_informacion_empresa_rag")
+    private String idInformacionEmpresaRag;
 }

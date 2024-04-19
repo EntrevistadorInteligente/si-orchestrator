@@ -27,17 +27,16 @@ class ActualizarInformacionEntrevistaServiceTest {
 
     @Test
     void testActualizarEstadoEntrevistaSegunMatch() {
-        String result = "result";
-        when(this.entrevistaDao.actualizarEntrevista(any())).thenReturn(Mono.just(result));
+        when(this.entrevistaDao.actualizarEntrevista(any())).thenReturn(Mono.empty());
 
-        Mono<String> publisher = this.actualizarInformacionEntrevistaService.actualizarEstadoEntrevistaSegunMatch(
+        Mono<Void> publisher = this.actualizarInformacionEntrevistaService.actualizarEstadoEntrevistaSegunMatch(
                 "any",
-                HojaDeVidaDto.builder().build()
+                true
         );
 
         StepVerifier
                 .create(publisher)
-                .expectNext(result)
+                .expectFusion()
                 .verifyComplete();
 
         verify(this.entrevistaDao, times(1)).actualizarEntrevista(any());
@@ -46,16 +45,16 @@ class ActualizarInformacionEntrevistaServiceTest {
     @Test
     void testActualizarInformacionEmpresa() {
         String result = "result";
-        when(this.entrevistaDao.actualizarEntrevista(any())).thenReturn(Mono.just(result));
+        when(this.entrevistaDao.actualizarEntrevista(any())).thenReturn(Mono.empty());
 
-        Mono<String> publisher = this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(
+        Mono<Void> publisher = this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(
                 "any",
                 InformacionEmpresaDto.builder().empresa("any").pais("any").perfil("any").seniority("any").build()
         );
 
         StepVerifier
                 .create(publisher)
-                .expectNext(result)
+                .expectFusion()
                 .verifyComplete();
 
         verify(this.entrevistaDao, timeout(1)).actualizarEntrevista(any());

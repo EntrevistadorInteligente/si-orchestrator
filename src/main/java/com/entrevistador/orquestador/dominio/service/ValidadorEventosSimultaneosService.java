@@ -5,8 +5,6 @@ import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
-
 @RequiredArgsConstructor
 public class ValidadorEventosSimultaneosService {
 
@@ -17,10 +15,11 @@ public class ValidadorEventosSimultaneosService {
           .flatMap(ragsIdsDto -> {
             String idHojaDeVida = ragsIdsDto.getIdHojaDeVidaRag();
             String idInformacionEmpresa = ragsIdsDto.getIdInformacionEmpresaRag();
-            if (Objects.nonNull(idHojaDeVida) && Objects.nonNull(idInformacionEmpresa))
-              return Mono.just(ragsIdsDto);
-            else
-              return Mono.empty();
+            if (idHojaDeVida != null && idInformacionEmpresa != null){
+                return Mono.just(ragsIdsDto);
+            } else{
+                return Mono.empty();
+            }
           });
     }
 

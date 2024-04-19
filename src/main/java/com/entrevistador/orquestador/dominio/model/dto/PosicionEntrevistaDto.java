@@ -12,5 +12,5 @@ public class PosicionEntrevistaDto {
     @JsonProperty("evento_entrevista_id")
     private String eventoEntrevistaId;
     @JsonProperty("formulario")
-    private FormularioDto formulario;
+    private InformacionEmpresaDto formulario;
 }

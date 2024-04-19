@@ -38,5 +38,8 @@ public class EntrevistaController {
         return new ArrayList<>(solicitudEntrevista.generarPreguntas(posicion));
     }
 
+
+
+
 }
 

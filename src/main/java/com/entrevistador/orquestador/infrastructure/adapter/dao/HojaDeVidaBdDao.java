@@ -3,6 +3,7 @@ package com.entrevistador.orquestador.infrastructure.adapter.dao;
 import com.entrevistador.orquestador.dominio.excepciones.IdHojaDeVidaRagNuloException;
 import com.entrevistador.orquestador.dominio.excepciones.UsernameNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
+import com.entrevistador.orquestador.dominio.model.dto.PerfilDto;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.HojaDeVidaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.HojaDeVidaRepository;
@@ -41,20 +42,45 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
                 .switchIfEmpty(Mono.error(new IdHojaDeVidaRagNuloException(String.format(idRagError, username))));
     }
 
-    public Mono<HojaDeVidaDto> obtenerHojaDeVida(String username){
+    public Mono<HojaDeVidaDto> obtenerHojaDeVidaPorNombreUsuario(String username){
         return this.hojaDeVidaRepository.findByUsername(username)
-                .map(entity -> HojaDeVidaDto.builder()
-                        .username(entity.getUsername())
-                        .nombre(entity.getNombre())
-                        .perfil(entity.getPerfil())
-                        .seniority(entity.getSeniority())
-                        .tecnologiasPrincipales(entity.getTecnologiasPrincipales())
-                        .experienciasLaborales(entity.getExperienciasLaborales())
-                        .habilidadesTecnicas(entity.getHabilidadesTecnicas())
-                        .certificaciones(entity.getCertificaciones())
-                        .proyectos(entity.getProyectos())
-                        .nivelIngles(entity.getNivelIngles())
-                        .otrasHabilidades(entity.getOtrasHabilidades())
-                        .build());
+                .map(HojaDeVidaBdDao::mapearHojaDeVida);
+    }
+
+    @Override
+    public Mono<Void> actualizarDatosPerfil(String uuid, PerfilDto perfilDto) {
+        return this.hojaDeVidaRepository.findById(uuid)
+                .flatMap(hojaDeVidaEntity -> this.hojaDeVidaRepository.save(HojaDeVidaEntity.builder()
+                        .uuid(hojaDeVidaEntity.getUuid())
+                        .username(hojaDeVidaEntity.getUsername())
+                        .idHojaDeVidaRag(hojaDeVidaEntity.getIdHojaDeVidaRag())
+                        .nombre(perfilDto.getNombre())
+                        .perfil(perfilDto.getPerfil())
+                        .seniority(perfilDto.getSeniority())
+                        .tecnologiasPrincipales(perfilDto.getTecnologiasPrincipales())
+                        .experienciasLaborales(perfilDto.getExperienciasLaborales())
+                        .habilidadesTecnicas(perfilDto.getHabilidadesTecnicas())
+                        .certificaciones(perfilDto.getCertificaciones())
+                        .proyectos(perfilDto.getProyectos())
+                        .nivelIngles(perfilDto.getNivelIngles())
+                        .otrasHabilidades(perfilDto.getOtrasHabilidades())
+                        .build())).then();
+    }
+
+    private static HojaDeVidaDto mapearHojaDeVida(HojaDeVidaEntity entity) {
+        return HojaDeVidaDto.builder()
+                .uuid(entity.getUuid())
+                .username(entity.getUsername())
+                .nombre(entity.getNombre())
+                .perfil(entity.getPerfil())
+                .seniority(entity.getSeniority())
+                .tecnologiasPrincipales(entity.getTecnologiasPrincipales())
+                .experienciasLaborales(entity.getExperienciasLaborales())
+                .habilidadesTecnicas(entity.getHabilidadesTecnicas())
+                .certificaciones(entity.getCertificaciones())
+                .proyectos(entity.getProyectos())
+                .nivelIngles(entity.getNivelIngles())
+                .otrasHabilidades(entity.getOtrasHabilidades())
+                .build();
     }
 }

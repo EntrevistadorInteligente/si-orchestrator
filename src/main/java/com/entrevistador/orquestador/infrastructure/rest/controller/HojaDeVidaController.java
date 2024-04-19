@@ -1,7 +1,7 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
-import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
+import com.entrevistador.orquestador.dominio.model.dto.PerfilDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +17,15 @@ public class HojaDeVidaController {
     private final HojaDeVida hojaDeVida;
 
     @GetMapping("/{username}")
-    public Mono<HojaDeVidaDto> obtenerHojaDeVida(@PathVariable String username) {
+    public Mono<PerfilDto> obtenerHojaDeVida(@PathVariable String username) {
         return hojaDeVida.obtenerHojaDeVida(username);
     }
 
-    @PutMapping("/corregir-datos")
-    public Mono<ResponseEntity<String>> corregirHojaDeVida(@RequestBody HojaDeVidaDto hojaDeVidaDto) {
-        return hojaDeVida.guardarHojaDeVida(hojaDeVidaDto)
+    @PutMapping("/{uuid}")
+    public Mono<ResponseEntity<String>> actualizarDatosPerfil(
+            @PathVariable String uuid,
+            @RequestBody PerfilDto perfilDto) {
+        return hojaDeVida.actualizarDatosPerfil(uuid,perfilDto)
                 .then(Mono.just(ResponseEntity.status(HttpStatus.OK)
                         .body("Perfil actualizado con exito")));
     }

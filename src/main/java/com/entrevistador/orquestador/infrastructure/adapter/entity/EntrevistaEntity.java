@@ -9,9 +9,6 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
-
 @Getter
 @Builder
 @Document(collection = "entrevista")
@@ -21,14 +18,16 @@ import java.util.List;
 public class EntrevistaEntity {
     @Id
     private String uuid;
+    private String username;
     private String idHojaDeVidaRag;
+    @Setter
     private String idInformacionEmpresaRag;
     private String empresa;
     private String perfilEmpresa;
     private String seniorityEmpresa;
     private String pais;
-    private List<String> preguntas;
+    private String descripcionVacante;
     @Setter
-    private boolean isHojaDeVidaValida;
+    private boolean hojaDeVidaValida;
 
 }
