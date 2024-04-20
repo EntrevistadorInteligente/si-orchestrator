@@ -31,7 +31,8 @@ class ValidadorEventosSimultaneosServiceTest {
         ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
         Map<String, String> map = Map.of(
                 "idHojaDeVidaRag", "theTitle",
-                "idInformacionEmpresaRag", "theUrl"
+                "idInformacionEmpresaRag", "theUrl",
+                "isHojaDeVidaValida", "true"
         );
         RagsIdsDto projection = factory.createProjection(RagsIdsDto.class, map);
         when(this.entrevistaDao.consultarRagsId(any())).thenReturn(Mono.just(projection));

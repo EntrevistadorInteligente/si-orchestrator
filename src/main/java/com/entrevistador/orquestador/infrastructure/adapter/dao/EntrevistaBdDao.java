@@ -2,6 +2,7 @@ package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
 import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.Entrevista;
+import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
@@ -13,37 +14,65 @@ import reactor.core.publisher.Mono;
 @Repository
 @RequiredArgsConstructor
 public class EntrevistaBdDao implements EntrevistaDao {
+    public static final String ID_DE_ESTADO_NO_ENCONTRADO_ID = "Id de estado no encontrado. ID: %s";
     private final EntrevistaRepository entrevistaRepository;
 
     @Override
-    public Mono<String> crearEntrevista() {
-        return this.entrevistaRepository.save(EntrevistaEntity.builder().build())
+    public Mono<String> crearEntrevistaBase(String idHojaDeVidaRag, String username, FormularioDto formulario) {
+        return this.entrevistaRepository.save(EntrevistaEntity.builder()
+                        .idHojaDeVidaRag(idHojaDeVidaRag)
+                        .username(username)
+                        .empresa(formulario.getEmpresa())
+                        .pais(formulario.getPais())
+                        .seniorityEmpresa(formulario.getSeniority())
+                        .perfilEmpresa(formulario.getPerfil())
+                        .descripcionVacante(formulario.getDescripcionVacante())
+                        .build())
                 .map(EntrevistaEntity::getUuid);
     }
 
     @Override
-    public Mono<String> actualizarEntrevista(Entrevista entrevista) {
-        final String uuidError = "Id de estado no encontrado. ID: %s";
-        return entrevistaRepository.findById(entrevista.getUuid())
-                .switchIfEmpty(Mono.error(new IdNoEncontradoException(String.format(uuidError, entrevista.getUuid()))))
-                .flatMap(entrevistaEntity -> {
+    public Mono<Void> actualizarEntrevista(Entrevista entrevista) {
+        return this.entrevistaRepository.findById(entrevista.getUuid())
+                .switchIfEmpty(Mono.error(new IdNoEncontradoException(String.format(ID_DE_ESTADO_NO_ENCONTRADO_ID, entrevista.getUuid()))))
+                .flatMap(entrevistaEntity ->
                         entrevistaRepository.save(EntrevistaEntity.builder()
                                             .uuid(entrevistaEntity.getUuid())
-                                            .idHojaDeVidaRag(entrevista.getIdHojaDeVidaRag())
+                                            .idHojaDeVidaRag(entrevistaEntity.getIdHojaDeVidaRag())
                                             .idInformacionEmpresaRag(entrevista.getInformacionEmpresaDto().getIdInformacionEmpresaRag())
                                             .empresa(entrevista.getInformacionEmpresaDto().getEmpresa())
                                             .perfilEmpresa(entrevista.getInformacionEmpresaDto().getPerfil())
                                             .seniorityEmpresa(entrevista.getInformacionEmpresaDto().getSeniority())
                                             .pais(entrevista.getInformacionEmpresaDto().getPais())
-                                            .preguntas(entrevista.getInformacionEmpresaDto().getPreguntas())
-                                            .build());
-                        return Mono.just("");
-                    }
-                );
+                                            .hojaDeVidaValida(entrevistaEntity.isHojaDeVidaValida())
+                                            .build()).then());
+
     }
 
     @Override
     public Mono<RagsIdsDto> consultarRagsId(String idEntrevista) {
-        return entrevistaRepository.findIdHojaDeVidaAndInformacionEmpresaIdById(idEntrevista);
+        return this.entrevistaRepository.obtenerRagsYEstadoEntrevistaPorId(idEntrevista);
     }
+
+    @Override
+    public Mono<Void> actualizarEstadoEntrevista(String idEntrevista, boolean esEntrevistaValida) {
+        return this.entrevistaRepository.findById(idEntrevista)
+                .flatMap(entrevista -> {
+                    entrevista.setHojaDeVidaValida(esEntrevistaValida);
+                    return entrevistaRepository.save(entrevista);
+                })
+                .then();
+    }
+
+
+    @Override
+    public Mono<Void> actualizarIdInformacionEmpresaRag(String idEntrevista, String idInformacionEmpresaRag) {
+        return this.entrevistaRepository.findById(idEntrevista)
+                .flatMap(entrevista -> {
+                    entrevista.setIdInformacionEmpresaRag(idInformacionEmpresaRag);
+                    return entrevistaRepository.save(entrevista);
+                })
+                .then();
+    }
+
 }

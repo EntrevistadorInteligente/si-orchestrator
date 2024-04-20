@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CrearEntrevistaAlternativaService {
 
-    private final NotificarFrontEntrevistaFallidaService notificarFrontEntrevistaFallidaService;
     private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
 
     public String ejecutar(ProcesoEntrevistaDto procesoEntrevistaDto, String idEntrevista) {

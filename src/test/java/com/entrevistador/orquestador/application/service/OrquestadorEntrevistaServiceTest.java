@@ -2,7 +2,7 @@ package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.dominio.model.dto.*;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
-import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
+import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.dominio.port.sse.SseService;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class OrquestadorEntrevistaServiceTest {
     @Mock
     private ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService;
     @Mock
-    private AnalizadorClient analizadorClient;
+    private JmsPublisherClient jmsPublisherClient;
     @Mock
     private SseService sseService;
     @Mock
@@ -45,19 +45,19 @@ class OrquestadorEntrevistaServiceTest {
         );
         RagsIdsDto projection = factory.createProjection(RagsIdsDto.class, map);
 
-        when(this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(anyString(), any())).thenReturn(Mono.just("any"));
+        when(this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(anyString(), any())).thenReturn(Mono.empty());
         when(this.entrevistaDao.consultarRagsId(any())).thenReturn(Mono.just(projection));
-        when(this.analizadorClient.generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class)))
+        when(this.jmsPublisherClient.generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class)))
                 .thenReturn(Mono.empty());
 
-        Mono<Void> publisher = this.orquestadorEntrevistaService.receptorInformacionEmpresa("any", InformacionEmpresaDto.builder().build());
+        Mono<Void> publisher = this.orquestadorEntrevistaService.receptorInformacionEmpresa("any", "any");
 
         StepVerifier
                 .create(publisher)
                 .verifyComplete();
 
         verify(this.actualizarInformacionEntrevistaService, times(1)).actualizarInformacionEmpresa(anyString(), any());
-        verify(this.analizadorClient, times(1)).generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class));
+        verify(this.jmsPublisherClient, times(1)).generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class));
     }
 
     @Test
@@ -69,12 +69,12 @@ class OrquestadorEntrevistaServiceTest {
         );
         RagsIdsDto projection = factory.createProjection(RagsIdsDto.class, map);
 
-        when(this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(anyString(), any())).thenReturn(Mono.just("any"));
+        when(this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(anyString(), any())).thenReturn(Mono.empty());
         when(this.entrevistaDao.consultarRagsId(any())).thenReturn(Mono.just(projection));
-        when(this.analizadorClient.generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class)))
+        when(this.jmsPublisherClient.generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class)))
                 .thenReturn(Mono.empty());
 
-        Mono<Void> publisher = this.orquestadorEntrevistaService.receptorInformacionEmpresa("any", InformacionEmpresaDto.builder().build());
+        Mono<Void> publisher = this.orquestadorEntrevistaService.receptorInformacionEmpresa("any", "any");
 
         StepVerifier
                 .create(publisher)

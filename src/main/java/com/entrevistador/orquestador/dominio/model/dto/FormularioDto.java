@@ -1,6 +1,11 @@
 package com.entrevistador.orquestador.dominio.model.dto;
 
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -12,5 +17,5 @@ public class FormularioDto {
     private String perfil;
     private String seniority;
     private String pais;
-
+    private String descripcionVacante;
 }

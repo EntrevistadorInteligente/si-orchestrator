@@ -42,6 +42,8 @@ public class KafkaConfiguration {
 
     @Value("${kafka.topic-recopilador-listener}")
     private String empresaListenerTopic;
+    @Value("${kafka.topic-analizador-validador-publisher}")
+    private String topicValidador;
 
     @Bean
     public Map<String, Object> producerConfig() {
@@ -91,8 +93,7 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public NewTopic hojaDeVidaListener
-            () {
+    public NewTopic hojaDeVidaListener() {
         return TopicBuilder.name(hojaDeVidaListenerTopic)
                 .partitions(2)
                 .replicas(1)
@@ -110,6 +111,14 @@ public class KafkaConfiguration {
     @Bean
     public NewTopic topic4() {
         return TopicBuilder.name(empresaListenerTopic)
+                .partitions(2)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic topic5() {
+        return TopicBuilder.name("hojaDeVidaValidaPublisherTopic2")
                 .partitions(2)
                 .replicas(1)
                 .build();

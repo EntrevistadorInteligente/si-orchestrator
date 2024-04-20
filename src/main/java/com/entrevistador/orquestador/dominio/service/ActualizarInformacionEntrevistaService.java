@@ -9,16 +9,14 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 public class ActualizarInformacionEntrevistaService {
+
     private final EntrevistaDao entrevistaDao;
 
-    public Mono<String> actualizarHojaDeVida(String idEntrevista, HojaDeVidaDto resume) {
-        Entrevista entrevista = Entrevista.builder()
-                .uuid(idEntrevista)
-                .build();
-        return entrevistaDao.actualizarEntrevista(entrevista);
+    public Mono<Void> actualizarEstadoEntrevistaSegunMatch(String idEntrevista, boolean esEntrevistaValida) {
+        return entrevistaDao.actualizarEstadoEntrevista(idEntrevista, esEntrevistaValida);
     }
 
-    public Mono<String> actualizarInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info) {
+    public Mono<Void> actualizarInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info) {
         Entrevista entrevista = Entrevista.builder()
                 .uuid(idEntrevista)
                 .informacionEmpresaDto(info)

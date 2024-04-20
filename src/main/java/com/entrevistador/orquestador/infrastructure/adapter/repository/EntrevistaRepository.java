@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface EntrevistaRepository extends ReactiveMongoRepository<EntrevistaEntity, String> {
 
-    @Query(value="{ '_id' : ?0 }", fields="{ 'idHojaDeVidaRag' : 1, 'idInformacionEmpresaRag' : 1}")
-    Mono<RagsIdsDto> findIdHojaDeVidaAndInformacionEmpresaIdById(String id);
+    @Query(value="{ '_id' : ?0 }", fields="{ 'idHojaDeVidaRag' : 1, 'idInformacionEmpresaRag' : 1, 'hojaDeVidaValida' : 1}")
+    Mono<RagsIdsDto> obtenerRagsYEstadoEntrevistaPorId(String id);
+
 }

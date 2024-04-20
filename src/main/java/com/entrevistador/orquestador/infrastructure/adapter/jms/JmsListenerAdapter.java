@@ -4,6 +4,7 @@ import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.model.dto.MensajeAnalizadorEmpresaDto;
+import com.entrevistador.orquestador.dominio.model.dto.MensajeValidacionMatch;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
@@ -45,12 +46,25 @@ public class JmsListenerAdapter {
             MensajeAnalizadorEmpresaDto mensajeAnalizador = objectMapper.readValue(mensajeJson, MensajeAnalizadorEmpresaDto.class);
             Mono.just(mensajeAnalizador)
                 .flatMap(mensajeAnalizadorDto -> this.actualizarEstadoProcesoEntrevistaService.ejecutar(mensajeAnalizadorDto.getProcesoEntrevista()))
-                .then(this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizador.getIdEntrevista(), mensajeAnalizador.getInformacionEmpresa())).block();
+                .then(this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizador.getIdEntrevista(), mensajeAnalizador.getIdInformacionEmpresaRag())).block();
 
         } catch (IOException e) {
             throw new RuntimeException("Error al deserializar el mensaje JSON", e);
         }
 
+    }
+
+    @KafkaListener(topics = "hojaDeVidaValidaListenerTopic", groupId = "resumeGroup")
+    public void receptorValidarMatchHojaDeVida(String mensajeJson) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+
+            MensajeValidacionMatch mensajeAnalizador = objectMapper.readValue(mensajeJson, MensajeValidacionMatch.class);
+            Mono.just(mensajeAnalizador).flatMap(this.orquestadorEntrevista::receptorHojaDeVidaMatch).block();
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error al deserializar el mensaje JSON", e);
+        }
     }
 
     @KafkaListener(topics = "resumeTopic2", groupId = "actualizacionEstados")
