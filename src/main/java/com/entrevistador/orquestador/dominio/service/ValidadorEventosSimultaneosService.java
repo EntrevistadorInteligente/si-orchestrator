@@ -11,16 +11,15 @@ public class ValidadorEventosSimultaneosService {
     private final EntrevistaDao entrevistaDao;
 
     public Mono<RagsIdsDto> ejecutar(String idEntrevista) {
-      return entrevistaDao.consultarRagsId(idEntrevista)
-          .flatMap(ragsIdsDto -> {
-            String idHojaDeVida = ragsIdsDto.getIdHojaDeVidaRag();
-            String idInformacionEmpresa = ragsIdsDto.getIdInformacionEmpresaRag();
-            if (idHojaDeVida != null && idInformacionEmpresa != null && ragsIdsDto.getHojaDeVidaValida()){
-                return Mono.just(ragsIdsDto);
-            } else{
-                return Mono.empty();
-            }
-          });
+        return entrevistaDao.consultarRagsId(idEntrevista)
+                .filter(this::hasIds)
+                .flatMap(Mono::just);
+    }
+
+    private boolean hasIds(RagsIdsDto ragsIdsDto) {
+        String idHojaDeVida = ragsIdsDto.getIdHojaDeVidaRag();
+        String idInformacionEmpresa = ragsIdsDto.getIdInformacionEmpresaRag();
+        return idHojaDeVida != null && idInformacionEmpresa != null && ragsIdsDto.getHojaDeVidaValida();
     }
 
 }

@@ -44,17 +44,19 @@ class EntrevistaControllerTest {
 
         when(this.solicitudEntrevista.generarSolicitudEntrevista(any(), any())).thenReturn(Mono.empty());
 
+
+
         this.webTestClient
                 .post()
                 .uri(URL.append("/solicitudes-entrevistas?username=test").toString())
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue("{\n" +
-                        "    \"empresa\": \"Tesla\",\n" +
-                        "    \"perfil\": \"Software Engineer Java\",\n" +
-                        "    \"seniority\": \"Senior\",\n" +
-                        "    \"pais\": \"Canada\",\n" +
-                        "    \"descripcionVacante\": \"Acerca del empleo\\nAre you a tech professional \"\n" +
-                        "}")
+                .bodyValue(FormularioDto.builder()
+                        .empresa("Tesla")
+                        .perfil("Software Engineer Java")
+                        .seniority("Senior")
+                        .pais("Canada")
+                        .descripcionVacante("Are you a tech professional")
+                        .build())
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(String.class)
