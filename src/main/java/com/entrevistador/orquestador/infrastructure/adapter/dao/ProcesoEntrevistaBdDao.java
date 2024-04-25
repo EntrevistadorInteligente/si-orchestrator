@@ -13,6 +13,7 @@ import java.util.Date;
 @Repository
 @RequiredArgsConstructor
 public class ProcesoEntrevistaBdDao implements ProcesoEntrevistaDao {
+
     private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
 
     @Override

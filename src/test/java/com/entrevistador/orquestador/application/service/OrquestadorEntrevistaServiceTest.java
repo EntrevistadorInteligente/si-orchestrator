@@ -5,6 +5,7 @@ import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.dominio.port.sse.SseService;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
+import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,13 +29,13 @@ class OrquestadorEntrevistaServiceTest {
     @InjectMocks
     private OrquestadorEntrevistaService orquestadorEntrevistaService;
     @Mock
-    private ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService;
-    @Mock
     private JmsPublisherClient jmsPublisherClient;
     @Mock
     private SseService sseService;
     @Mock
     private EntrevistaDao entrevistaDao;
+    @Mock
+    private ValidadorEventosSimultaneosService validadorEventosSimultaneosService;
 
     @Test
     void testReceptorInformacionEmpresa_WhenSolicitudEventosSimultaneosServiceRetornaTrue() {
@@ -45,8 +46,8 @@ class OrquestadorEntrevistaServiceTest {
         );
         RagsIdsDto projection = factory.createProjection(RagsIdsDto.class, map);
 
-        when(this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(anyString(), any())).thenReturn(Mono.empty());
-        when(this.entrevistaDao.consultarRagsId(any())).thenReturn(Mono.just(projection));
+        when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(projection));
+        when(this.entrevistaDao.actualizarIdInformacionEmpresaRag(anyString(), any())).thenReturn(Mono.empty());
         when(this.jmsPublisherClient.generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class)))
                 .thenReturn(Mono.empty());
 
@@ -56,7 +57,7 @@ class OrquestadorEntrevistaServiceTest {
                 .create(publisher)
                 .verifyComplete();
 
-        verify(this.actualizarInformacionEntrevistaService, times(1)).actualizarInformacionEmpresa(anyString(), any());
+        verify(this.validadorEventosSimultaneosService, times(1)).ejecutar(anyString());
         verify(this.jmsPublisherClient, times(1)).generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class));
     }
 
@@ -69,8 +70,8 @@ class OrquestadorEntrevistaServiceTest {
         );
         RagsIdsDto projection = factory.createProjection(RagsIdsDto.class, map);
 
-        when(this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(anyString(), any())).thenReturn(Mono.empty());
-        when(this.entrevistaDao.consultarRagsId(any())).thenReturn(Mono.just(projection));
+        when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(projection));
+        when(this.entrevistaDao.actualizarIdInformacionEmpresaRag(anyString(), any())).thenReturn(Mono.empty());
         when(this.jmsPublisherClient.generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class)))
                 .thenReturn(Mono.empty());
 
@@ -80,7 +81,7 @@ class OrquestadorEntrevistaServiceTest {
                 .create(publisher)
                 .verifyComplete();
 
-        verify(this.actualizarInformacionEntrevistaService, times(1)).actualizarInformacionEmpresa(anyString(), any());
+        verify(this.validadorEventosSimultaneosService, times(1)).ejecutar(anyString());
         verify(this.sseService, times(0)).emitEvent(any());
 
     }

@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.when;
 @WebFluxTest(controllers = {EntrevistaController.class})
 class EntrevistaControllerTest {
 
-    private final StringBuilder URL = new StringBuilder("/v1/entrevistador");
+    private final StringBuilder URL = new StringBuilder("/v1/entrevistadores");
 
     @Autowired
     private WebTestClient webTestClient;
@@ -43,15 +44,19 @@ class EntrevistaControllerTest {
 
         when(this.solicitudEntrevista.generarSolicitudEntrevista(any(), any())).thenReturn(Mono.empty());
 
-        MultipartBodyBuilder multipartRequest = new MultipartBodyBuilder();
-        multipartRequest.part("file", new ByteArrayResource(file.getBytes())).contentType(MediaType.APPLICATION_PDF);
-        multipartRequest.part("formulario", new FormularioDto()).contentType(MediaType.APPLICATION_JSON);
+
 
         this.webTestClient
                 .post()
-                .uri(URL.append("/cv").toString())
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .bodyValue(multipartRequest.build())
+                .uri(URL.append("/solicitudes-entrevistas?username=test").toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(FormularioDto.builder()
+                        .empresa("Tesla")
+                        .perfil("Software Engineer Java")
+                        .seniority("Senior")
+                        .pais("Canada")
+                        .descripcionVacante("Are you a tech professional")
+                        .build())
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(String.class)

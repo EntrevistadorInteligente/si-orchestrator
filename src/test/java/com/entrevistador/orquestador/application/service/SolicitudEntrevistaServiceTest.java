@@ -4,6 +4,7 @@ import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
+import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
@@ -31,11 +32,11 @@ class SolicitudEntrevistaServiceTest {
     @Mock
     private JmsPublisherClient jmsPublisherClient;
     @Mock
-    private ValidadorPdfService validadorPdfService;
-    @Mock
     private ProcesoEntrevistaDao procesoEntrevistaDao;
     @Mock
     private EntrevistaDao entrevistaDao;
+    @Mock
+    private  HojaDeVidaDao hojaDeVidaDao;
 
     @Test
     void generarSolicitudEntrevistaTest() {
@@ -43,24 +44,27 @@ class SolicitudEntrevistaServiceTest {
         ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
         Map<String, String> map = Map.of(
                 "idHojaDeVidaRag", "theTitle",
-                "idInformacionEmpresaRag", "theUrl"
+                "idInformacionEmpresaRag", "theUrl",
+                "hojaDeVidaValida", "true"
         );
         RagsIdsDto projection = factory.createProjection(RagsIdsDto.class, map);
 
-        when(this.validadorPdfService.ejecutar(any())).thenReturn(Mono.just(new byte[]{}));
-        when(this.entrevistaDao.consultarRagsId(any())).thenReturn(Mono.just(projection));
         when(this.procesoEntrevistaDao.crearEvento()).thenReturn(Mono.just(ProcesoEntrevistaDto.builder().uuid("any").build()));
+        when(this.entrevistaDao.crearEntrevistaBase(anyString(),any(),any())).thenReturn(Mono.just("projection"));
         when(this.jmsPublisherClient.enviarInformacionEmpresa(any())).thenReturn(Mono.empty());
+        when(this.jmsPublisherClient.validarmatchHojaDeVida(any())).thenReturn(Mono.empty());
+        when(this.hojaDeVidaDao.obtenerIdHojaDeVidaRag(anyString())).thenReturn(Mono.just("1"));
 
-        Mono<Void> publisher = this.solicitudEntrevistaService.generarSolicitudEntrevista("", new FormularioDto());
+        Mono<Void> publisher =this.solicitudEntrevistaService.generarSolicitudEntrevista("1", new FormularioDto());
 
         StepVerifier
                 .create(publisher)
                 .verifyComplete();
 
-        verify(this.validadorPdfService, times(1)).ejecutar(any());
         verify(this.procesoEntrevistaDao, times(1)).crearEvento();
         verify(this.jmsPublisherClient, times(1)).enviarInformacionEmpresa(any());
+        verify(this.jmsPublisherClient, times(1)).validarmatchHojaDeVida(any());
+        verify(this.hojaDeVidaDao, times(1)).obtenerIdHojaDeVidaRag(any());
     }
 
 }

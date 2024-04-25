@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -65,21 +64,6 @@ public class JmsListenerAdapter {
         } catch (IOException e) {
             throw new RuntimeException("Error al deserializar el mensaje JSON", e);
         }
-    }
-
-    @KafkaListener(topics = "resumeTopic2", groupId = "actualizacionEstados")
-    public void receptorActualizacionEstados(ProcesoEntrevistaDto procesoEntrevistaDto) {
-        this.actualizarEstadoProcesoEntrevistaService.ejecutar(procesoEntrevistaDto);
-    }
-
-    @KafkaListener(topics = "resumeTopic2", groupId = "investigacionEmpresa")
-    public void receptorErrorInvestigacionEmpresa(ProcesoEntrevistaDto procesoEntrevistaDto, String idEntrevista) {
-        this.crearEntrevistaAlternativaService.ejecutar(procesoEntrevistaDto, idEntrevista);
-    }
-
-    @KafkaListener(topics = "resumeTopic2", groupId = "investigacionEmpresa")
-    public void receptorErrorInvestigacionEmpresa(List<String> preguntas) {
-        Mono.just(this.orquestadorEntrevista.enviarPreguntasFront(preguntas).block());
     }
 
 }
