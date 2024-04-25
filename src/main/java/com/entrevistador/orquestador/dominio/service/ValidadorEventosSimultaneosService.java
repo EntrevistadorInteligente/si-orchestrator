@@ -15,7 +15,7 @@ public class ValidadorEventosSimultaneosService {
           .flatMap(ragsIdsDto -> {
             String idHojaDeVida = ragsIdsDto.getIdHojaDeVidaRag();
             String idInformacionEmpresa = ragsIdsDto.getIdInformacionEmpresaRag();
-            if (idHojaDeVida != null && idInformacionEmpresa != null){
+            if (idHojaDeVida != null && idInformacionEmpresa != null && ragsIdsDto.getHojaDeVidaValida()){
                 return Mono.just(ragsIdsDto);
             } else{
                 return Mono.empty();
