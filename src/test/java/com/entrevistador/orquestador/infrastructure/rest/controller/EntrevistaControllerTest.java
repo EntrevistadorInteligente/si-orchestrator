@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -30,11 +31,19 @@ class EntrevistaControllerTest {
 
         this.webTestClient
                 .post()
-                .uri(URL.append("/solicitudes-entrevistas?username=any").toString())
-                .body(Mono.just(FormularioDto.builder().build()), FormularioDto.class)
+                .uri(URL.append("/solicitudes-entrevistas?username=test").toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(FormularioDto.builder()
+                        .empresa("Tesla")
+                        .perfil("Software Engineer Java")
+                        .seniority("Senior")
+                        .pais("Canada")
+                        .descripcionVacante("Are you a tech professional")
+                        .build())
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(String.class)
                 .isEqualTo("Archivo PDF cargado con exito");
     }
+
 }

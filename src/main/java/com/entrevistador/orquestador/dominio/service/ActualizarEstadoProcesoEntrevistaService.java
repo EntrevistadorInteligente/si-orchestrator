@@ -3,14 +3,15 @@ package com.entrevistador.orquestador.dominio.service;
 import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
+import com.entrevistador.orquestador.infrastructure.adapter.repository.EntrevistaRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 
 @RequiredArgsConstructor
 public class ActualizarEstadoProcesoEntrevistaService {
-    private final ProcesoEntrevistaDao procesoEntrevistaDao;
 
+    private final ProcesoEntrevistaDao procesoEntrevistaDao;
     public Mono<Void> ejecutar(ProcesoEntrevistaDto procesoEntrevistaDtoParam) {
         return this.procesoEntrevistaDao
                 .obtenerEventoPorId(procesoEntrevistaDtoParam.getUuid())
@@ -19,4 +20,5 @@ public class ActualizarEstadoProcesoEntrevistaService {
                 .flatMap(this.procesoEntrevistaDao::actualizar)
                 .then();
     }
+
 }

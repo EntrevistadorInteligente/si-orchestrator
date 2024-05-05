@@ -42,16 +42,10 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
                         this.entrevistaDao.crearEntrevistaBase(idHojaDeVidaRag, username, formulario),
                         this.procesoEntrevistaDao.crearEvento(),
                         (idEntrevista, procesoEntrevistaDto) ->
-                                this.enviarMatch2(idEntrevista, idHojaDeVidaRag, procesoEntrevistaDto, formulario)
+                                this.enviarMatch(idEntrevista, idHojaDeVidaRag, procesoEntrevistaDto, formulario)
 
                 )
                 .flatMap(tuple2Mono -> tuple2Mono.flatMap(tuple -> this.enviarInformacionEmpresa(tuple.getT1(), tuple.getT2(), formulario)));
-    }
-
-    private Mono<Tuple2<String, String>> enviarMatch2(String idEntrevista, String idHojaDeVidaRag,
-                                                     ProcesoEntrevistaDto eventoEntrevista, FormularioDto formulario) {
-
-        return Mono.just(Tuples.of(idEntrevista, eventoEntrevista.getUuid()));
     }
 
     private Mono<Tuple2<String, String>> enviarMatch(String idEntrevista, String idHojaDeVidaRag,

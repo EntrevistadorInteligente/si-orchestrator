@@ -40,6 +40,7 @@ class SolicitudEntrevistaServiceTest {
         when(this.entrevistaDao.crearEntrevistaBase(anyString(), anyString(), any())).thenReturn(Mono.just("any"));
         when(this.procesoEntrevistaDao.crearEvento()).thenReturn(Mono.just(ProcesoEntrevistaDto.builder().uuid("any").build()));
         when(this.jmsPublisherClient.enviarInformacionEmpresa(any())).thenReturn(Mono.empty());
+        when(this.jmsPublisherClient.validarmatchHojaDeVida(any())).thenReturn(Mono.empty());
 
         Mono<Void> publisher = this.solicitudEntrevistaService.generarSolicitudEntrevista("any", new FormularioDto());
 
@@ -51,6 +52,7 @@ class SolicitudEntrevistaServiceTest {
         verify(this.entrevistaDao, times(1)).crearEntrevistaBase(anyString(), anyString(), any());
         verify(this.procesoEntrevistaDao, times(1)).crearEvento();
         verify(this.jmsPublisherClient, times(1)).enviarInformacionEmpresa(any());
+        verify(this.jmsPublisherClient, times(1)).validarmatchHojaDeVida(any());
     }
 
 }
