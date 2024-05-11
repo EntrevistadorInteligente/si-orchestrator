@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -32,6 +33,7 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
     private final EntrevistaDao entrevistaDao;
     private final HojaDeVidaDao hojaDeVidaDao;
 
+    @Override
     public Mono<Void> generarSolicitudEntrevista(String username, FormularioDto formulario) {
         return this.hojaDeVidaDao.obtenerIdHojaDeVidaRag(username)
                 .flatMap(idHojaDeVidaRag -> this.procesarHojaDeVida(idHojaDeVidaRag,username, formulario));
@@ -75,6 +77,7 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
 
     @Override
     public List<VistaPreviaEntrevistaDto> generarPreguntas(String posicion) {
+
         Map<String, List<VistaPreviaEntrevistaDto>> preguntasPorPosicion = new HashMap<>();
         List<VistaPreviaEntrevistaDto> backendPreguntas = generarPreguntasBackend();
         List<VistaPreviaEntrevistaDto> frontendPreguntas = generarPreguntasFrontend();
