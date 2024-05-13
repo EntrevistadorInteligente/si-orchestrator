@@ -1,3 +1,4 @@
+/*
 package com.entrevistador.orquestador.infrastructure.beanconfiguration;
 
 import org.springframework.context.annotation.Bean;
@@ -19,4 +20,4 @@ public class SecurityConfig {
                 ));
         return http.build();
     }
-}
+}*/
