@@ -2,10 +2,12 @@ package com.entrevistador.orquestador.infrastructure.rest.controller;
 
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.dominio.model.dto.PerfilDto;
+import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
 import com.entrevistador.orquestador.infrastructure.adapter.util.SanitizeStringUtil;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ public class HojaDeVidaController {
 
     @PutMapping("/{uuid}")
     public Mono<ResponseEntity<String>> actualizarDatosPerfil(
-            @PathVariable String uuid,
+            @NotNull(message = ValidationsMessagesData.NOT_NULL_MESSAGE) @PathVariable String uuid,
             @Valid @RequestBody PerfilDto perfilDto) {
         return hojaDeVida.actualizarDatosPerfil(SanitizeStringUtil.sanitize(uuid),perfilDto)
                 .then(Mono.just(ResponseEntity.status(HttpStatus.OK)
@@ -39,7 +41,7 @@ public class HojaDeVidaController {
     @PostMapping("/cargas")
     public Mono<ResponseEntity<String>> cargarHojaDeVida(
             @RequestPart("file") Mono<FilePart> file,
-            @RequestPart("username") String username) {
+            @NotNull(message = ValidationsMessagesData.NOT_NULL_MESSAGE) @RequestPart("username") String username) {
         return this.hojaDeVida.generarSolicitudHojaDeVida(file, SanitizeStringUtil.sanitize(username))
                 .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
                         .body("Archivo PDF cargado con exito")));

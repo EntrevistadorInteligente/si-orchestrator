@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
+import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
 import com.entrevistador.orquestador.infrastructure.adapter.util.SanitizeStringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,7 @@ public class EntrevistaController {
 
     @PostMapping(value = "/solicitudes-entrevistas")
     public Mono<ResponseEntity<String>> crearSolicitudEntrevista(
-            @RequestParam String username,
+            @NotNull(message = ValidationsMessagesData.NOT_NULL_MESSAGE) @RequestParam String username,
             @Valid @RequestBody FormularioDto formulario
     ) {
         return this.solicitudEntrevista.generarSolicitudEntrevista(SanitizeStringUtil.sanitize(username), formulario)
@@ -38,7 +40,7 @@ public class EntrevistaController {
 
     @GetMapping(value = "/preguntas")
     public List<VistaPreviaEntrevistaDto> crearSolicitudEntrevista(
-            @RequestParam("posicion") String posicion) {
+            @NotNull(message = ValidationsMessagesData.NOT_NULL_MESSAGE) @RequestParam("posicion") String posicion) {
         return new ArrayList<>(solicitudEntrevista.generarPreguntas(SanitizeStringUtil.sanitize(posicion)));
     }
 
