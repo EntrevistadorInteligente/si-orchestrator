@@ -1,10 +1,13 @@
 package com.entrevistador.orquestador.infrastructure.adapter.repository;
 
+import com.entrevistador.orquestador.dominio.model.dto.IdEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.PerfilDto;
 import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.model.dto.SoloPerfilDto;
 import com.entrevistador.orquestador.dominio.model.dto.SoloPerfilImp;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
+import com.entrevistador.orquestador.infrastructure.properties.Aggregations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
@@ -18,7 +21,6 @@ public interface EntrevistaRepository extends ReactiveMongoRepository<Entrevista
     @Query(value="{ '_id' : ?0 }", fields="{ 'idHojaDeVidaRag' : 1, 'idInformacionEmpresaRag' : 1, 'hojaDeVidaValida' : 1}")
     Mono<RagsIdsDto> obtenerRagsYEstadoEntrevistaPorId(String id);
 
-    //@Query(value = "{}", fields = "{'perfilEmpresa' : 1}")
     @Aggregation(pipeline = {"""
             {
                 '$group': {
@@ -47,5 +49,8 @@ public interface EntrevistaRepository extends ReactiveMongoRepository<Entrevista
             """
             })
     Flux<SoloPerfilImp> obtenerPerfilEmpresa(int limit);
+
+    @Aggregation(pipeline ={"{'$match': { perfilEmpresa: ?0, hojaDeVidaValida: true }}","{'$limit': 1 }","{'$project' : { _id: 1}}"} )
+    Mono<IdEntrevistaDto> obtenerIdEntrevistaPorPerfil(String perfil);
 
 }
