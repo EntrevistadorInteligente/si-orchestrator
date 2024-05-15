@@ -133,7 +133,7 @@ public class KafkaConfiguration {
 
     @Bean
     public NewTopic topic5() {
-        return TopicBuilder.name("hojaDeVidaValidaPublisherTopic")
+        return TopicBuilder.name(topicValidador)
                 .partitions(2)
                 .replicas(1)
                 .build();
