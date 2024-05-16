@@ -6,6 +6,11 @@ public class SoloPerfilImp implements SoloPerfilDto{
     public SoloPerfilImp(String perfilEmpresa) {
         this.perfilEmpresa = perfilEmpresa;
     }
+
+    public SoloPerfilImp() {
+
+    }
+
     @Override
     public String getPerfilEmpresa() {
         return this.perfilEmpresa;

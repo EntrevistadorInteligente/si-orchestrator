@@ -1,13 +1,9 @@
 package com.entrevistador.orquestador.infrastructure.adapter.repository;
 
 import com.entrevistador.orquestador.dominio.model.dto.IdEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.PerfilDto;
 import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
-import com.entrevistador.orquestador.dominio.model.dto.SoloPerfilDto;
 import com.entrevistador.orquestador.dominio.model.dto.SoloPerfilImp;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
-import com.entrevistador.orquestador.infrastructure.properties.Aggregations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;

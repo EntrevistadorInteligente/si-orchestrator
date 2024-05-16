@@ -16,8 +16,8 @@ public class EntrevistaPruebaService implements EntrevistaPrueba {
     private final EntrevistaPruebaDao entrevistaPruebaDao;
 
     @Override
-    public Flux<SoloPerfilImp> getPerfiles(int limit) {
-        return this.entrevistaPruebaDao.getPerfil(limit);
+    public Flux<SoloPerfilImp> getPerfiles() {
+        return this.entrevistaPruebaDao.getPerfil();
     }
 
     @Override

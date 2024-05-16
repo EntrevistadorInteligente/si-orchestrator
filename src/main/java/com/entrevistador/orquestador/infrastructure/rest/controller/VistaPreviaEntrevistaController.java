@@ -5,8 +5,6 @@ import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.dominio.model.dto.IdEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.SoloPerfilImp;
 import com.entrevistador.orquestador.dominio.model.dto.VistaPreviaEntrevistaDto;
-import com.entrevistador.orquestador.infrastructure.adapter.repository.EntrevistaRepository;
-import com.entrevistador.orquestador.infrastructure.properties.Aggregations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +26,6 @@ public class VistaPreviaEntrevistaController {
 
     private final SolicitudEntrevista solicitudEntrevista;
     private final EntrevistaPrueba entrevistaPrueba;
-    private final Aggregations aggregations;
 
     @GetMapping(value = "/preguntas")
     public List<VistaPreviaEntrevistaDto> crearSolicitudEntrevista() {
@@ -45,7 +42,7 @@ public class VistaPreviaEntrevistaController {
 
     @GetMapping(value = "/perfiles")
     public Flux<SoloPerfilImp> mostrarListaPerfiles(){
-        return entrevistaPrueba.getPerfiles(10);
+        return entrevistaPrueba.getPerfiles();
     }
 
     @GetMapping(value = "/entrevista_muestra_id")

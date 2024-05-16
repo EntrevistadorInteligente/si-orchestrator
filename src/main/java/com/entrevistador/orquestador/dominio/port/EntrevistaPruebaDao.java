@@ -7,7 +7,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface EntrevistaPruebaDao {
-    Flux<SoloPerfilImp> getPerfil(int limit);
+    Flux<SoloPerfilImp> getPerfil();
 
     Mono<IdEntrevistaDto> getIdEntrevistaByPerfil(String perfil);
 }
