@@ -3,8 +3,6 @@ package com.entrevistador.orquestador.application.service;
 import com.entrevistador.orquestador.dominio.model.dto.*;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
-import com.entrevistador.orquestador.dominio.port.sse.SseService;
-import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,8 +28,6 @@ class OrquestadorEntrevistaServiceTest {
     private OrquestadorEntrevistaService orquestadorEntrevistaService;
     @Mock
     private JmsPublisherClient jmsPublisherClient;
-    @Mock
-    private SseService sseService;
     @Mock
     private EntrevistaDao entrevistaDao;
     @Mock
@@ -82,7 +78,6 @@ class OrquestadorEntrevistaServiceTest {
                 .verifyComplete();
 
         verify(this.validadorEventosSimultaneosService, times(1)).ejecutar(anyString());
-        verify(this.sseService, times(0)).emitEvent(any());
 
     }
 }

@@ -49,4 +49,7 @@ public interface EntrevistaRepository extends ReactiveMongoRepository<Entrevista
     @Aggregation(pipeline ={"{'$match': { perfilEmpresa: ?0, hojaDeVidaValida: true }}","{'$limit': 1 }","{'$project' : { _id: 1}}"} )
     Mono<IdEntrevistaDto> obtenerIdEntrevistaPorPerfil(String perfil);
 
+    @Query(value="{ 'username' : ?0 }", fields="{ '_id' : 0, 'estadoEntrevista' : 1}")
+    Mono<EntrevistaEntity> findByUsername(String username);
+
 }

@@ -24,21 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VistaPreviaEntrevistaController {
 
-    private final SolicitudEntrevista solicitudEntrevista;
     private final EntrevistaPrueba entrevistaPrueba;
-
-    @GetMapping(value = "/preguntas")
-    public List<VistaPreviaEntrevistaDto> crearSolicitudEntrevista() {
-
-        List<VistaPreviaEntrevistaDto> vistaPreviaEntrevistaDtos = new ArrayList<>();
-        vistaPreviaEntrevistaDtos.add(new VistaPreviaEntrevistaDto("Cual es tu mayor reto?"));
-        vistaPreviaEntrevistaDtos.add(new VistaPreviaEntrevistaDto("Que lenguaje domians mas?"));
-        vistaPreviaEntrevistaDtos.add(new VistaPreviaEntrevistaDto("Por que te gusta programar?"));
-        vistaPreviaEntrevistaDtos.add(new VistaPreviaEntrevistaDto("Eres un pato?"));
-
-        return new ArrayList<>(vistaPreviaEntrevistaDtos);
-
-    }
 
     @GetMapping(value = "/perfiles")
     public Flux<SoloPerfilImp> mostrarListaPerfiles(){
@@ -50,8 +36,6 @@ public class VistaPreviaEntrevistaController {
         perfil = UriUtils.decode(perfil, StandardCharsets.UTF_8);
         return this.entrevistaPrueba.getIdEntrevista(perfil);
     }
-
-
 
 }
 

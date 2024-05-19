@@ -6,15 +6,11 @@ import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.model.dto.SolicitudGeneracionEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
-import com.entrevistador.orquestador.dominio.port.sse.SseService;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +18,6 @@ import java.util.List;
 public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
 
     private final JmsPublisherClient jmsPublisherClient;
-    private final SseService sseService;
     private final EntrevistaDao entrevistaDao;
     private final ValidadorEventosSimultaneosService validadorEventosSimultaneosService;
 
@@ -34,12 +29,6 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
                 .flatMap(ragsIdsDto -> enviarInformacionEntrevistaAPreparador(ragsIdsDto, idEntrevista));
     }
 
-    @Override
-    public Mono<Void> enviarPreguntasFront(List<String> preguntas) {
-        return sseService.emitEvent(ServerSentEvent.<String>builder()
-                .data(preguntas.toString())
-                .build());
-    }
 
     @Override
     public Mono<Void> receptorHojaDeVidaMatch(MensajeValidacionMatch mensajeValidacionMatch) {

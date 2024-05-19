@@ -1,5 +1,6 @@
 package com.entrevistador.orquestador.application.usescases;
 
+import com.entrevistador.orquestador.dominio.model.dto.EstadoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.VistaPreviaEntrevistaDto;
 
@@ -12,6 +13,5 @@ import reactor.core.publisher.Mono;
 public interface SolicitudEntrevista {
     Mono<Void> generarSolicitudEntrevista(String username, FormularioDto formulario);
 
-    List<VistaPreviaEntrevistaDto> generarPreguntas(String posicion);
-
+    Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(String username);
 }
