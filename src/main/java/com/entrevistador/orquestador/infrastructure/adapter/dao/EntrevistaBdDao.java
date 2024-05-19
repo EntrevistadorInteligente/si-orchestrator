@@ -2,6 +2,7 @@ package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
 import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.Entrevista;
+import com.entrevistador.orquestador.dominio.model.dto.EstadoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
@@ -73,6 +74,11 @@ public class EntrevistaBdDao implements EntrevistaDao {
                     return entrevistaRepository.save(entrevista);
                 })
                 .then();
+    }
+
+    @Override
+    public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(String username) {
+        return this.entrevistaRepository.findByUsername(username).map( ent -> new EstadoEntrevistaDto(ent.getUuid(), ent.getEstadoEntrevista()));
     }
 
 }

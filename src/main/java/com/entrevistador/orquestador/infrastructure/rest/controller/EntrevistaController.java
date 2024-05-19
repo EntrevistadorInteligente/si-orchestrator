@@ -1,11 +1,8 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
+import com.entrevistador.orquestador.dominio.model.dto.EstadoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
-import com.entrevistador.orquestador.dominio.model.dto.VistaPreviaEntrevistaDto;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -16,7 +13,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 
@@ -38,10 +41,9 @@ public class EntrevistaController {
                         .body("Archivo PDF cargado con exito")));
     }
 
-    @GetMapping(value = "/preguntas")
-    public List<VistaPreviaEntrevistaDto> crearSolicitudEntrevista(
-            @NotNull(message = ValidationsMessagesData.NOT_NULL_MESSAGE) @RequestParam("posicion") String posicion) {
-        return new ArrayList<>(solicitudEntrevista.generarPreguntas(SanitizeStringUtil.sanitize(posicion)));
+    @GetMapping(value = "/{username}")
+    public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(@PathVariable String username) {
+        return this.solicitudEntrevista.obtenerEstadoEntrevistaPorUsuario(SanitizeStringUtil.sanitize(username));
     }
 
 }

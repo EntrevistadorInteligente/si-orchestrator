@@ -1,6 +1,7 @@
 package com.entrevistador.orquestador.dominio.port;
 
 import com.entrevistador.orquestador.dominio.model.Entrevista;
+import com.entrevistador.orquestador.dominio.model.dto.EstadoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import reactor.core.publisher.Mono;
@@ -17,4 +18,5 @@ public interface EntrevistaDao {
 
     Mono<Void> actualizarIdInformacionEmpresaRag(String idEntrevista, String idInformacionEmpresaRag);
 
+    Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(String username);
 }
