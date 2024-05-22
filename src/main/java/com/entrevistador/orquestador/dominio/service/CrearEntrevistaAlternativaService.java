@@ -10,7 +10,7 @@ public class CrearEntrevistaAlternativaService {
 
     private final ProcesoEntrevistaRepository procesoEntrevistaRepository;
 
-    public String ejecutar(ProcesoEntrevistaDto procesoEntrevistaDto, String idEntrevista) {
+    public String ejecutar() {
         this.procesoEntrevistaRepository.save(ProcesoEntrevistaEntity.builder().build());
         return null;
     }
