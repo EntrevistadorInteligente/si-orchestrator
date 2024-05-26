@@ -3,7 +3,6 @@ package com.entrevistador.orquestador.dominio.service;
 import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
-import com.entrevistador.orquestador.infrastructure.adapter.repository.EntrevistaRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 

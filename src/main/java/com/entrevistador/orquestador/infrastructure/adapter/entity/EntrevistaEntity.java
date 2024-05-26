@@ -29,5 +29,6 @@ public class EntrevistaEntity {
     private String descripcionVacante;
     @Setter
     private boolean hojaDeVidaValida;
+    private String estadoEntrevista;
 
 }
