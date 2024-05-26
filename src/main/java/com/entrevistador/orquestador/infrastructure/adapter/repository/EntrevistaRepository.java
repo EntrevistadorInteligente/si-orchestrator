@@ -8,9 +8,7 @@ import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.data.mongodb.repository.Update;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -60,5 +58,5 @@ public interface EntrevistaRepository extends ReactiveMongoRepository<Entrevista
     @Update("{ '$set': { 'estadoEntrevista': ?1 } }")
     Mono<Void> actualizarEstadoEntrevistaPorId(String id, String estadoEntrevista);
 
-
+    Flux<EntrevistaEntity> findByUsernameOrderByFechaCreacionDesc(String username);
 }

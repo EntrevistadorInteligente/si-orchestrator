@@ -7,6 +7,7 @@ import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
+import com.entrevistador.orquestador.dominio.service.ValidadacionEntrevistaPermitidaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +35,8 @@ class SolicitudEntrevistaServiceTest {
     @Mock
     private ProcesoEntrevistaDao procesoEntrevistaDao;
     @Mock
+    private ValidadacionEntrevistaPermitidaService validadacionEntrevistaPermitidaService;
+    @Mock
     private EntrevistaDao entrevistaDao;
     @Mock
     private  HojaDeVidaDao hojaDeVidaDao;
@@ -54,6 +57,7 @@ class SolicitudEntrevistaServiceTest {
         when(this.jmsPublisherClient.enviarInformacionEmpresa(any())).thenReturn(Mono.empty());
         when(this.jmsPublisherClient.validarmatchHojaDeVida(any())).thenReturn(Mono.empty());
         when(this.hojaDeVidaDao.obtenerIdHojaDeVidaRag(anyString())).thenReturn(Mono.just("1"));
+        when(this.validadacionEntrevistaPermitidaService.ejecutar(anyString())).thenReturn(Mono.empty());
 
         Mono<Void> publisher =this.solicitudEntrevistaService.generarSolicitudEntrevista("1", new FormularioDto());
 

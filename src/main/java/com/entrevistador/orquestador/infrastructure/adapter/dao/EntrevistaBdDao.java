@@ -11,7 +11,11 @@ import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEnt
 import com.entrevistador.orquestador.infrastructure.adapter.repository.EntrevistaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,6 +34,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
                         .perfilEmpresa(formulario.getPerfil())
                         .descripcionVacante(formulario.getDescripcionVacante())
                         .estadoEntrevista(EstadoEntrevistaEnum.IC.name())
+                        .fechaCreacion(LocalDateTime.now(ZoneOffset.UTC))
                         .build())
                 .map(entrevista ->
                         entrevista.getUuid());
@@ -51,6 +56,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
                                             .hojaDeVidaValida(entrevistaEntity.isHojaDeVidaValida())
                                             .estadoEntrevista(entrevistaEntity.getEstadoEntrevista())
                                             .username(entrevistaEntity.getUsername())
+                                            .fechaCreacion(entrevistaEntity.getFechaCreacion())
                                             .build()).then());
 
     }
@@ -98,6 +104,16 @@ public class EntrevistaBdDao implements EntrevistaDao {
     @Override
     public Mono<Void> actualizarEstadoEntrevista(String idEntrevista, EstadoEntrevistaEnum estadoEntrevistaEnum) {
         return this.entrevistaRepository.actualizarEstadoEntrevistaPorId(idEntrevista, estadoEntrevistaEnum.name());
+    }
+
+    @Override
+    public Flux<Entrevista> consultarUltimasEntrevistas(String username) {
+        return this.entrevistaRepository.findByUsernameOrderByFechaCreacionDesc(username)
+                .map(entrevistaEntity -> Entrevista.builder()
+                        .uuid(entrevistaEntity.getUuid())
+                        .idHojaDeVidaRag(entrevistaEntity.getIdHojaDeVidaRag())
+                        .fechaCreacion(entrevistaEntity.getFechaCreacion())
+                        .build());
     }
 
 }

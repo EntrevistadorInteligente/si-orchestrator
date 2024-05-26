@@ -5,7 +5,10 @@ import com.entrevistador.orquestador.dominio.model.dto.EstadoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 public interface EntrevistaDao {
 
@@ -24,4 +27,6 @@ public interface EntrevistaDao {
     Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorId(String id);
 
     Mono<Void> actualizarEstadoEntrevista(String idEntrevista, EstadoEntrevistaEnum estadoEntrevistaEnum);
+
+    Flux<Entrevista> consultarUltimasEntrevistas(String username);
 }
