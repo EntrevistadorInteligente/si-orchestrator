@@ -50,7 +50,7 @@ public interface EntrevistaRepository extends ReactiveMongoRepository<Entrevista
             })
     Flux<SoloPerfilImp> obtenerPerfilEmpresa(int limit);
 
-    @Aggregation(pipeline ={"{'$match': { perfilEmpresa: ?0, hojaDeVidaValida: true }}","{'$limit': 1 }","{'$project' : { _id: 1}}"} )
+    @Aggregation(pipeline ={"{'$match': { perfilEmpresa: ?0, estadoEntrevista: { $in: ['FN','FG'] }}}","{'$limit': 1 }","{'$project' : { _id: 1}}"} )
     Mono<IdEntrevistaDto> obtenerIdEntrevistaPorPerfil(String perfil);
 
     @Query(value="{ 'username' : ?0, 'estadoEntrevista' : { $ne: 'FN' } }")
