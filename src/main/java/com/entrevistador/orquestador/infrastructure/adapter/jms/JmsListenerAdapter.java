@@ -80,7 +80,7 @@ public class JmsListenerAdapter {
                     .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorFeedback)
                     .block();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR);
         }
     }
 
@@ -93,7 +93,7 @@ public class JmsListenerAdapter {
                     .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorPreguntas)
                     .block();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR);
         }
     }
 
