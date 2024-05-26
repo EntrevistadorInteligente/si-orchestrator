@@ -2,11 +2,13 @@ package com.entrevistador.orquestador.infrastructure.adapter.jms;
 
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
+import com.entrevistador.orquestador.dominio.model.dto.EntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.FeedbackDto;
 import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.model.dto.MensajeAnalizadorEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.MensajeValidacionMatch;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
-import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -20,10 +22,9 @@ import java.io.IOException;
 public class JmsListenerAdapter {
     private final OrquestadorEntrevista orquestadorEntrevista;
     private final ActualizarEstadoProcesoEntrevistaService actualizarEstadoProcesoEntrevistaService;
-    private final CrearEntrevistaAlternativaService crearEntrevistaAlternativaService;
     private final HojaDeVida hojaDeVida;
 
-    @KafkaListener(topics = "hojaDeVidaListenerTopic", groupId = "resumeGroup")
+    @KafkaListener(topics = "hojaDeVidaListenerTopic", groupId = "resumeGroup2")
     public void receptorHojaDevida(String mensajeJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -36,7 +37,7 @@ public class JmsListenerAdapter {
         }
     }
 
-    @KafkaListener(topics = "empresaListenerTopic", groupId = "resumeGroup")
+    @KafkaListener(topics = "empresaListenerTopic", groupId = "resumeGroup2")
     public void receptorInformacionEmpresa(String mensajeJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -52,7 +53,7 @@ public class JmsListenerAdapter {
 
     }
 
-    @KafkaListener(topics = "hojaDeVidaValidaListenerTopic", groupId = "resumeGroup")
+    @KafkaListener(topics = "hojaDeVidaValidaListenerTopic", groupId = "resumeGroup2")
     public void receptorValidarMatchHojaDeVida(String mensajeJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -62,6 +63,33 @@ public class JmsListenerAdapter {
 
         } catch (IOException e) {
             throw new RuntimeException("Error al deserializar el mensaje JSON", e);
+        }
+    }
+
+    @KafkaListener(topics = "feedbackListenerTopic", groupId = "resumeGroup2")
+    public void receptorFeedBack(String jsonData) {
+        final ObjectMapper mapper = new ObjectMapper();
+        try {
+            FeedbackDto json = mapper.readValue(jsonData, FeedbackDto.class);
+
+            Mono.just(json)
+                    .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorFeedback)
+                    .block();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @KafkaListener(topics = "preguntasListenerTopic", groupId = "my-group")
+    public void receptorPreguntasEntrevista(String jsonData) {
+        final ObjectMapper mapper = new ObjectMapper();
+        try {
+            EntrevistaDto json = mapper.readValue(jsonData, EntrevistaDto.class);
+            Mono.just(json)
+                    .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorPreguntas)
+                    .block();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -5,6 +5,7 @@ import com.entrevistador.orquestador.dominio.model.Entrevista;
 import com.entrevistador.orquestador.dominio.model.dto.EstadoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
 import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
+import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.EntrevistaRepository;
@@ -28,8 +29,10 @@ public class EntrevistaBdDao implements EntrevistaDao {
                         .seniorityEmpresa(formulario.getSeniority())
                         .perfilEmpresa(formulario.getPerfil())
                         .descripcionVacante(formulario.getDescripcionVacante())
+                        .estadoEntrevista(EstadoEntrevistaEnum.IC.name())
                         .build())
-                .map(EntrevistaEntity::getUuid);
+                .map(entrevista ->
+                        entrevista.getUuid());
     }
 
     @Override
@@ -46,6 +49,8 @@ public class EntrevistaBdDao implements EntrevistaDao {
                                             .seniorityEmpresa(entrevista.getInformacionEmpresaDto().getSeniority())
                                             .pais(entrevista.getInformacionEmpresaDto().getPais())
                                             .hojaDeVidaValida(entrevistaEntity.isHojaDeVidaValida())
+                                            .estadoEntrevista(entrevistaEntity.getEstadoEntrevista())
+                                            .username(entrevistaEntity.getUsername())
                                             .build()).then());
 
     }
@@ -56,7 +61,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
     }
 
     @Override
-    public Mono<Void> actualizarEstadoEntrevista(String idEntrevista, boolean esEntrevistaValida) {
+    public Mono<Void> actualizarEstadoHojaDeVida(String idEntrevista, boolean esEntrevistaValida) {
         return this.entrevistaRepository.findById(idEntrevista)
                 .flatMap(entrevista -> {
                     entrevista.setHojaDeVidaValida(esEntrevistaValida);
@@ -78,7 +83,21 @@ public class EntrevistaBdDao implements EntrevistaDao {
 
     @Override
     public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(String username) {
-        return this.entrevistaRepository.findByUsername(username).map( ent -> new EstadoEntrevistaDto(ent.getUuid(), ent.getEstadoEntrevista()));
+        return this.entrevistaRepository.
+                obtenerEntrevistaEnProcesoPorUsuario(username).map( entrevista -> new EstadoEntrevistaDto(entrevista.getUuid(),
+                entrevista.getEstadoEntrevista()));
+    }
+
+    @Override
+    public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorId(String id) {
+       return this.entrevistaRepository.findById(id)
+               .map( entrevista -> new EstadoEntrevistaDto(entrevista.getUuid(),
+                       entrevista.getEstadoEntrevista()));
+    }
+
+    @Override
+    public Mono<Void> actualizarEstadoEntrevista(String idEntrevista, EstadoEntrevistaEnum estadoEntrevistaEnum) {
+        return this.entrevistaRepository.actualizarEstadoEntrevistaPorId(idEntrevista, estadoEntrevistaEnum.name());
     }
 
 }

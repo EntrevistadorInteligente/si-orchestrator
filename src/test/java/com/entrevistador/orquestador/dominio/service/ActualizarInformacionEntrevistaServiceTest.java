@@ -1,6 +1,5 @@
 package com.entrevistador.orquestador.dominio.service;
 
-import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ class ActualizarInformacionEntrevistaServiceTest {
 
     @Test
     void testActualizarEstadoEntrevistaSegunMatch() {
-        when(this.entrevistaDao.actualizarEstadoEntrevista(anyString(), anyBoolean())).thenReturn(Mono.empty());
+        when(this.entrevistaDao.actualizarEstadoHojaDeVida(anyString(), anyBoolean())).thenReturn(Mono.empty());
 
         Mono<Void> publisher = this.actualizarInformacionEntrevistaService.actualizarEstadoEntrevistaSegunMatch(
                 "any",
@@ -40,7 +39,7 @@ class ActualizarInformacionEntrevistaServiceTest {
                 .create(publisher)
                 .verifyComplete();
 
-        verify(this.entrevistaDao, times(1)).actualizarEstadoEntrevista(anyString(), anyBoolean());
+        verify(this.entrevistaDao, times(1)).actualizarEstadoHojaDeVida(anyString(), anyBoolean());
     }
 
     @Test

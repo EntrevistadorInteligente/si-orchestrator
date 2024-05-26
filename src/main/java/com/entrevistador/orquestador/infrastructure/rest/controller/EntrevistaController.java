@@ -41,8 +41,13 @@ public class EntrevistaController {
                         .body("Archivo PDF cargado con exito")));
     }
 
-    @GetMapping(value = "/{username}")
-    public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(@PathVariable String username) {
+    @GetMapping(value = "/{id}")
+    public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorId(@PathVariable String id) {
+        return this.solicitudEntrevista.obtenerEstadoEntrevistaPorId(SanitizeStringUtil.sanitize(id));
+    }
+
+    @GetMapping()
+    public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(@RequestParam String username) {
         return this.solicitudEntrevista.obtenerEstadoEntrevistaPorUsuario(SanitizeStringUtil.sanitize(username));
     }
 

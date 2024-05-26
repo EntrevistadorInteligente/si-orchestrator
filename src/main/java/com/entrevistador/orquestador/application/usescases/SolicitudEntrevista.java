@@ -8,4 +8,6 @@ public interface SolicitudEntrevista {
     Mono<Void> generarSolicitudEntrevista(String username, FormularioDto formulario);
 
     Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(String username);
+
+    Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorId(String id);
 }
