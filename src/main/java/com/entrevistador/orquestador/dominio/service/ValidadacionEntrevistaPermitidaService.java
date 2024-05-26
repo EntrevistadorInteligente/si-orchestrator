@@ -47,8 +47,8 @@ public class ValidadacionEntrevistaPermitidaService {
 
     private Mono<Void> notificarEntrevistaInvalida(Duration diferencia) {
         long horasRestantes = HORAS_INHABILITADAS - diferencia.toHours();
-        long minutosRestantes = 60 - diferencia.toMinutesPart();
-        long segundosRestantes = 60 - diferencia.toSecondsPart();
+        long minutosRestantes = 60L - diferencia.toMinutesPart();
+        long segundosRestantes = 60L - diferencia.toSecondsPart();
 
         String mensaje = String.format(
                 " %02d horas, %02d minutos y %02d segundos",
@@ -61,7 +61,7 @@ public class ValidadacionEntrevistaPermitidaService {
     private Mono<Void> verificarEstadoEntrevistaEnProceso(String username) {
         return obtenerEstadoEntrevistaPorUsuario(username)
                 .flatMap(estadoEntrevistaDto -> {
-                    if (!EstadoEntrevistaEnum.FN.equals(estadoEntrevistaDto.getEstadoEntrevista())) {
+                    if (!EstadoEntrevistaEnum.FN.name().equals(estadoEntrevistaDto.getEstadoEntrevista())) {
                         return Mono.error(new EntrevistaProcesoException(CodigoErrorEnum.ENTREVISTA_EN_PROCESO));
                     }
                     return Mono.empty();
