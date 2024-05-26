@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class Entrevista {
-    public String uuid;
+    private String uuid;
     private String idEvento;
     private String idHojaDeVidaRag;
     private boolean isHojaDeVidaValida;
