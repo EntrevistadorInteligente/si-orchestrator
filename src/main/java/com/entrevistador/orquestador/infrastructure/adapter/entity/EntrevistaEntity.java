@@ -9,6 +9,8 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @Document(collection = "entrevista")
@@ -30,5 +32,6 @@ public class EntrevistaEntity {
     @Setter
     private boolean hojaDeVidaValida;
     private String estadoEntrevista;
+    private LocalDateTime fechaCreacion;
 
 }

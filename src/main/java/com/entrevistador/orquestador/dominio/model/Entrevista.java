@@ -4,6 +4,8 @@ import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 public class Entrevista {
@@ -12,5 +14,6 @@ public class Entrevista {
     private String idHojaDeVidaRag;
     private boolean isHojaDeVidaValida;
     private InformacionEmpresaDto informacionEmpresaDto;
+    private LocalDateTime fechaCreacion;
 
 }

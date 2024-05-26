@@ -6,6 +6,7 @@ import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntr
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
+import com.entrevistador.orquestador.dominio.service.ValidadacionEntrevistaPermitidaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
@@ -38,6 +39,11 @@ public class ServicesBeanConfiguration {
     @Bean
     public ValidadorPdfService validadorPdfService() {
         return new ValidadorPdfService();
+    }
+
+    @Bean
+    public ValidadacionEntrevistaPermitidaService validadorIntervaloEntrevistaService(EntrevistaDao entrevistaDao) {
+        return new ValidadacionEntrevistaPermitidaService(entrevistaDao);
     }
 
 

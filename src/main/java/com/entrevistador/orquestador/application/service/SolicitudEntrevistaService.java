@@ -11,6 +11,7 @@ import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
+import com.entrevistador.orquestador.dominio.service.ValidadacionEntrevistaPermitidaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -23,12 +24,14 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
 
     private final JmsPublisherClient jmsPublisherClient;
     private final ProcesoEntrevistaDao procesoEntrevistaDao;
+    private final ValidadacionEntrevistaPermitidaService validadacionEntrevistaPermitidaService;
     private final EntrevistaDao entrevistaDao;
     private final HojaDeVidaDao hojaDeVidaDao;
 
     @Override
     public Mono<Void> generarSolicitudEntrevista(String username, FormularioDto formulario) {
-        return this.hojaDeVidaDao.obtenerIdHojaDeVidaRag(username)
+        return this.validadacionEntrevistaPermitidaService.ejecutar(username)
+                .then(this.hojaDeVidaDao.obtenerIdHojaDeVidaRag(username))
                 .flatMap(idHojaDeVidaRag -> this.procesarHojaDeVida(idHojaDeVidaRag,username, formulario));
     }
 
