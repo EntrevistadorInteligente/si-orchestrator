@@ -37,7 +37,7 @@ public class JmsListenerAdapter {
             Mono.just(mensajeAnalizador).flatMap(this.hojaDeVida::guardarHojaDeVida).block();
 
         } catch (IOException e) {
-            throw new ErrorDeserializarJson(MENSAJE_ERROR);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR, e);
         }
     }
 
@@ -52,7 +52,7 @@ public class JmsListenerAdapter {
                 .then(this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizador.getIdEntrevista(), mensajeAnalizador.getIdInformacionEmpresaRag())).block();
 
         } catch (IOException e) {
-            throw new ErrorDeserializarJson(MENSAJE_ERROR);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR, e);
         }
 
     }
@@ -66,7 +66,7 @@ public class JmsListenerAdapter {
             Mono.just(mensajeAnalizador).flatMap(this.orquestadorEntrevista::receptorHojaDeVidaMatch).block();
 
         } catch (IOException e) {
-            throw new ErrorDeserializarJson(MENSAJE_ERROR);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR, e);
         }
     }
 
@@ -80,7 +80,7 @@ public class JmsListenerAdapter {
                     .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorFeedback)
                     .block();
         } catch (JsonProcessingException e) {
-            throw new ErrorDeserializarJson(MENSAJE_ERROR);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR, e);
         }
     }
 
@@ -93,7 +93,7 @@ public class JmsListenerAdapter {
                     .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorPreguntas)
                     .block();
         } catch (JsonProcessingException e) {
-            throw new ErrorDeserializarJson(MENSAJE_ERROR);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR, e);
         }
     }
 
