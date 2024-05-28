@@ -5,6 +5,7 @@ import com.entrevistador.orquestador.dominio.model.dto.SolicitudHojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -12,13 +13,21 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public final class JmsPublisherAdapter implements JmsPublisherClient {
 
+
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(JmsPublisherAdapter.class);
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private static final String SENT_MESSAGE = "Sent message=[";
+    private static final String WITH_OFFSET = "] with offset=[";
+    private static final String UNABLE_SEND_MESSAGE = "Unable to send message=[";
+    private static final String DUE_TO = "] due to : ";
+    private static final String ERROR = "ERROR : ";
 
     @Value("${kafka.topic-analizador-publisher}")
     private String hojaDeVidaPublisherTopic;
@@ -39,16 +48,16 @@ public final class JmsPublisherAdapter implements JmsPublisherClient {
             CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(hojaDeVidaPublisherTopic, solicitudHojaDeVidaDto);
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
-                    System.out.println("Sent message=[" + solicitudHojaDeVidaDto.getUsername() +
-                            "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                    logger.info(SENT_MESSAGE + solicitudHojaDeVidaDto.getUsername() +
+                            WITH_OFFSET + result.getRecordMetadata().offset() + "]");
                 } else {
-                    System.out.println("Unable to send message=[" +
-                            solicitudHojaDeVidaDto.toString() + "] due to : " + ex.getMessage());
+                    logger.info(UNABLE_SEND_MESSAGE+
+                            solicitudHojaDeVidaDto.toString() + DUE_TO + ex.getMessage());
                 }
             });
 
         } catch (Exception ex) {
-            System.out.println("ERROR : " + ex.getMessage());
+            logger.info(ERROR + ex.getMessage());
         }
 
         return Mono.empty();
@@ -61,16 +70,16 @@ public final class JmsPublisherAdapter implements JmsPublisherClient {
             CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topicEmpresa, perfil);
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
-                    System.out.println("Sent message=[" + perfil.getIdEntrevista() +
-                            "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                    logger.info(SENT_MESSAGE + perfil.getIdEntrevista() +
+                            WITH_OFFSET + result.getRecordMetadata().offset() + "]");
                 } else {
-                    System.out.println("Unable to send message=[" +
-                            perfil.toString() + "] due to : " + ex.getMessage());
+                    logger.info(UNABLE_SEND_MESSAGE+
+                            perfil.toString() + DUE_TO + ex.getMessage());
                 }
             });
 
         } catch (Exception ex) {
-            System.out.println("ERROR : " + ex.getMessage());
+            logger.info(ERROR + ex.getMessage());
         }
 
         return Mono.empty();
@@ -82,16 +91,16 @@ public final class JmsPublisherAdapter implements JmsPublisherClient {
             CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topicGenerador, solicitudGeneracionEntrevista);
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
-                    System.out.println("Sent message=[" + solicitudGeneracionEntrevista.getIdEntrevista() +
-                            "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                    logger.info(SENT_MESSAGE + solicitudGeneracionEntrevista.getIdEntrevista() +
+                            WITH_OFFSET + result.getRecordMetadata().offset() + "]");
                 } else {
-                    System.out.println("Unable to send message=[" +
-                            solicitudGeneracionEntrevista.toString() + "] due to : " + ex.getMessage());
+                    logger.info(UNABLE_SEND_MESSAGE+
+                            solicitudGeneracionEntrevista.toString() + DUE_TO + ex.getMessage());
                 }
             });
 
         } catch (Exception ex) {
-            System.out.println("ERROR : " + ex.getMessage());
+            logger.info(ERROR + ex.getMessage());
         }
 
         return Mono.empty();
@@ -103,16 +112,16 @@ public final class JmsPublisherAdapter implements JmsPublisherClient {
             CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topicValidador, solicitudMatchDto);
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
-                    System.out.println("Sent message=[" + solicitudMatchDto.getIdEntrevista() +
-                            "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                    logger.info(SENT_MESSAGE + solicitudMatchDto.getIdEntrevista() +
+                            WITH_OFFSET + result.getRecordMetadata().offset() + "]");
                 } else {
-                    System.out.println("Unable to send message=[" +
-                            solicitudMatchDto.toString() + "] due to : " + ex.getMessage());
+                    logger.info(UNABLE_SEND_MESSAGE+
+                            solicitudMatchDto.toString() + DUE_TO + ex.getMessage());
                 }
             });
 
         } catch (Exception ex) {
-            System.out.println("ERROR : " + ex.getMessage());
+            logger.info(ERROR + ex.getMessage());
         }
 
         return Mono.empty();

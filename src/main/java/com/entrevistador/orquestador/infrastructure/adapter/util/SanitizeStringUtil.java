@@ -4,6 +4,10 @@ import com.entrevistador.orquestador.infrastructure.adapter.exceptions.SanitizeS
 import org.owasp.encoder.Encode;
 
 public final class SanitizeStringUtil {
+
+    private SanitizeStringUtil() {
+    }
+
     public static String sanitize(final String str) {
         try {
             return Encode.forJava(str);
