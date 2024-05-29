@@ -8,6 +8,8 @@ import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.model.dto.MensajeAnalizadorEmpresaDto;
 import com.entrevistador.orquestador.dominio.model.dto.MensajeValidacionMatch;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
+import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
+import com.entrevistador.orquestador.infrastructure.adapter.exceptions.ErrorDeserializarJson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class JmsListenerAdapter {
+
+    private static final String MENSAJE_ERROR = "Error al deserializar el mensaje JSON";
     private final OrquestadorEntrevista orquestadorEntrevista;
     private final ActualizarEstadoProcesoEntrevistaService actualizarEstadoProcesoEntrevistaService;
     private final HojaDeVida hojaDeVida;
@@ -33,7 +37,7 @@ public class JmsListenerAdapter {
             Mono.just(mensajeAnalizador).flatMap(this.hojaDeVida::guardarHojaDeVida).block();
 
         } catch (IOException e) {
-            throw new RuntimeException("Error al deserializar el mensaje JSON", e);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR, e);
         }
     }
 
@@ -48,7 +52,7 @@ public class JmsListenerAdapter {
                 .then(this.orquestadorEntrevista.receptorInformacionEmpresa(mensajeAnalizador.getIdEntrevista(), mensajeAnalizador.getIdInformacionEmpresaRag())).block();
 
         } catch (IOException e) {
-            throw new RuntimeException("Error al deserializar el mensaje JSON", e);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR, e);
         }
 
     }
@@ -62,7 +66,7 @@ public class JmsListenerAdapter {
             Mono.just(mensajeAnalizador).flatMap(this.orquestadorEntrevista::receptorHojaDeVidaMatch).block();
 
         } catch (IOException e) {
-            throw new RuntimeException("Error al deserializar el mensaje JSON", e);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR, e);
         }
     }
 
@@ -76,7 +80,7 @@ public class JmsListenerAdapter {
                     .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorFeedback)
                     .block();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR, e);
         }
     }
 
@@ -89,7 +93,7 @@ public class JmsListenerAdapter {
                     .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorPreguntas)
                     .block();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new ErrorDeserializarJson(MENSAJE_ERROR, e);
         }
     }
 
