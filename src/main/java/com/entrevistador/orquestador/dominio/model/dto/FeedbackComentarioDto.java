@@ -14,4 +14,5 @@ public class FeedbackComentarioDto {
     @JsonProperty("id_pregunta")
     private String idPregunta;
     private String feedback;
+    private String score;
 }

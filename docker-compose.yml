@@ -35,6 +35,15 @@ services:
     ports:
       - '27017:27017'
 
+
+  redis:
+    image: 'redis:latest'
+    container_name: 'orquestador-redis'
+    ports:
+      - '6379:6379'
+    networks:
+      - kafka-red
+
 networks:
   kafka-red:
     driver: bridge
