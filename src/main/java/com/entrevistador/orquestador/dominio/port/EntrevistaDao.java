@@ -8,8 +8,6 @@ import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
 public interface EntrevistaDao {
 
     Mono<String> crearEntrevistaBase(String idHojaDeVidaRag, String username, FormularioDto formulario);

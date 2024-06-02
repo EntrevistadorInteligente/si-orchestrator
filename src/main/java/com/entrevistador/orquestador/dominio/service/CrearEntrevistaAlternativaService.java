@@ -1,6 +1,5 @@
 package com.entrevistador.orquestador.dominio.service;
 
-import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.ProcesoEntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
 import lombok.RequiredArgsConstructor;

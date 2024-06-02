@@ -5,7 +5,6 @@ import com.entrevistador.orquestador.dominio.model.dto.PerfilDto;
 import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Mono;
 
-
 public interface HojaDeVida {
     Mono<Void> generarSolicitudHojaDeVida(Mono<FilePart> file, String username);
 
