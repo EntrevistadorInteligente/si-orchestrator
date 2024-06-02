@@ -6,7 +6,6 @@ import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-
 @RequiredArgsConstructor
 public class ActualizarEstadoProcesoEntrevistaService {
     private final ProcesoEntrevistaDao procesoEntrevistaDao;

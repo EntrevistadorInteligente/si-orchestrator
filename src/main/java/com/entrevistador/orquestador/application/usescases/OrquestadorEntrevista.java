@@ -5,7 +5,6 @@ import com.entrevistador.orquestador.dominio.model.Feedback;
 import com.entrevistador.orquestador.dominio.model.MensajeValidacionMatch;
 import reactor.core.publisher.Mono;
 
-
 public interface OrquestadorEntrevista {
 
     Mono<Void> receptorInformacionEmpresa(String idEntrevista, String idInformacionEmpresaRag);
