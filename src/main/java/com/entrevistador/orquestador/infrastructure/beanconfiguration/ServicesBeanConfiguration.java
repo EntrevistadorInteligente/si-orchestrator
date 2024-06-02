@@ -1,6 +1,5 @@
 package com.entrevistador.orquestador.infrastructure.beanconfiguration;
 
-
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
