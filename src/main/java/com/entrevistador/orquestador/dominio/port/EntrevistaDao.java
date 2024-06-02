@@ -1,18 +1,16 @@
 package com.entrevistador.orquestador.dominio.port;
 
+import com.entrevistador.orquestador.application.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.model.Entrevista;
-import com.entrevistador.orquestador.dominio.model.dto.EstadoEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
-import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
+import com.entrevistador.orquestador.dominio.model.EstadoEntrevista;
+import com.entrevistador.orquestador.dominio.model.Formulario;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
 public interface EntrevistaDao {
 
-    Mono<String> crearEntrevistaBase(String idHojaDeVidaRag, String username, FormularioDto formulario);
+    Mono<String> crearEntrevistaBase(String idHojaDeVidaRag, String username, Formulario formulario);
 
     Mono<Void> actualizarEntrevista(Entrevista entrevista);
 
@@ -22,9 +20,9 @@ public interface EntrevistaDao {
 
     Mono<Void> actualizarIdInformacionEmpresaRag(String idEntrevista, String idInformacionEmpresaRag);
 
-    Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(String username);
+    Mono<EstadoEntrevista> obtenerEstadoEntrevistaPorUsuario(String username);
 
-    Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorId(String id);
+    Mono<EstadoEntrevista> obtenerEstadoEntrevistaPorId(String id);
 
     Mono<Void> actualizarEstadoEntrevista(String idEntrevista, EstadoEntrevistaEnum estadoEntrevistaEnum);
 

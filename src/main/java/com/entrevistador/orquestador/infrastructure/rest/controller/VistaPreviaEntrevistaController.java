@@ -1,8 +1,9 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
 import com.entrevistador.orquestador.application.usescases.EntrevistaPrueba;
-import com.entrevistador.orquestador.dominio.model.dto.IdEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.SoloPerfilImp;
+import com.entrevistador.orquestador.application.dto.IdEntrevistaDto;
+import com.entrevistador.orquestador.application.dto.SoloPerfilDto;
+import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaPruebaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,16 +21,19 @@ import java.nio.charset.StandardCharsets;
 public class VistaPreviaEntrevistaController {
 
     private final EntrevistaPrueba entrevistaPrueba;
+    private final EntrevistaPruebaMapper mapper;
 
     @GetMapping(value = "/perfiles")
-    public Flux<SoloPerfilImp> mostrarListaPerfiles(){
-        return entrevistaPrueba.getPerfiles();
+    public Flux<SoloPerfilDto> mostrarListaPerfiles(){
+        return entrevistaPrueba.getPerfiles()
+                .map(this.mapper::mapSoloPerfilToSoloPerfilDto);
     }
 
     @GetMapping(value = "/entrevista_muestra_id")
     public Mono<IdEntrevistaDto> obtenerId(@RequestParam("perfil") String perfil){
         perfil = UriUtils.decode(perfil, StandardCharsets.UTF_8);
-        return this.entrevistaPrueba.getIdEntrevista(perfil);
+        return this.entrevistaPrueba.getIdEntrevista(perfil)
+                .map(this.mapper::mapIdEntrevistaDto);
     }
 
 }

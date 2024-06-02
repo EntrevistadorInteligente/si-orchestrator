@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.dominio.service;
 
-import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
+import com.entrevistador.orquestador.application.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;

@@ -1,8 +1,8 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.EntrevistaPrueba;
-import com.entrevistador.orquestador.dominio.model.dto.IdEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.SoloPerfilImp;
+import com.entrevistador.orquestador.dominio.model.IdEntrevista;
+import com.entrevistador.orquestador.dominio.model.SoloPerfil;
 import com.entrevistador.orquestador.dominio.port.EntrevistaPruebaDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,12 @@ public class EntrevistaPruebaService implements EntrevistaPrueba {
     private final EntrevistaPruebaDao entrevistaPruebaDao;
 
     @Override
-    public Flux<SoloPerfilImp> getPerfiles() {
+    public Flux<SoloPerfil> getPerfiles() {
         return this.entrevistaPruebaDao.getPerfil();
     }
 
     @Override
-    public Mono<IdEntrevistaDto> getIdEntrevista(String perfil) {
+    public Mono<IdEntrevista> getIdEntrevista(String perfil) {
         return this.entrevistaPruebaDao.getIdEntrevistaByPerfil(perfil);
     }
-
 }

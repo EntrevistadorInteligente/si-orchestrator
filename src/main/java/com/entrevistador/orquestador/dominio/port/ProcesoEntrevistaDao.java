@@ -1,14 +1,14 @@
 package com.entrevistador.orquestador.dominio.port;
 
-import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.ProcesoEntrevista;
 import reactor.core.publisher.Mono;
 
 public interface ProcesoEntrevistaDao {
 
-    Mono<ProcesoEntrevistaDto> crearEvento();
+    Mono<ProcesoEntrevista> crearEvento();
 
-    Mono<ProcesoEntrevistaDto> obtenerEventoPorId(String idEvento);
+    Mono<ProcesoEntrevista> obtenerEventoPorId(String idEvento);
 
-    Mono<ProcesoEntrevistaDto> actualizar(ProcesoEntrevistaDto procesoEntrevistaDto);
+    Mono<ProcesoEntrevista> actualizar(ProcesoEntrevista procesoEntrevistaDto);
 
 }

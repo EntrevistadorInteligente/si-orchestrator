@@ -1,16 +1,15 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
+import com.entrevistador.orquestador.application.dto.FormularioDto;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
-import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
+import com.entrevistador.orquestador.dominio.model.Formulario;
+import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -31,6 +30,8 @@ class EntrevistaControllerTest {
 
     @MockBean
     private SolicitudEntrevista solicitudEntrevista;
+    @MockBean
+    private EntrevistaMapper    mapper;
 
     @Test
     @DisplayName("Debera cargar el CV")
@@ -43,7 +44,7 @@ class EntrevistaControllerTest {
         );
 
         when(this.solicitudEntrevista.generarSolicitudEntrevista(any(), any())).thenReturn(Mono.empty());
-
+        when(this.mapper.mapFormularioDtoToFormulario(any())).thenReturn(Formulario.builder().build());
 
 
         this.webTestClient

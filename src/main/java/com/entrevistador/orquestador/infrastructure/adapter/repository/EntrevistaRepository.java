@@ -1,8 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.adapter.repository;
 
-import com.entrevistador.orquestador.dominio.model.dto.IdEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
-import com.entrevistador.orquestador.dominio.model.dto.SoloPerfilImp;
+import com.entrevistador.orquestador.application.dto.RagsIdsDto;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.Query;
@@ -46,10 +44,13 @@ public interface EntrevistaRepository extends ReactiveMongoRepository<Entrevista
               }
             """
             })
-    Flux<SoloPerfilImp> obtenerPerfilEmpresa(int limit);
+    Flux<EntrevistaEntity> obtenerPerfilEmpresa(int limit);
 
-    @Aggregation(pipeline ={"{'$match': { perfilEmpresa: ?0, estadoEntrevista: { $in: ['FN','FG'] }}}","{'$limit': 1 }","{'$project' : { _id: 1}}"} )
-    Mono<IdEntrevistaDto> obtenerIdEntrevistaPorPerfil(String perfil);
+    @Aggregation(pipeline ={
+            "{'$match': { perfilEmpresa: ?0, estadoEntrevista: { $in: ['FN','FG'] }}}",
+            "{'$limit': 1 }"
+    })
+    Mono<EntrevistaEntity> obtenerIdEntrevistaPorPerfil(String perfil);
 
     @Query(value="{ 'username' : ?0, 'estadoEntrevista' : { $ne: 'FN' } }")
     Mono<EntrevistaEntity> obtenerEntrevistaEnProcesoPorUsuario(String username);

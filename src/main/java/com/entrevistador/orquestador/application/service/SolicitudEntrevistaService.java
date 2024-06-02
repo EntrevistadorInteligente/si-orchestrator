@@ -1,12 +1,12 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
-import com.entrevistador.orquestador.dominio.model.dto.EstadoEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.FormularioDto;
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
-import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.SolicitudMatchDto;
+import com.entrevistador.orquestador.dominio.model.EstadoEntrevista;
+import com.entrevistador.orquestador.dominio.model.Formulario;
+import com.entrevistador.orquestador.dominio.model.InformacionEmpresa;
+import com.entrevistador.orquestador.dominio.model.PosicionEntrevista;
+import com.entrevistador.orquestador.dominio.model.ProcesoEntrevista;
+import com.entrevistador.orquestador.dominio.model.SolicitudMatch;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
@@ -29,37 +29,37 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
     private final HojaDeVidaDao hojaDeVidaDao;
 
     @Override
-    public Mono<Void> generarSolicitudEntrevista(String username, FormularioDto formulario) {
+    public Mono<Void> generarSolicitudEntrevista(String username, Formulario formulario) {
         return this.validadacionEntrevistaPermitidaService.ejecutar(username)
                 .then(this.hojaDeVidaDao.obtenerIdHojaDeVidaRag(username))
                 .flatMap(idHojaDeVidaRag -> this.procesarHojaDeVida(idHojaDeVidaRag,username, formulario));
     }
 
     @Override
-    public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(String username) {
+    public Mono<EstadoEntrevista> obtenerEstadoEntrevistaPorUsuario(String username) {
         return entrevistaDao.obtenerEstadoEntrevistaPorUsuario(username);
     }
 
     @Override
-    public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorId(String id) {
+    public Mono<EstadoEntrevista> obtenerEstadoEntrevistaPorId(String id) {
         return entrevistaDao.obtenerEstadoEntrevistaPorId(id);
     }
 
-    private Mono<Void> procesarHojaDeVida(String idHojaDeVidaRag, String username, FormularioDto formulario) {
+    private Mono<Void> procesarHojaDeVida(String idHojaDeVidaRag, String username, Formulario formulario) {
         return Mono.zip(
                         this.entrevistaDao.crearEntrevistaBase(idHojaDeVidaRag, username, formulario),
                         this.procesoEntrevistaDao.crearEvento(),
-                        (idEntrevista, procesoEntrevistaDto) ->
-                                this.enviarMatch(idEntrevista, idHojaDeVidaRag, procesoEntrevistaDto, formulario)
+                        (idEntrevista, procesoEntrevista) ->
+                                this.enviarMatch(idEntrevista, idHojaDeVidaRag, procesoEntrevista, formulario)
 
                 )
                 .flatMap(tuple2Mono -> tuple2Mono.flatMap(tuple -> this.enviarInformacionEmpresa(tuple.getT1(), tuple.getT2(), formulario)));
     }
 
     private Mono<Tuple2<String, String>> enviarMatch(String idEntrevista, String idHojaDeVidaRag,
-                                                     ProcesoEntrevistaDto eventoEntrevista, FormularioDto formulario) {
+                                                     ProcesoEntrevista eventoEntrevista, Formulario formulario) {
 
-        return this.jmsPublisherClient.validarmatchHojaDeVida(SolicitudMatchDto.builder()
+        return this.jmsPublisherClient.validarmatchHojaDeVida(SolicitudMatch.builder()
                         .idEntrevista(idEntrevista)
                         .idHojaDeVidaRag(idHojaDeVidaRag)
                         .formulario(formulario)
@@ -67,11 +67,11 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
                 .then(Mono.just(Tuples.of(idEntrevista, eventoEntrevista.getUuid())));
     }
 
-    private Mono<Void> enviarInformacionEmpresa(String idEntrevista, String idEventoEntrevista, FormularioDto formulario) {
-        return this.jmsPublisherClient.enviarInformacionEmpresa(PosicionEntrevistaDto.builder()
+    private Mono<Void> enviarInformacionEmpresa(String idEntrevista, String idEventoEntrevista, Formulario formulario) {
+        return this.jmsPublisherClient.enviarInformacionEmpresa(PosicionEntrevista.builder()
                 .eventoEntrevistaId(idEventoEntrevista)
                 .idEntrevista(idEntrevista)
-                .formulario(InformacionEmpresaDto.builder()
+                .formulario(InformacionEmpresa.builder()
                         .empresa(formulario.getEmpresa())
                         .pais(formulario.getPais())
                         .seniority(formulario.getSeniority())

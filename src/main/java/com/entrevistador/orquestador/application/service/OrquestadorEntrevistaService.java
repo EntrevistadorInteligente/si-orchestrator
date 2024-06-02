@@ -1,11 +1,11 @@
 package com.entrevistador.orquestador.application.service;
 
+import com.entrevistador.orquestador.application.dto.RagsIdsDto;
+import com.entrevistador.orquestador.application.dto.SolicitudGeneracionEntrevistaDto;
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
-import com.entrevistador.orquestador.dominio.model.dto.EntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.FeedbackDto;
-import com.entrevistador.orquestador.dominio.model.dto.MensajeValidacionMatch;
-import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
-import com.entrevistador.orquestador.dominio.model.dto.SolicitudGeneracionEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.EntrevistaModel;
+import com.entrevistador.orquestador.dominio.model.Feedback;
+import com.entrevistador.orquestador.dominio.model.MensajeValidacionMatch;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
@@ -35,7 +35,7 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
 
     @Override
     public Mono<Void> receptorHojaDeVidaMatch(MensajeValidacionMatch mensajeValidacionMatch) {
-        log.info(String.format("Recibiendo informacion validacion hoja de vida para entervista id : %s",mensajeValidacionMatch.getIdEntrevista()));
+        log.info(String.format("Recibiendo informacion validacion hoja de vida para entervista id : %s", mensajeValidacionMatch.getIdEntrevista()));
         return this.entrevistaDao.actualizarEstadoHojaDeVida(mensajeValidacionMatch.getIdEntrevista(), mensajeValidacionMatch.isMatchValido())
                 .then(this.validadorEventosSimultaneosService.ejecutar(mensajeValidacionMatch.getIdEntrevista()))
                 .flatMap(ragsIdsDto -> enviarInformacionEntrevistaAPreparador(ragsIdsDto, mensajeValidacionMatch.getIdEntrevista()));
@@ -59,15 +59,15 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
     }
 
     @Override
-    public Mono<Void> actualizarEstadoEntrevistaPorPreguntas(EntrevistaDto entrevista) {
-        if (!entrevista.getPreguntas().isEmpty()) {
-            return this.entrevistaDao.actualizarEstadoEntrevista(entrevista.getIdEntrevista(), EstadoEntrevistaEnum.PG);
+    public Mono<Void> actualizarEstadoEntrevistaPorPreguntas(EntrevistaModel entrevistaModel) {
+        if (!entrevistaModel.getPreguntas().isEmpty()) {
+            return this.entrevistaDao.actualizarEstadoEntrevista(entrevistaModel.getIdEntrevista(), EstadoEntrevistaEnum.PG);
         }
         return Mono.empty();
     }
 
     @Override
-    public Mono<Void> actualizarEstadoEntrevistaPorFeedback(FeedbackDto feedback) {
+    public Mono<Void> actualizarEstadoEntrevistaPorFeedback(Feedback feedback) {
         if (!feedback.getProcesoEntrevista().isEmpty()) {
             return this.entrevistaDao.actualizarEstadoEntrevista(feedback.getIdEntrevista(), EstadoEntrevistaEnum.FG);
         }

@@ -1,9 +1,10 @@
 package com.entrevistador.orquestador.application.service;
 
-import com.entrevistador.orquestador.dominio.model.dto.*;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
+import com.entrevistador.orquestador.application.dto.RagsIdsDto;
+import com.entrevistador.orquestador.application.dto.SolicitudGeneracionEntrevistaDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
