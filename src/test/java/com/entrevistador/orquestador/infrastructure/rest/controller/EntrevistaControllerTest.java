@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
-import com.entrevistador.orquestador.application.dto.FormularioDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.FormularioDto;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.dominio.model.Formulario;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMapper;
@@ -35,7 +35,7 @@ class EntrevistaControllerTest {
 
     @Test
     @DisplayName("Debera cargar el CV")
-    void shouldLoadCV_WhenPost() throws IOException {
+    void shouldLoadCV_WhenPost() {
         MockMultipartFile file = new MockMultipartFile(
                 "file",
                 "file.pdf",

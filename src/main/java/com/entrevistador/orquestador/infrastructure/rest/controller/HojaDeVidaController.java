@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
-import com.entrevistador.orquestador.application.dto.PerfilDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.PerfilDto;
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.HojaDeVidaMapper;

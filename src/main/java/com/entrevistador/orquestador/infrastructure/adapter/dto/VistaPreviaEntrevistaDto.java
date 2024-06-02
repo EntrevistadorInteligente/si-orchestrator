@@ -1,4 +1,4 @@
-package com.entrevistador.orquestador.application.dto;
+package com.entrevistador.orquestador.infrastructure.adapter.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

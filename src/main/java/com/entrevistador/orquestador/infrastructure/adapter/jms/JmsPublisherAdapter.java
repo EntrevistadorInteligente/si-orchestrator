@@ -1,8 +1,8 @@
 package com.entrevistador.orquestador.infrastructure.adapter.jms;
 
-import com.entrevistador.orquestador.application.dto.SolicitudGeneracionEntrevistaDto;
-import com.entrevistador.orquestador.application.dto.SolicitudHojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.model.PosicionEntrevista;
+import com.entrevistador.orquestador.dominio.model.SolicitudGeneracionEntrevista;
+import com.entrevistador.orquestador.dominio.model.SolicitudHojaDeVida;
 import com.entrevistador.orquestador.dominio.model.SolicitudMatch;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMapper;
@@ -42,8 +42,10 @@ public final class JmsPublisherAdapter implements JmsPublisherClient {
     private String topicValidador;
 
     @Override
-    public Mono<Void> enviarHojaDeVida(SolicitudHojaDeVidaDto solicitudHojaDeVidaDto) {
-        return enviarMensaje(hojaDeVidaPublisherTopic, solicitudHojaDeVidaDto, solicitudHojaDeVidaDto.getUsername());
+    public Mono<Void> enviarHojaDeVida(SolicitudHojaDeVida solicitudHojaDeVida) {
+        return Mono.just(this.mapper.mapSolicitudHojaDeVidaSolicitudHojaDeVidaDto(solicitudHojaDeVida))
+                .flatMap(solicitudHojaDeVidaDto ->
+                        enviarMensaje(hojaDeVidaPublisherTopic, solicitudHojaDeVidaDto, solicitudHojaDeVidaDto.getUsername()));
     }
 
     @Override
@@ -54,8 +56,10 @@ public final class JmsPublisherAdapter implements JmsPublisherClient {
     }
 
     @Override
-    public Mono<Void> generarEntrevista(SolicitudGeneracionEntrevistaDto solicitudGeneracionEntrevista) {
-        return enviarMensaje(topicGenerador, solicitudGeneracionEntrevista, solicitudGeneracionEntrevista.getIdEntrevista());
+    public Mono<Void> generarEntrevista(SolicitudGeneracionEntrevista generacionEntrevista) {
+        return Mono.just(this.mapper.mapSolicitudGeneracionEntrevistaToSolicitudGeneracionEntrevistaDto(generacionEntrevista))
+                .flatMap(solicitudGeneracionEntrevistaDto ->
+                        enviarMensaje(topicGenerador, solicitudGeneracionEntrevistaDto, solicitudGeneracionEntrevistaDto.getIdEntrevista()));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
-import com.entrevistador.orquestador.application.dto.EstadoEntrevistaDto;
-import com.entrevistador.orquestador.application.dto.FormularioDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.EstadoEntrevistaDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.FormularioDto;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMapper;
@@ -49,7 +49,7 @@ public class EntrevistaController {
                 .map(this.mapper::mapEstadoEntrevistaToEstadoEntrevistaDto);
     }
 
-    @GetMapping()
+    @GetMapping
     public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(@RequestParam String username) {
         return this.solicitudEntrevista.obtenerEstadoEntrevistaPorUsuario(SanitizeStringUtil.sanitize(username))
                 .map(this.mapper::mapEstadoEntrevistaToEstadoEntrevistaDto);

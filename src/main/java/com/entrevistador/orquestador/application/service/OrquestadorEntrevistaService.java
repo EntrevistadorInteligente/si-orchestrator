@@ -1,7 +1,7 @@
 package com.entrevistador.orquestador.application.service;
 
-import com.entrevistador.orquestador.application.dto.RagsIdsDto;
-import com.entrevistador.orquestador.application.dto.SolicitudGeneracionEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.SolicitudGeneracionEntrevista;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.RagsIdsDto;
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
 import com.entrevistador.orquestador.dominio.model.EntrevistaModel;
 import com.entrevistador.orquestador.dominio.model.Feedback;
@@ -41,11 +41,11 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
                 .flatMap(ragsIdsDto -> enviarInformacionEntrevistaAPreparador(ragsIdsDto, mensajeValidacionMatch.getIdEntrevista()));
     }
 
+    //TODO: Cambiar el RagsIdDto a una Clase del dominio
     private Mono<Void> enviarInformacionEntrevistaAPreparador(RagsIdsDto ragsIdsDto, String idEntrevista) {
-
         if(ragsIdsDto != null){
             log.info(String.format("Enviando informacion a preparador para entervista id : %s", idEntrevista));
-            return this.jmsPublisherClient.generarEntrevista(SolicitudGeneracionEntrevistaDto.builder()
+            return this.jmsPublisherClient.generarEntrevista(SolicitudGeneracionEntrevista.builder()
                             .idEntrevista(idEntrevista)
                             .idHojaDeVida(ragsIdsDto.getIdHojaDeVidaRag())
                             .username(ragsIdsDto.getUsername())
@@ -55,7 +55,6 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
         }
 
         return Mono.empty();
-
     }
 
     @Override

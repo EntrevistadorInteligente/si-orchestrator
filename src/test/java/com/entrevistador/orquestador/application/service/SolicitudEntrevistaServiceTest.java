@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.application.service;
 
-import com.entrevistador.orquestador.application.dto.RagsIdsDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.model.Formulario;
 import com.entrevistador.orquestador.dominio.model.ProcesoEntrevista;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;

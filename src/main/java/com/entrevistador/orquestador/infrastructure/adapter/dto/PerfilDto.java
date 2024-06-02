@@ -1,4 +1,4 @@
-package com.entrevistador.orquestador.application.dto;
+package com.entrevistador.orquestador.infrastructure.adapter.dto;
 
 import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

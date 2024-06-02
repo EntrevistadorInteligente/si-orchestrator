@@ -1,4 +1,4 @@
-package com.entrevistador.orquestador.application.dto;
+package com.entrevistador.orquestador.infrastructure.adapter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

@@ -1,8 +1,8 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
 import com.entrevistador.orquestador.application.usescases.EntrevistaPrueba;
-import com.entrevistador.orquestador.application.dto.IdEntrevistaDto;
-import com.entrevistador.orquestador.application.dto.SoloPerfilDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.IdEntrevistaDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.SoloPerfilDto;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaPruebaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

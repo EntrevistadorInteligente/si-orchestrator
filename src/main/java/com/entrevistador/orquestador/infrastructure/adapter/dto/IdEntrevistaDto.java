@@ -1,4 +1,4 @@
-package com.entrevistador.orquestador.application.dto;
+package com.entrevistador.orquestador.infrastructure.adapter.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SoloPerfilDto {
-    private String perfilEmpresa;
+public class IdEntrevistaDto {
+    private String id;
 }

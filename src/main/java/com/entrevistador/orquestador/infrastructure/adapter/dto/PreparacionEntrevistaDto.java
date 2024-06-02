@@ -1,4 +1,4 @@
-package com.entrevistador.orquestador.application.dto;
+package com.entrevistador.orquestador.infrastructure.adapter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -6,11 +6,11 @@ import lombok.Data;
 
 @Builder
 @Data
-public class PosicionEntrevistaDto {
+public class PreparacionEntrevistaDto {
     @JsonProperty("id_entrevista")
     private String idEntrevista;
     @JsonProperty("evento_entrevista_id")
     private String eventoEntrevistaId;
-    @JsonProperty("formulario")
-    private InformacionEmpresaDto formulario;
+    @JsonProperty("hoja_de_vida")
+    private byte[] hojaDeVida;
 }

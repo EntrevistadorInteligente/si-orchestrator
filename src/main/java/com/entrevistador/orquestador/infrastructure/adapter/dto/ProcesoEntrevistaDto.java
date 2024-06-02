@@ -1,4 +1,4 @@
-package com.entrevistador.orquestador.application.dto;
+package com.entrevistador.orquestador.infrastructure.adapter.dto;
 
 import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
 import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;

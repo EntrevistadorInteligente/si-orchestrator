@@ -1,12 +1,12 @@
 package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
-import com.entrevistador.orquestador.application.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.Entrevista;
 import com.entrevistador.orquestador.dominio.model.EstadoEntrevista;
 import com.entrevistador.orquestador.dominio.model.Formulario;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.RagsIdsDto;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMapper;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.EntrevistaRepository;

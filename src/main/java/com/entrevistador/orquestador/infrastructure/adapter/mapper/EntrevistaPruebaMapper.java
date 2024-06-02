@@ -1,8 +1,8 @@
 package com.entrevistador.orquestador.infrastructure.adapter.mapper;
 
-import com.entrevistador.orquestador.application.dto.SoloPerfilDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.SoloPerfilDto;
 import com.entrevistador.orquestador.dominio.model.IdEntrevista;
-import com.entrevistador.orquestador.application.dto.IdEntrevistaDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.IdEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.SoloPerfil;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
 import org.mapstruct.Mapper;

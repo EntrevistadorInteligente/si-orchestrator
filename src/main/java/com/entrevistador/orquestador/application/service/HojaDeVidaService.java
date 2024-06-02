@@ -1,9 +1,9 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
-import com.entrevistador.orquestador.application.dto.SolicitudHojaDeVidaDto;
 import com.entrevistador.orquestador.dominio.model.HojaDeVidaModel;
 import com.entrevistador.orquestador.dominio.model.Perfil;
+import com.entrevistador.orquestador.dominio.model.SolicitudHojaDeVida;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
@@ -30,7 +30,7 @@ public class HojaDeVidaService implements HojaDeVida {
 
     private Mono<Void> procesarHojaDeVida(byte[] hojaDeVidaBytes, String username) {
         return this.jmsPublisherClient.enviarHojaDeVida(
-                SolicitudHojaDeVidaDto.builder()
+                SolicitudHojaDeVida.builder()
                         .username(username)
                         .hojaDeVida(hojaDeVidaBytes)
                         .build());

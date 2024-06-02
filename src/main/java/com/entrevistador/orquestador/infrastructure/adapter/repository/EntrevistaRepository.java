@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.adapter.repository;
 
-import com.entrevistador.orquestador.application.dto.RagsIdsDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.RagsIdsDto;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.Query;

@@ -1,7 +1,7 @@
 package com.entrevistador.orquestador.dominio.service;
 
 import com.entrevistador.orquestador.dominio.model.Entrevista;
-import com.entrevistador.orquestador.application.dto.EstadoEntrevistaDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.EstadoEntrevistaDto;
 import com.entrevistador.orquestador.dominio.model.enums.CodigoErrorEnum;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;

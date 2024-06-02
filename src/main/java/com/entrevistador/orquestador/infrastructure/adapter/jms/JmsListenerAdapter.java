@@ -1,10 +1,10 @@
 package com.entrevistador.orquestador.infrastructure.adapter.jms;
 
-import com.entrevistador.orquestador.application.dto.EntrevistaDto;
-import com.entrevistador.orquestador.application.dto.FeedbackDto;
-import com.entrevistador.orquestador.application.dto.HojaDeVidaDto;
-import com.entrevistador.orquestador.application.dto.MensajeAnalizadorEmpresaDto;
-import com.entrevistador.orquestador.application.dto.MensajeValidacionMatchDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.EntrevistaDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.FeedbackDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.HojaDeVidaDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.MensajeAnalizadorEmpresaDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.MensajeValidacionMatchDto;
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
