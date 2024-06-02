@@ -1,11 +1,15 @@
 package com.entrevistador.orquestador.application.usescases;
 
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
-import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
+import com.entrevistador.orquestador.dominio.model.dto.EntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.FeedbackDto;
+import com.entrevistador.orquestador.dominio.model.dto.MensajeValidacionMatch;
+import reactor.core.publisher.Mono;
 
 public interface OrquestadorEntrevista {
 
-    void receptorHojaDeVida(String idEntrevista,String eventoEntrevistaId, HojaDeVidaDto resume);
-    void receptorInformacionEmpresa(String idEntrevista,String eventoEntrevistaId, InformacionEmpresaDto info);
-    void generarEntrevistaConDatosDummy(String idEntrevista);
+    Mono<Void> receptorInformacionEmpresa(String idEntrevista, String idInformacionEmpresaRag);
+    Mono<Void> receptorHojaDeVidaMatch(MensajeValidacionMatch mensajeValidacionMatch);
+    Mono<Void> actualizarEstadoEntrevistaPorPreguntas(EntrevistaDto entrevista);
+    Mono<Void> actualizarEstadoEntrevistaPorFeedback(FeedbackDto feedback);
+
 }

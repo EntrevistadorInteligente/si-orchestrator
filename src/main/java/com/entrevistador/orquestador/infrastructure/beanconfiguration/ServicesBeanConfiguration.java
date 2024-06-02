@@ -1,14 +1,14 @@
 package com.entrevistador.orquestador.infrastructure.beanconfiguration;
 
-
-import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProvesoEntrevistaService;
+import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
+import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.CrearEntrevistaAlternativaService;
-import com.entrevistador.orquestador.dominio.service.CrearEntrevistaService;
-import com.entrevistador.orquestador.dominio.service.NotificarFrontEntrevistaFallidaService;
-import com.entrevistador.orquestador.dominio.service.SolicitudPreparacionEntrevistaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
+import com.entrevistador.orquestador.dominio.service.ValidadacionEntrevistaPermitidaService;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
+import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
+import com.entrevistador.orquestador.infrastructure.adapter.repository.ProcesoEntrevistaRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,42 +16,34 @@ import org.springframework.context.annotation.Configuration;
 public class ServicesBeanConfiguration {
 
     @Bean
-    public ActualizarEstadoProvesoEntrevistaService actualizarEstadoProvesoEntrevistaService(){
-        return new ActualizarEstadoProvesoEntrevistaService();
-    }
-    @Bean
-    public ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService(){
-        return new ActualizarInformacionEntrevistaService();
+    public ActualizarEstadoProcesoEntrevistaService actualizarEstadoProcesoEntrevistaService(ProcesoEntrevistaDao procesoEntrevistaDao) {
+        return new ActualizarEstadoProcesoEntrevistaService(procesoEntrevistaDao);
     }
 
     @Bean
-    public CrearEntrevistaAlternativaService crearEntrevistaAlternativaService(NotificarFrontEntrevistaFallidaService notificarFrontEntrevistaFallidaService){
-        return new CrearEntrevistaAlternativaService(notificarFrontEntrevistaFallidaService);
+    public ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService(EntrevistaDao entrevistaDao) {
+        return new ActualizarInformacionEntrevistaService(entrevistaDao);
     }
 
     @Bean
-    public CrearEntrevistaService crearEntrevistaService(){
-        return new CrearEntrevistaService();
+    public CrearEntrevistaAlternativaService crearEntrevistaAlternativaService(ProcesoEntrevistaRepository procesoEntrevistaRepository) {
+        return new CrearEntrevistaAlternativaService(procesoEntrevistaRepository);
     }
 
     @Bean
-    public NotificarFrontEntrevistaFallidaService notificarFrontEntrevistaFallidaService(){
-        return new NotificarFrontEntrevistaFallidaService();
+    public ValidadorEventosSimultaneosService validadorEventosSimultaneosService(EntrevistaDao entrevistaDao) {
+        return new ValidadorEventosSimultaneosService(entrevistaDao);
     }
 
     @Bean
-    public SolicitudPreparacionEntrevistaService solicitudPreparacionEntrevistaService(){
-        return new SolicitudPreparacionEntrevistaService();
-    }
-
-    @Bean
-    public ValidadorEventosSimultaneosService validadorEventosSimultaneosService(){
-        return new ValidadorEventosSimultaneosService();
-    }
-
-    @Bean
-    public ValidadorPdfService validadorPdfService(){
+    public ValidadorPdfService validadorPdfService() {
         return new ValidadorPdfService();
     }
+
+    @Bean
+    public ValidadacionEntrevistaPermitidaService validadorIntervaloEntrevistaService(EntrevistaDao entrevistaDao) {
+        return new ValidadacionEntrevistaPermitidaService(entrevistaDao);
+    }
+
 
 }

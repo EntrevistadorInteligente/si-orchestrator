@@ -1,14 +1,37 @@
 package com.entrevistador.orquestador.infrastructure.adapter.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+import java.time.LocalDateTime;
+
+@Getter
+@Builder
+@Document(collection = "entrevista")
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class EntrevistaEntity {
-    /**
-     * TODO
-     * Cambiar por uuid
-     */
     @Id
-    private int id;
+    private String uuid;
+    private String username;
+    private String idHojaDeVidaRag;
+    @Setter
+    private String idInformacionEmpresaRag;
+    private String empresa;
+    private String perfilEmpresa;
+    private String seniorityEmpresa;
+    private String pais;
+    private String descripcionVacante;
+    @Setter
+    private boolean hojaDeVidaValida;
+    private String estadoEntrevista;
+    private LocalDateTime fechaCreacion;
+
 }

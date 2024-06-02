@@ -1,14 +1,29 @@
 package com.entrevistador.orquestador.infrastructure.adapter.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
+import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+import java.util.Date;
+
+@Getter
+@Document(collection = "proceso_entrevista")
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class ProcesoEntrevistaEntity {
-    /**
-     * TODO
-     * Cambiar por uuid
-     */
+
     @Id
-    private int id;
+    private String uuid;
+    private Date fechaHora;
+    private EstadoProcesoEnum estado;
+    private FuenteEnum fuente;
+    private String error;
+
 }

@@ -1,54 +1,77 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
-import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
-import com.entrevistador.orquestador.dominio.service.ActualizarInformacionEntrevistaService;
-import com.entrevistador.orquestador.dominio.service.SolicitudPreparacionEntrevistaService;
+import com.entrevistador.orquestador.dominio.model.dto.EntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.dto.FeedbackDto;
+import com.entrevistador.orquestador.dominio.model.dto.MensajeValidacionMatch;
+import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
+import com.entrevistador.orquestador.dominio.model.dto.SolicitudGeneracionEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
+import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
+import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
-import com.entrevistador.orquestador.infrastructure.adapter.client.PreparadorClient;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
 
-    private final SolicitudPreparacionEntrevistaService solicitudPreparacionEntrevistaService;
-    private final ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService;
+    private final JmsPublisherClient jmsPublisherClient;
+    private final EntrevistaDao entrevistaDao;
     private final ValidadorEventosSimultaneosService validadorEventosSimultaneosService;
-    private final PreparadorClient preparadorClient;
-
-    public OrquestadorEntrevistaService(SolicitudPreparacionEntrevistaService solicitudPreparacionEntrevistaService, ActualizarInformacionEntrevistaService actualizarInformacionEntrevistaService, ValidadorEventosSimultaneosService validadorEventosSimultaneosService, PreparadorClient preparadorClient) {
-        this.solicitudPreparacionEntrevistaService = solicitudPreparacionEntrevistaService;
-        this.actualizarInformacionEntrevistaService = actualizarInformacionEntrevistaService;
-        this.validadorEventosSimultaneosService = validadorEventosSimultaneosService;
-        this.preparadorClient = preparadorClient;
-    }
 
     @Override
-    public void receptorHojaDeVida(String idEntrevista, String eventoEntrevistaId , HojaDeVidaDto resume) {
-        this.actualizarInformacionEntrevistaService.actualizarHojaDeVida(idEntrevista, resume);
-        var eventosFinalizados = this.validadorEventosSimultaneosService.ejecutar(idEntrevista);
-        enviarInformacionEntrevistaAPreparador(eventosFinalizados);
+    public Mono<Void> receptorInformacionEmpresa(String idEntrevista, String idInformacionEmpresaRag) {
+        log.info(String.format("Recibiendo informacion empresa para entervista id : %s",idEntrevista));
+        return this.entrevistaDao.actualizarIdInformacionEmpresaRag(idEntrevista, idInformacionEmpresaRag)
+                .then(this.validadorEventosSimultaneosService.ejecutar(idEntrevista))
+                .flatMap(ragsIdsDto -> enviarInformacionEntrevistaAPreparador(ragsIdsDto, idEntrevista));
     }
+
 
     @Override
-    public void receptorInformacionEmpresa(String idEntrevista,String eventoEntrevistaId, InformacionEmpresaDto info) {
-        var eventosFinalizados = this.validadorEventosSimultaneosService.ejecutar(idEntrevista);
-        this.actualizarInformacionEntrevistaService.actualizarInrfomacionEmpresa(idEntrevista, info);
-        enviarInformacionEntrevistaAPreparador(eventosFinalizados);
+    public Mono<Void> receptorHojaDeVidaMatch(MensajeValidacionMatch mensajeValidacionMatch) {
+        log.info(String.format("Recibiendo informacion validacion hoja de vida para entervista id : %s",mensajeValidacionMatch.getIdEntrevista()));
+        return this.entrevistaDao.actualizarEstadoHojaDeVida(mensajeValidacionMatch.getIdEntrevista(), mensajeValidacionMatch.isMatchValido())
+                .then(this.validadorEventosSimultaneosService.ejecutar(mensajeValidacionMatch.getIdEntrevista()))
+                .flatMap(ragsIdsDto -> enviarInformacionEntrevistaAPreparador(ragsIdsDto, mensajeValidacionMatch.getIdEntrevista()));
     }
 
-    @Override
-    public void generarEntrevistaConDatosDummy(String idEntrevista){
-        enviarInformacionEntrevistaAPreparador(true);
-    }
+    private Mono<Void> enviarInformacionEntrevistaAPreparador(RagsIdsDto ragsIdsDto, String idEntrevista) {
 
-    private void enviarInformacionEntrevistaAPreparador(boolean eventosFinalizados){
-        if(eventosFinalizados){
-            this.solicitudPreparacionEntrevistaService.ejecutar();
-            this.preparadorClient.generarEntrevista();
+        if(ragsIdsDto != null){
+            log.info(String.format("Enviando informacion a preparador para entervista id : %s", idEntrevista));
+            return this.jmsPublisherClient.generarEntrevista(SolicitudGeneracionEntrevistaDto.builder()
+                            .idEntrevista(idEntrevista)
+                            .idHojaDeVida(ragsIdsDto.getIdHojaDeVidaRag())
+                            .username(ragsIdsDto.getUsername())
+                            .idInformacionEmpresa(ragsIdsDto.getIdInformacionEmpresaRag())
+                            .build())
+                    .then();
         }
+
+        return Mono.empty();
+
     }
 
+    @Override
+    public Mono<Void> actualizarEstadoEntrevistaPorPreguntas(EntrevistaDto entrevista) {
+        if (!entrevista.getPreguntas().isEmpty()) {
+            return this.entrevistaDao.actualizarEstadoEntrevista(entrevista.getIdEntrevista(), EstadoEntrevistaEnum.PG);
+        }
+        return Mono.empty();
+    }
+
+    @Override
+    public Mono<Void> actualizarEstadoEntrevistaPorFeedback(FeedbackDto feedback) {
+        if (!feedback.getProcesoEntrevista().isEmpty()) {
+            return this.entrevistaDao.actualizarEstadoEntrevista(feedback.getIdEntrevista(), EstadoEntrevistaEnum.FG);
+        }
+        return Mono.empty();
+    }
 }
 
