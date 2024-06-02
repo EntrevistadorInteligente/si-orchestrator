@@ -4,7 +4,6 @@ import com.entrevistador.orquestador.dominio.model.PosicionEntrevista;
 import com.entrevistador.orquestador.dominio.model.SolicitudGeneracionEntrevista;
 import com.entrevistador.orquestador.dominio.model.SolicitudHojaDeVida;
 import com.entrevistador.orquestador.dominio.model.SolicitudMatch;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.SolicitudGeneracionEntrevistaDto;
 import reactor.core.publisher.Mono;
 
 public interface JmsPublisherClient {

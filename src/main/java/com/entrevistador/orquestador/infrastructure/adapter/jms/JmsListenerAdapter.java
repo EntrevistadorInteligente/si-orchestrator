@@ -80,9 +80,9 @@ public class JmsListenerAdapter {
 
     @KafkaListener(topics = "feedbackListenerTopic", groupId = "resumeGroup2")
     public void receptorFeedBack(String jsonData) {
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper objectMapper = new ObjectMapper();
         try {
-            FeedbackDto feedbackDto = mapper.readValue(jsonData, FeedbackDto.class);
+            FeedbackDto feedbackDto = objectMapper.readValue(jsonData, FeedbackDto.class);
 
             Mono.just(this.mapper.mapFeedbackDtoToFeedback(feedbackDto))
                     .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorFeedback)
@@ -94,9 +94,9 @@ public class JmsListenerAdapter {
 
     @KafkaListener(topics = "preguntasListenerTopic", groupId = "my-group")
     public void receptorPreguntasEntrevista(String jsonData) {
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper objectMapper = new ObjectMapper();
         try {
-            EntrevistaDto entrevistaDto = mapper.readValue(jsonData, EntrevistaDto.class);
+            EntrevistaDto entrevistaDto = objectMapper.readValue(jsonData, EntrevistaDto.class);
             Mono.just(this.mapper.mapEntrevistaDtoToEntrevistaModel(entrevistaDto))
                     .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorPreguntas)
                     .block();
