@@ -5,8 +5,8 @@ import com.entrevistador.orquestador.infrastructure.adapter.dto.EstadoEntrevista
 import com.entrevistador.orquestador.dominio.model.enums.CodigoErrorEnum;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
-import com.entrevistador.orquestador.infrastructure.adapter.exceptions.EntrevistaProcesoException;
-import com.entrevistador.orquestador.infrastructure.adapter.exceptions.LimiteEntrevistaException;
+import com.entrevistador.orquestador.dominio.excepciones.EntrevistaProcesoException;
+import com.entrevistador.orquestador.dominio.excepciones.LimiteEntrevistaException;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 

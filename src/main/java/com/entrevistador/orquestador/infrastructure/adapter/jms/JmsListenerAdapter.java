@@ -8,7 +8,7 @@ import com.entrevistador.orquestador.infrastructure.adapter.dto.MensajeValidacio
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
-import com.entrevistador.orquestador.infrastructure.adapter.exceptions.ErrorDeserializarJson;
+import com.entrevistador.orquestador.dominio.excepciones.ErrorDeserializarJson;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.HojaDeVidaMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
