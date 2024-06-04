@@ -1,8 +1,7 @@
 package com.entrevistador.orquestador;
 
 import org.junit.jupiter.api.Test;
-
-//@SpringBootTest
+@SuppressWarnings("squid:S2699")
 class OrquestadorApplicationTests {
 
     @Test
