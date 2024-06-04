@@ -1,7 +1,7 @@
 package com.entrevistador.orquestador.dominio.service;
 
+import com.entrevistador.orquestador.dominio.excepciones.PdfException;
 import com.entrevistador.orquestador.dominio.model.enums.CodigoErrorEnum;
-import com.entrevistador.orquestador.infrastructure.adapter.exceptions.HojaDeVidaInvalidaException;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Mono;
@@ -22,10 +22,10 @@ public class ValidadorPdfService {
                     dataBuffer.read(bytes);
                     DataBufferUtils.release(dataBuffer);
                     if(!esPdf(bytes)){
-                        return Mono.error(new HojaDeVidaInvalidaException(CodigoErrorEnum.HOJA_DE_VIDA_INVALIDA));
+                        return Mono.error(new PdfException(CodigoErrorEnum.HOJA_DE_VIDA_INVALIDA));
                     }
                     if (bytes.length > MAX_FILE_SIZE) {
-                        return Mono.error(new HojaDeVidaInvalidaException(CodigoErrorEnum.SIZE_HOJA_DE_VIDA_EXCEDIDO));
+                        return Mono.error(new PdfException(CodigoErrorEnum.SIZE_HOJA_DE_VIDA_EXCEDIDO));
                     }
                     return Mono.just(bytes);
                 });
