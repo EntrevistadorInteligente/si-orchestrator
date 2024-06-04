@@ -2,7 +2,7 @@ package com.entrevistador.orquestador.dominio.service;
 
 import com.entrevistador.orquestador.dominio.excepciones.ActualizarEstadoEntrevistaException;
 import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
-import com.entrevistador.orquestador.dominio.model.dto.ProcesoEntrevistaDto;
+import com.entrevistador.orquestador.dominio.model.ProcesoEntrevista;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoProcesoEnum;
 import com.entrevistador.orquestador.dominio.model.enums.FuenteEnum;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
@@ -32,7 +32,7 @@ public class ActualizarEstadoProcesoEntrevistaServiceTest {
     @Mock
     private ProcesoEntrevistaDao procesoEntrevistaDao;
 
-    private ProcesoEntrevistaDto procesoEntrevistaDtoVacio = ProcesoEntrevistaDto.builder()
+    private ProcesoEntrevista procesoEntrevistaDtoVacio = ProcesoEntrevista.builder()
             .uuid("")
             .fechaYHora(null)
             .estado(null)
@@ -40,7 +40,7 @@ public class ActualizarEstadoProcesoEntrevistaServiceTest {
             .error("")
             .build();
 
-    private ProcesoEntrevistaDto procesoEntrevistaDtoActualizar = ProcesoEntrevistaDto.builder()
+    private ProcesoEntrevista procesoEntrevistaDtoActualizar = ProcesoEntrevista.builder()
             .uuid("any")
             .fechaYHora(new Date())
             .estado(EstadoProcesoEnum.AC)

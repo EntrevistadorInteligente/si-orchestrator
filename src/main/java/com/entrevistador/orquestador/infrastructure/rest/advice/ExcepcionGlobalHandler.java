@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.rest.advice;
 
-import com.entrevistador.orquestador.dominio.model.dto.ErrorResponse;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.ErrorResponse;
 import com.entrevistador.orquestador.dominio.model.enums.CodigoErrorEnum;
 import com.entrevistador.orquestador.infrastructure.adapter.exceptions.EntrevistaProcesoException;
 import com.entrevistador.orquestador.infrastructure.adapter.exceptions.LimiteEntrevistaException;

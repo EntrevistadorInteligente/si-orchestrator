@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.dominio.service;
 
-import com.entrevistador.orquestador.dominio.model.dto.RagsIdsDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,9 +1,9 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
-import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
-import com.entrevistador.orquestador.dominio.model.dto.PerfilDto;
-import com.entrevistador.orquestador.dominio.model.dto.SolicitudHojaDeVidaDto;
+import com.entrevistador.orquestador.dominio.model.HojaDeVidaModel;
+import com.entrevistador.orquestador.dominio.model.Perfil;
+import com.entrevistador.orquestador.dominio.model.SolicitudHojaDeVida;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
@@ -30,41 +30,26 @@ public class HojaDeVidaService implements HojaDeVida {
 
     private Mono<Void> procesarHojaDeVida(byte[] hojaDeVidaBytes, String username) {
         return this.jmsPublisherClient.enviarHojaDeVida(
-                SolicitudHojaDeVidaDto.builder()
+                SolicitudHojaDeVida.builder()
                         .username(username)
                         .hojaDeVida(hojaDeVidaBytes)
                         .build());
     }
 
     @Override
-    public Mono<PerfilDto> obtenerHojaDeVida(String username) {
-
-        return hojaDeVidaDao.obtenerHojaDeVidaPorNombreUsuario(username)
-                .map(hojaDeVidaDto -> PerfilDto.builder()
-                        .uuid(hojaDeVidaDto.getUuid())
-                        .nombre(hojaDeVidaDto.getNombre())
-                        .perfil(hojaDeVidaDto.getPerfil())
-                        .seniority(hojaDeVidaDto.getSeniority())
-                        .tecnologiasPrincipales(hojaDeVidaDto.getTecnologiasPrincipales())
-                        .experienciasLaborales(hojaDeVidaDto.getExperienciasLaborales())
-                        .habilidadesTecnicas(hojaDeVidaDto.getHabilidadesTecnicas())
-                        .certificaciones(hojaDeVidaDto.getCertificaciones())
-                        .proyectos(hojaDeVidaDto.getProyectos())
-                        .nivelIngles(hojaDeVidaDto.getNivelIngles())
-                        .otrasHabilidades(hojaDeVidaDto.getOtrasHabilidades())
-                        .build());
+    public Mono<HojaDeVidaModel> obtenerHojaDeVida(String username) {
+        return hojaDeVidaDao.obtenerHojaDeVidaPorNombreUsuario(username);
     }
 
     @Override
-    public Mono<Void> guardarHojaDeVida(HojaDeVidaDto hojaDeVidaDto) {
+    public Mono<Void> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel) {
         log.info("Recibiendo hoja de vida");
-        return this.hojaDeVidaDao.guardarHojaDeVida(hojaDeVidaDto);
+        return this.hojaDeVidaDao.guardarHojaDeVida(hojaDeVidaModel);
     }
 
     @Override
-    public Mono<Void> actualizarDatosPerfil(String uuid, PerfilDto perfilDto) {
-        return this.hojaDeVidaDao.actualizarDatosPerfil(uuid, perfilDto);
+    public Mono<Void> actualizarDatosPerfil(String uuid, Perfil perfil) {
+        return this.hojaDeVidaDao.actualizarDatosPerfil(uuid, perfil);
     }
-
 }
 

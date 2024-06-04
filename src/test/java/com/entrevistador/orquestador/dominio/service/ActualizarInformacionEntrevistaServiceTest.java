@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.dominio.service;
 
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
+import com.entrevistador.orquestador.dominio.model.InformacionEmpresa;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +49,7 @@ class ActualizarInformacionEntrevistaServiceTest {
 
         Mono<Void> publisher = this.actualizarInformacionEntrevistaService.actualizarInformacionEmpresa(
                 "any",
-                InformacionEmpresaDto.builder().empresa("any").pais("any").perfil("any").seniority("any").build()
+                InformacionEmpresa.builder().empresa("any").pais("any").perfil("any").seniority("any").build()
         );
 
         StepVerifier

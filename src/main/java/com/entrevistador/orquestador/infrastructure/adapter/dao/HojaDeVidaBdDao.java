@@ -1,9 +1,10 @@
 package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
+import com.entrevistador.orquestador.dominio.model.Perfil;
+import com.entrevistador.orquestador.infrastructure.adapter.mapper.HojaDeVidaMapper;
 import com.entrevistador.orquestador.dominio.excepciones.IdHojaDeVidaRagNuloException;
 import com.entrevistador.orquestador.dominio.excepciones.UsernameNoEncontradoException;
-import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
-import com.entrevistador.orquestador.dominio.model.dto.PerfilDto;
+import com.entrevistador.orquestador.dominio.model.HojaDeVidaModel;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.HojaDeVidaEntity;
 import com.entrevistador.orquestador.infrastructure.adapter.repository.HojaDeVidaRepository;
@@ -15,22 +16,12 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class HojaDeVidaBdDao implements HojaDeVidaDao {
     private final HojaDeVidaRepository hojaDeVidaRepository;
+    private final HojaDeVidaMapper mapper;
 
-    public Mono<Void> guardarHojaDeVida(HojaDeVidaDto hojaDeVidaDto){
-        return this.hojaDeVidaRepository.save(HojaDeVidaEntity.builder()
-                .username(hojaDeVidaDto.getUsername())
-                .idHojaDeVidaRag(hojaDeVidaDto.getIdHojaDeVidaRag())
-                .nombre(hojaDeVidaDto.getNombre())
-                .perfil(hojaDeVidaDto.getPerfil())
-                .seniority(hojaDeVidaDto.getSeniority())
-                .tecnologiasPrincipales(hojaDeVidaDto.getTecnologiasPrincipales())
-                .experienciasLaborales(hojaDeVidaDto.getExperienciasLaborales())
-                .habilidadesTecnicas(hojaDeVidaDto.getHabilidadesTecnicas())
-                .certificaciones(hojaDeVidaDto.getCertificaciones())
-                .proyectos(hojaDeVidaDto.getProyectos())
-                .nivelIngles(hojaDeVidaDto.getNivelIngles())
-                .otrasHabilidades(hojaDeVidaDto.getOtrasHabilidades())
-                .build()).then(Mono.empty());
+    public Mono<Void> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel){
+        return Mono.just(this.mapper.mapHojaDeVidaModelToHojaDeVidaEntity(hojaDeVidaModel))
+                .flatMap(this.hojaDeVidaRepository::save)
+                .then();
     }
 
     public Mono<String> obtenerIdHojaDeVidaRag(String username){
@@ -42,45 +33,28 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
                 .switchIfEmpty(Mono.error(new IdHojaDeVidaRagNuloException(String.format(idRagError, username))));
     }
 
-    public Mono<HojaDeVidaDto> obtenerHojaDeVidaPorNombreUsuario(String username){
+    public Mono<HojaDeVidaModel> obtenerHojaDeVidaPorNombreUsuario(String username){
         return this.hojaDeVidaRepository.findByUsername(username)
-                .map(HojaDeVidaBdDao::mapearHojaDeVida);
+                .map(this.mapper::mapHojaDeVidaEntityToHojaDeVida);
     }
 
     @Override
-    public Mono<Void> actualizarDatosPerfil(String uuid, PerfilDto perfilDto) {
+    public Mono<Void> actualizarDatosPerfil(String uuid, Perfil perfil) {
         return this.hojaDeVidaRepository.findById(uuid)
                 .flatMap(hojaDeVidaEntity -> this.hojaDeVidaRepository.save(HojaDeVidaEntity.builder()
                         .uuid(hojaDeVidaEntity.getUuid())
                         .username(hojaDeVidaEntity.getUsername())
                         .idHojaDeVidaRag(hojaDeVidaEntity.getIdHojaDeVidaRag())
-                        .nombre(perfilDto.getNombre())
-                        .perfil(perfilDto.getPerfil())
-                        .seniority(perfilDto.getSeniority())
-                        .tecnologiasPrincipales(perfilDto.getTecnologiasPrincipales())
-                        .experienciasLaborales(perfilDto.getExperienciasLaborales())
-                        .habilidadesTecnicas(perfilDto.getHabilidadesTecnicas())
-                        .certificaciones(perfilDto.getCertificaciones())
-                        .proyectos(perfilDto.getProyectos())
-                        .nivelIngles(perfilDto.getNivelIngles())
-                        .otrasHabilidades(perfilDto.getOtrasHabilidades())
+                        .nombre(perfil.getNombre())
+                        .perfil(perfil.getPerfil())
+                        .seniority(perfil.getSeniority())
+                        .tecnologiasPrincipales(perfil.getTecnologiasPrincipales())
+                        .experienciasLaborales(perfil.getExperienciasLaborales())
+                        .habilidadesTecnicas(perfil.getHabilidadesTecnicas())
+                        .certificaciones(perfil.getCertificaciones())
+                        .proyectos(perfil.getProyectos())
+                        .nivelIngles(perfil.getNivelIngles())
+                        .otrasHabilidades(perfil.getOtrasHabilidades())
                         .build())).then();
-    }
-
-    private static HojaDeVidaDto mapearHojaDeVida(HojaDeVidaEntity entity) {
-        return HojaDeVidaDto.builder()
-                .uuid(entity.getUuid())
-                .username(entity.getUsername())
-                .nombre(entity.getNombre())
-                .perfil(entity.getPerfil())
-                .seniority(entity.getSeniority())
-                .tecnologiasPrincipales(entity.getTecnologiasPrincipales())
-                .experienciasLaborales(entity.getExperienciasLaborales())
-                .habilidadesTecnicas(entity.getHabilidadesTecnicas())
-                .certificaciones(entity.getCertificaciones())
-                .proyectos(entity.getProyectos())
-                .nivelIngles(entity.getNivelIngles())
-                .otrasHabilidades(entity.getOtrasHabilidades())
-                .build();
     }
 }
