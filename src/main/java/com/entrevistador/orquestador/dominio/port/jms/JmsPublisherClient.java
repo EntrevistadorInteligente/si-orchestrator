@@ -1,19 +1,19 @@
 package com.entrevistador.orquestador.dominio.port.jms;
 
-import com.entrevistador.orquestador.dominio.model.dto.PosicionEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.SolicitudGeneracionEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.SolicitudHojaDeVidaDto;
-import com.entrevistador.orquestador.dominio.model.dto.SolicitudMatchDto;
+import com.entrevistador.orquestador.dominio.model.PosicionEntrevista;
+import com.entrevistador.orquestador.dominio.model.SolicitudGeneracionEntrevista;
+import com.entrevistador.orquestador.dominio.model.SolicitudHojaDeVida;
+import com.entrevistador.orquestador.dominio.model.SolicitudMatch;
 import reactor.core.publisher.Mono;
 
 public interface JmsPublisherClient {
 
-    Mono<Void> enviarHojaDeVida(SolicitudHojaDeVidaDto solicitudHojaDeVidaDto);
+    Mono<Void> enviarHojaDeVida(SolicitudHojaDeVida solicitudHojaDeVidaDto);
 
-    Mono<Void> enviarInformacionEmpresa(PosicionEntrevistaDto perfil);
+    Mono<Void> enviarInformacionEmpresa(PosicionEntrevista posicionEntrevista);
 
-    Mono<Void> generarEntrevista(SolicitudGeneracionEntrevistaDto solicitudGeneracionEntrevista);
+    Mono<Void> generarEntrevista(SolicitudGeneracionEntrevista generacionEntrevista);
 
-    Mono<Void> validarmatchHojaDeVida(SolicitudMatchDto solicitudMatchDto);
+    Mono<Void> validarmatchHojaDeVida(SolicitudMatch solicitudMatch);
 
 }

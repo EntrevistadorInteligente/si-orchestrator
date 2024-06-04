@@ -1,9 +1,10 @@
 package com.entrevistador.orquestador.application.service;
 
-import com.entrevistador.orquestador.dominio.model.dto.*;
+import com.entrevistador.orquestador.dominio.model.SolicitudGeneracionEntrevista;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.dominio.service.ValidadorEventosSimultaneosService;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.RagsIdsDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,7 +45,7 @@ class OrquestadorEntrevistaServiceTest {
 
         when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(projection));
         when(this.entrevistaDao.actualizarIdInformacionEmpresaRag(anyString(), any())).thenReturn(Mono.empty());
-        when(this.jmsPublisherClient.generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class)))
+        when(this.jmsPublisherClient.generarEntrevista(any(SolicitudGeneracionEntrevista.class)))
                 .thenReturn(Mono.empty());
 
         Mono<Void> publisher = this.orquestadorEntrevistaService.receptorInformacionEmpresa("any", "any");
@@ -54,7 +55,7 @@ class OrquestadorEntrevistaServiceTest {
                 .verifyComplete();
 
         verify(this.validadorEventosSimultaneosService, times(1)).ejecutar(anyString());
-        verify(this.jmsPublisherClient, times(1)).generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class));
+        verify(this.jmsPublisherClient, times(1)).generarEntrevista(any(SolicitudGeneracionEntrevista.class));
     }
 
     @Test
@@ -68,7 +69,7 @@ class OrquestadorEntrevistaServiceTest {
 
         when(this.validadorEventosSimultaneosService.ejecutar(anyString())).thenReturn(Mono.just(projection));
         when(this.entrevistaDao.actualizarIdInformacionEmpresaRag(anyString(), any())).thenReturn(Mono.empty());
-        when(this.jmsPublisherClient.generarEntrevista(any(SolicitudGeneracionEntrevistaDto.class)))
+        when(this.jmsPublisherClient.generarEntrevista(any(SolicitudGeneracionEntrevista.class)))
                 .thenReturn(Mono.empty());
 
         Mono<Void> publisher = this.orquestadorEntrevistaService.receptorInformacionEmpresa("any", "any");
@@ -78,6 +79,5 @@ class OrquestadorEntrevistaServiceTest {
                 .verifyComplete();
 
         verify(this.validadorEventosSimultaneosService, times(1)).ejecutar(anyString());
-
     }
 }
