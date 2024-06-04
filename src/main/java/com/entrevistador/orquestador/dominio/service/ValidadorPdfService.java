@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 public class ValidadorPdfService {
 
     private static final byte[] PDF_HEADER = "%PDF-".getBytes(StandardCharsets.US_ASCII);
-    private static final long MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB en bytes
+    private static final long MAX_FILE_SIZE = 3L * 1024 * 1024; // 3MB en bytes
     private static final int HEADER_LENGTH = PDF_HEADER.length;
 
     public Mono<byte[]> ejecutar(FilePart file) {
