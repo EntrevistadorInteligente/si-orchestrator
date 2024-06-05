@@ -55,6 +55,7 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
                         .proyectos(perfil.getProyectos())
                         .nivelIngles(perfil.getNivelIngles())
                         .otrasHabilidades(perfil.getOtrasHabilidades())
+                        .fechaCreacion(hojaDeVidaEntity.getFechaCreacion())
                         .build())).then();
     }
 }
