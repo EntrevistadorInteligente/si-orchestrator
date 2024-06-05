@@ -7,5 +7,5 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface HojaDeVidaRepository extends ReactiveMongoRepository<HojaDeVidaEntity, String> {
-    Mono<HojaDeVidaEntity> findByUsername(String username);
+    Mono<HojaDeVidaEntity> findFirstByUsernameOrderByFechaCreacionDesc(String username);
 }

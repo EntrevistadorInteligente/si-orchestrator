@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -31,4 +33,6 @@ public class HojaDeVidaDto {
     private String nivelIngles;
     @JsonProperty("otras_habilidades")
     private List<String> otrasHabilidades;
+    @JsonProperty("fecha_creacion")
+    private LocalDateTime fechaCreacion;
 }

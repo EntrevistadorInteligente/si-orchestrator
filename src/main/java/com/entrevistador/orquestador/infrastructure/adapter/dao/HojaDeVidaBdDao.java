@@ -27,14 +27,14 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
     public Mono<String> obtenerIdHojaDeVidaRag(String username){
         final String usernameError = "Username no encontrado. Username: %s";
         final String idRagError = "El campo idHojaDeVidaRag del username \"%s\" es nulo";
-        return this.hojaDeVidaRepository.findByUsername(username)
+        return this.hojaDeVidaRepository.findFirstByUsernameOrderByFechaCreacionDesc(username)
                 .switchIfEmpty(Mono.error(new UsernameNoEncontradoException(String.format(usernameError, username))))
                 .map(HojaDeVidaEntity::getIdHojaDeVidaRag)
                 .switchIfEmpty(Mono.error(new IdHojaDeVidaRagNuloException(String.format(idRagError, username))));
     }
 
     public Mono<HojaDeVidaModel> obtenerHojaDeVidaPorNombreUsuario(String username){
-        return this.hojaDeVidaRepository.findByUsername(username)
+        return this.hojaDeVidaRepository.findFirstByUsernameOrderByFechaCreacionDesc(username)
                 .map(this.mapper::mapHojaDeVidaEntityToHojaDeVida);
     }
 
