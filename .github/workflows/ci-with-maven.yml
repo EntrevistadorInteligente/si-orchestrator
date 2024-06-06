@@ -27,16 +27,16 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run Tests with Maven
-        run: mvn -B test --file pom.xml
-
       - uses: actions/cache@main
         with:
           path: |
             target
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven-
+            ${{ runner.os }}-maven-    
+
+      - name: Run Tests with Maven
+        run: mvn -B test --file pom.xml
 
       - name: Cache SonarCloud packages
         uses: actions/cache@main
