@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -25,4 +26,5 @@ public class HojaDeVidaModel {
     private List<String> proyectos;
     private String       nivelIngles;
     private List<String> otrasHabilidades;
+    private LocalDateTime fechaCreacion;
 }
