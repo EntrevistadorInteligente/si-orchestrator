@@ -28,7 +28,6 @@ public interface HojaDeVidaMapper {
     @Mapping(target = "fechaCreacion", source = "hojaDeVidaModel.fechaCreacion")
     PerfilDto mapHojaDeVidaToPerfilDto(HojaDeVidaModel hojaDeVidaModel);
 
-    @Mapping(target = "fechaCreacion", source = "hojaDeVidaDto.fechaCreacion")
     HojaDeVidaModel mapHojaDeVidaDtoToHojaDeVida(HojaDeVidaDto hojaDeVidaDto);
 
     @Mapping(target = "uuid", ignore = true)

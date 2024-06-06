@@ -33,6 +33,4 @@ public class HojaDeVidaDto {
     private String nivelIngles;
     @JsonProperty("otras_habilidades")
     private List<String> otrasHabilidades;
-    @JsonProperty("fecha_creacion")
-    private LocalDateTime fechaCreacion;
 }
