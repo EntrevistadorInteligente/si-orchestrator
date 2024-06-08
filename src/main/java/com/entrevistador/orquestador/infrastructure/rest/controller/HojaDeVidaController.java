@@ -1,5 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
+import com.entrevistador.orquestador.infrastructure.adapter.dto.ConfirmacionDto;
 import com.entrevistador.orquestador.infrastructure.adapter.dto.PerfilDto;
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
@@ -39,21 +40,25 @@ public class HojaDeVidaController {
     }
 
     @PutMapping("/{uuid}")
-    public Mono<ResponseEntity<String>> actualizarDatosPerfil(
+    public Mono<ResponseEntity<ConfirmacionDto>> actualizarDatosPerfil(
             @NotNull(message = ValidationsMessagesData.NOT_NULL_MESSAGE) @PathVariable String uuid,
             @Valid @RequestBody PerfilDto perfilDto) {
         return Mono.just(this.mapper.mapPerfilDtoToPerfil(perfilDto))
                 .flatMap(perfil -> this.hojaDeVida.actualizarDatosPerfil(SanitizeStringUtil.sanitize(uuid), perfil))
                 .then(Mono.just(ResponseEntity.status(HttpStatus.OK)
-                        .body("Perfil actualizado con exito")));
+                        .body(ConfirmacionDto.builder()
+                                        .valor("Perfil actualizado con exito")
+                                        .build())));
     }
 
     @PostMapping("/cargas")
-    public Mono<ResponseEntity<String>> cargarHojaDeVida(
+    public Mono<ResponseEntity<ConfirmacionDto>> cargarHojaDeVida(
             @RequestPart("file") Mono<FilePart> file,
             @NotNull(message = ValidationsMessagesData.NOT_NULL_MESSAGE) @RequestPart("username") String username) {
         return this.hojaDeVida.generarSolicitudHojaDeVida(file, SanitizeStringUtil.sanitize(username))
                 .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
-                        .body("Archivo PDF cargado con exito")));
+                        .body(ConfirmacionDto.builder()
+                                        .valor("Archivo PDF cargado con exito")
+                                        .build())));
     }
 }
