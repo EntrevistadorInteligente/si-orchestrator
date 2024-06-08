@@ -17,17 +17,28 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface HojaDeVidaMapper {
+    @Mapping(target = "fechaCreacion", source = "hojaDeVidaEntity.fechaCreacion")
     HojaDeVidaModel mapHojaDeVidaEntityToHojaDeVida(HojaDeVidaEntity hojaDeVidaEntity);
 
+    @Mapping(target = "fechaCreacion", source = "hojaDeVidaModel.fechaCreacion")
     PerfilDto mapHojaDeVidaToPerfilDto(HojaDeVidaModel hojaDeVidaModel);
 
     HojaDeVidaModel mapHojaDeVidaDtoToHojaDeVida(HojaDeVidaDto hojaDeVidaDto);
 
     @Mapping(target = "uuid", ignore = true)
+    @Mapping(target = "fechaCreacion", expression = "java(defaultFechaCreacion())")
     HojaDeVidaEntity mapHojaDeVidaModelToHojaDeVidaEntity(HojaDeVidaModel hojaDeVidaModel);
 
+    default LocalDateTime defaultFechaCreacion() {
+        return LocalDateTime.now(ZoneOffset.UTC);
+    }
+
+    @Mapping(target = "fechaCreacion",  source = "perfilDto.fechaCreacion")
     Perfil mapPerfilDtoToPerfil(PerfilDto perfilDto);
 
     MensajeValidacionMatch mapMensajeValidacionMatchDtoToMensajeValidacionMatch(MensajeValidacionMatchDto mensajeValidacionMatchDto);

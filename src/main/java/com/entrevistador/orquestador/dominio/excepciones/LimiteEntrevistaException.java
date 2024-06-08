@@ -1,4 +1,4 @@
-package com.entrevistador.orquestador.infrastructure.adapter.exceptions;
+package com.entrevistador.orquestador.dominio.excepciones;
 
 import com.entrevistador.orquestador.dominio.model.enums.CodigoErrorEnum;
 

@@ -8,6 +8,7 @@ import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static com.entrevistador.orquestador.utils.PdfFileEm.PDF_FILE;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,7 +18,7 @@ class ValidadorPdfServiceTest {
 
     @Test
     void ejecutarTest() {
-        byte[] bytes = "Hello Test".getBytes();
+        byte[] bytes = PDF_FILE.getBytes();
         DefaultDataBuffer defaultDataBuffer = new DefaultDataBufferFactory().wrap(bytes);
         FilePart filePart = new CustomFilePart("file", defaultDataBuffer);
 

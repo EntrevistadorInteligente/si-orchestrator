@@ -1,6 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.adapter.util;
 
-import com.entrevistador.orquestador.infrastructure.adapter.exceptions.SanitizeStringUtilException;
+import com.entrevistador.orquestador.dominio.excepciones.SanitizeStringUtilException;
 import org.owasp.encoder.Encode;
 
 public final class SanitizeStringUtil {

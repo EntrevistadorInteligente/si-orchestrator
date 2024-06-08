@@ -38,6 +38,7 @@ public class HojaDeVidaService implements HojaDeVida {
 
     @Override
     public Mono<HojaDeVidaModel> obtenerHojaDeVida(String username) {
+        log.info("Obtener hoja de Vida");
         return hojaDeVidaDao.obtenerHojaDeVidaPorNombreUsuario(username);
     }
 
