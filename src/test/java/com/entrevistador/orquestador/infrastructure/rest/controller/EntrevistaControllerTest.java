@@ -61,7 +61,7 @@ class EntrevistaControllerTest {
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(String.class)
-                .isEqualTo("Archivo PDF cargado con exito");
+                .isEqualTo("{\"valor\":\"Archivo PDF cargado con exito\"}");
     }
 
 }
