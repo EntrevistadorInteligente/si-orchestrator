@@ -32,5 +32,6 @@ public class HojaDeVidaEntity {
     private List<String> proyectos;
     private String nivelIngles;
     private List<String> otrasHabilidades;
+    private String estadoHojaDeVida;
     private LocalDateTime fechaCreacion;
 }
