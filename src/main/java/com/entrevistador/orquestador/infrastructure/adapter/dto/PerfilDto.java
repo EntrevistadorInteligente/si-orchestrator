@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -32,4 +33,5 @@ public class PerfilDto {
     private List<String> proyectos;
     private String nivelIngles;
     private List<String> otrasHabilidades;
+    private LocalDateTime fechaCreacion;
 }
