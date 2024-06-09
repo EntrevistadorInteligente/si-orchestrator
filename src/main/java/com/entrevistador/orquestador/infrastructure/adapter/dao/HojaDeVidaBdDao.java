@@ -1,6 +1,7 @@
 package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
 import com.entrevistador.orquestador.dominio.model.Perfil;
+import com.entrevistador.orquestador.dominio.model.enums.EstadoHojaDeVidaEnum;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.HojaDeVidaMapper;
 import com.entrevistador.orquestador.dominio.excepciones.IdHojaDeVidaRagNuloException;
 import com.entrevistador.orquestador.dominio.excepciones.UsernameNoEncontradoException;
@@ -19,8 +20,10 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
     private final HojaDeVidaMapper mapper;
 
     public Mono<Void> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel){
-        return Mono.just(this.mapper.mapHojaDeVidaModelToHojaDeVidaEntity(hojaDeVidaModel))
-                .flatMap(this.hojaDeVidaRepository::save)
+        HojaDeVidaEntity entity = this.mapper.mapHojaDeVidaModelToHojaDeVidaEntity(hojaDeVidaModel);
+
+        return this.hojaDeVidaRepository.actualizarEstadoHojadeVidaPorUsername(entity.getUsername(), EstadoHojaDeVidaEnum.NU.name())
+                .then(this.hojaDeVidaRepository.save(entity))
                 .then();
     }
 
@@ -34,7 +37,7 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
     }
 
     public Mono<HojaDeVidaModel> obtenerHojaDeVidaPorNombreUsuario(String username){
-        return this.hojaDeVidaRepository.findFirstByUsernameOrderByFechaCreacionDesc(username)
+        return this.hojaDeVidaRepository.findFirstByUsernameAndEstadoHojaDeVida(username,EstadoHojaDeVidaEnum.US.name())
                 .map(this.mapper::mapHojaDeVidaEntityToHojaDeVida);
     }
 
@@ -56,6 +59,7 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
                         .nivelIngles(perfil.getNivelIngles())
                         .otrasHabilidades(perfil.getOtrasHabilidades())
                         .fechaCreacion(hojaDeVidaEntity.getFechaCreacion())
+                        .estadoHojaDeVida(hojaDeVidaEntity.getEstadoHojaDeVida())
                         .build())).then();
     }
 }

@@ -1,5 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.adapter.mapper;
 
+import com.entrevistador.orquestador.dominio.model.enums.EstadoHojaDeVidaEnum;
 import com.entrevistador.orquestador.infrastructure.adapter.dto.EntrevistaDto;
 import com.entrevistador.orquestador.infrastructure.adapter.dto.FeedbackDto;
 import com.entrevistador.orquestador.infrastructure.adapter.dto.HojaDeVidaDto;
@@ -32,8 +33,12 @@ public interface HojaDeVidaMapper {
 
     @Mapping(target = "uuid", ignore = true)
     @Mapping(target = "fechaCreacion", expression = "java(defaultFechaCreacion())")
+    @Mapping(target = "estadoHojaDeVida", expression = "java(defaultEstadoHojaDeVida())")
     HojaDeVidaEntity mapHojaDeVidaModelToHojaDeVidaEntity(HojaDeVidaModel hojaDeVidaModel);
 
+    default  String defaultEstadoHojaDeVida(){
+        return EstadoHojaDeVidaEnum.US.name();
+    }
     default LocalDateTime defaultFechaCreacion() {
         return LocalDateTime.now(ZoneOffset.UTC);
     }
