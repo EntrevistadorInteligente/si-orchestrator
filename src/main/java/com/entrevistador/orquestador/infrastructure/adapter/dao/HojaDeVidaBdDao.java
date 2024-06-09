@@ -22,7 +22,7 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
     public Mono<Void> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel){
         HojaDeVidaEntity entity = this.mapper.mapHojaDeVidaModelToHojaDeVidaEntity(hojaDeVidaModel);
 
-        return this.hojaDeVidaRepository.actualizarEstadoHojadeVidaPorUsername(entity.getUsername(), EstadoHojaDeVidaEnum.AT.name())
+        return this.hojaDeVidaRepository.actualizarEstadoHojadeVidaPorUsername(entity.getUsername(), EstadoHojaDeVidaEnum.NU.name())
                 .then(this.hojaDeVidaRepository.save(entity))
                 .then();
     }
@@ -37,7 +37,7 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
     }
 
     public Mono<HojaDeVidaModel> obtenerHojaDeVidaPorNombreUsuario(String username){
-        return this.hojaDeVidaRepository.findFirstByUsernameAndEstadoHojaDeVida(username,EstadoHojaDeVidaEnum.NV.name())
+        return this.hojaDeVidaRepository.findFirstByUsernameAndEstadoHojaDeVida(username,EstadoHojaDeVidaEnum.US.name())
                 .map(this.mapper::mapHojaDeVidaEntityToHojaDeVida);
     }
 

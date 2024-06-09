@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum EstadoHojaDeVidaEnum {
-    AT("ANTIGUO"),
-    NV("NUEVO");
+    US("USADO"),
+    NU("NO USADO");
 
     private String descripcion;
 

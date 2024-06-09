@@ -37,7 +37,7 @@ public interface HojaDeVidaMapper {
     HojaDeVidaEntity mapHojaDeVidaModelToHojaDeVidaEntity(HojaDeVidaModel hojaDeVidaModel);
 
     default  String defaultEstadoHojaDeVida(){
-        return EstadoHojaDeVidaEnum.NV.name();
+        return EstadoHojaDeVidaEnum.US.name();
     }
     default LocalDateTime defaultFechaCreacion() {
         return LocalDateTime.now(ZoneOffset.UTC);
