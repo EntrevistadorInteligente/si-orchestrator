@@ -13,7 +13,7 @@ public interface HojaDeVidaRepository extends ReactiveMongoRepository<HojaDeVida
 
     Mono<HojaDeVidaEntity> findFirstByUsernameAndEstadoHojaDeVida(String username, String estadoHojaDeVida);
 
-    @Query("{ 'username' : ?0, 'estadoHojaDeVida' : { $ne: 'AT' } }")
+    @Query("{ 'username' : ?0, 'estadoHojaDeVida' : { $ne: 'NU' } }")
     @Update("{'$set': {'estadoHojaDeVida': ?1 }}")
     Mono<Void> actualizarEstadoHojadeVidaPorUsername(String username, String estadoHojaDeVida);
 }
