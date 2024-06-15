@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class ConfirmacionDto {
-    private String valor;
+public class GenericResponse {
+    private String message;
 }

@@ -4,7 +4,7 @@ import com.entrevistador.orquestador.infrastructure.adapter.dto.EstadoEntrevista
 import com.entrevistador.orquestador.infrastructure.adapter.dto.FormularioDto;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.ConfirmacionDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.GenericResponse;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMapper;
 import com.entrevistador.orquestador.infrastructure.adapter.util.SanitizeStringUtil;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class EntrevistaController {
     private final EntrevistaMapper    mapper;
 
     @PostMapping(value = "/solicitudes-entrevistas")
-    public Mono<ResponseEntity<ConfirmacionDto>> crearSolicitudEntrevista(
+    public Mono<ResponseEntity<GenericResponse>> crearSolicitudEntrevista(
             @NotNull(message = ValidationsMessagesData.NOT_NULL_MESSAGE) @RequestParam String username,
             @Valid @RequestBody FormularioDto formularioDto
     ) {
@@ -41,8 +41,8 @@ public class EntrevistaController {
                 .flatMap(formulario ->
                         this.solicitudEntrevista.generarSolicitudEntrevista(SanitizeStringUtil.sanitize(username), formulario))
                 .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
-                        .body(ConfirmacionDto.builder()
-                                .valor("Archivo PDF cargado con exito")
+                        .body(GenericResponse.builder()
+                                .message("Archivo PDF cargado con exito")
                                 .build())));
     }
 
