@@ -1,3 +1,9 @@
 const:
   entrevistaprueba:
     limitperfiles: 10
+  orquestadorwebflux:
+    webFluxRoutes:
+      webFluxNotificaciones:
+        urlBase: ${URL_NOTIFICACIONES}
+        endpoints:
+          enviarEvento: /v1/eventos/enviar/

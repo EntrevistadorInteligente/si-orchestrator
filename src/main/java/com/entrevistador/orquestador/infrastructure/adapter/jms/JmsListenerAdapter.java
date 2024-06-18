@@ -29,7 +29,7 @@ public class JmsListenerAdapter {
     private final HojaDeVida hojaDeVida;
     private final HojaDeVidaMapper mapper;
 
-    @KafkaListener(topics = "hojaDeVidaListenerTopic", groupId = "resumeGroup2")
+    @KafkaListener(topics = "hojaDeVidaListenerTopic", groupId = "resumeGroup3")
     public void receptorHojaDevida(String mensajeJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
