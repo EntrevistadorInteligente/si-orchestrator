@@ -1,4 +1,4 @@
-package com.entrevistador.orquestador.dominio.model.dto;
+package com.entrevistador.orquestador.infrastructure.adapter.dto;
 
 import com.entrevistador.orquestador.dominio.model.enums.TipoNotificacionEnum;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NotifiacionDto {
+public class NotificacionDto {
     private TipoNotificacionEnum tipo;
     private String mensaje;
 

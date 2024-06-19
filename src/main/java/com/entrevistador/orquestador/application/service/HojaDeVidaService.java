@@ -2,9 +2,9 @@ package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.dominio.model.HojaDeVidaModel;
+import com.entrevistador.orquestador.dominio.model.Notificacion;
 import com.entrevistador.orquestador.dominio.model.Perfil;
 import com.entrevistador.orquestador.dominio.model.SolicitudHojaDeVida;
-import com.entrevistador.orquestador.dominio.model.dto.NotifiacionDto;
 import com.entrevistador.orquestador.dominio.model.enums.TipoNotificacionEnum;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.client.NotificacionesClient;
@@ -70,7 +70,7 @@ public class HojaDeVidaService implements HojaDeVida {
         return
                 Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(object))
                         .flatMap(jsonData ->
-                                this.notificacionesClient.enviar(userId, NotifiacionDto.builder()
+                                this.notificacionesClient.enviar(userId, Notificacion.builder()
                                         .tipo(notificacion)
                                         .mensaje(jsonData)
                                         .build())
