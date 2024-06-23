@@ -47,7 +47,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
     public Mono<Void> actualizarEstadoHojaDeVida(String idEntrevista, boolean esEntrevistaValida) {
         return this.entrevistaRepository.findById(idEntrevista)
                 .flatMap(entrevista -> {
-                    entrevista.setHojaDeVidaValida(esEntrevistaValida);
+                    entrevista.setHojaDeVidaValida(true);
                     return entrevistaRepository.save(entrevista);
                 })
                 .then();
@@ -89,6 +89,16 @@ public class EntrevistaBdDao implements EntrevistaDao {
                         .idHojaDeVidaRag(entrevistaEntity.getIdHojaDeVidaRag())
                         .fechaCreacion(entrevistaEntity.getFechaCreacion())
                         .build());
+    }
+
+    @Override
+    public Mono<Void> terminarEntrevista(String id) {
+        return this.entrevistaRepository.findById(id)
+                .flatMap(entrevista -> {
+                    entrevista.setEstadoEntrevista(EstadoEntrevistaEnum.FN.name());
+                    return entrevistaRepository.save(entrevista);
+                })
+                .then();
     }
 
 }

@@ -27,4 +27,6 @@ public interface EntrevistaDao {
     Mono<Void> actualizarEstadoEntrevista(String idEntrevista, EstadoEntrevistaEnum estadoEntrevistaEnum);
 
     Flux<Entrevista> consultarUltimasEntrevistas(String username);
+
+    Mono<Void> terminarEntrevista(String id);
 }

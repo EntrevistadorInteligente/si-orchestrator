@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,5 +57,14 @@ public class EntrevistaController {
     public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(@RequestParam String username) {
         return this.solicitudEntrevista.obtenerEstadoEntrevistaPorUsuario(SanitizeStringUtil.sanitize(username))
                 .map(this.mapper::mapEstadoEntrevistaToEstadoEntrevistaDto);
+    }
+
+    @PutMapping(value = "/{id}/terminar")
+    public Mono<ResponseEntity<GenericResponse>> terminarEntrevista(@PathVariable String id) {
+        return this.solicitudEntrevista.terminarEntrevista(SanitizeStringUtil.sanitize(id))
+                .then(Mono.just(ResponseEntity.status(HttpStatus.OK)
+                        .body(GenericResponse.builder()
+                                .message("Entrevista terminada con exito")
+                                .build())));
     }
 }

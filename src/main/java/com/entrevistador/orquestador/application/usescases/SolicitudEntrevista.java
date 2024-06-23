@@ -10,4 +10,6 @@ public interface SolicitudEntrevista {
     Mono<EstadoEntrevista> obtenerEstadoEntrevistaPorUsuario(String username);
 
     Mono<EstadoEntrevista> obtenerEstadoEntrevistaPorId(String id);
+
+    Mono<Void> terminarEntrevista(String id);
 }
