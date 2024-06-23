@@ -19,12 +19,12 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
     private final HojaDeVidaRepository hojaDeVidaRepository;
     private final HojaDeVidaMapper mapper;
 
-    public Mono<Void> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel){
+    public Mono<HojaDeVidaModel> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel){
         HojaDeVidaEntity entity = this.mapper.mapHojaDeVidaModelToHojaDeVidaEntity(hojaDeVidaModel);
 
         return this.hojaDeVidaRepository.actualizarEstadoHojadeVidaPorUsername(entity.getUsername(), EstadoHojaDeVidaEnum.NU.name())
                 .then(this.hojaDeVidaRepository.save(entity))
-                .then();
+                .map(this.mapper::mapHojaDeVidaEntityToHojaDeVida);
     }
 
     public Mono<String> obtenerIdHojaDeVidaRag(String username){

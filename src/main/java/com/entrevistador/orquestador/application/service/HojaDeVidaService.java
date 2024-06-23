@@ -2,11 +2,16 @@ package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.dominio.model.HojaDeVidaModel;
+import com.entrevistador.orquestador.dominio.model.Notificacion;
 import com.entrevistador.orquestador.dominio.model.Perfil;
 import com.entrevistador.orquestador.dominio.model.SolicitudHojaDeVida;
+import com.entrevistador.orquestador.dominio.model.enums.TipoNotificacionEnum;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
+import com.entrevistador.orquestador.dominio.port.client.NotificacionesClient;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.codec.multipart.FilePart;
@@ -21,6 +26,7 @@ public class HojaDeVidaService implements HojaDeVida {
     private final JmsPublisherClient jmsPublisherClient;
     private final ValidadorPdfService validadorPdfService;
     private final HojaDeVidaDao hojaDeVidaDao;
+    private final NotificacionesClient notificacionesClient;
 
     @Override
     public Mono<Void> generarSolicitudHojaDeVida(Mono<FilePart> file, String username) {
@@ -45,12 +51,33 @@ public class HojaDeVidaService implements HojaDeVida {
     @Override
     public Mono<Void> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel) {
         log.info("Recibiendo hoja de vida");
-        return this.hojaDeVidaDao.guardarHojaDeVida(hojaDeVidaModel);
+        return this.hojaDeVidaDao.guardarHojaDeVida(hojaDeVidaModel)
+                 .flatMap(hojadevida-> generarNotificacion(
+                        hojadevida.getUsername(),
+                        TipoNotificacionEnum.HG,
+                        "OK"
+                ));
     }
 
     @Override
     public Mono<Void> actualizarDatosPerfil(String uuid, Perfil perfil) {
         return this.hojaDeVidaDao.actualizarDatosPerfil(uuid, perfil);
+    }
+
+    private Mono<Void> generarNotificacion(String userId,
+                                           TipoNotificacionEnum notificacion,
+                                           Object object) {
+        return
+                Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(object))
+                        .flatMap(jsonData ->
+                                this.notificacionesClient.enviar(userId, Notificacion.builder()
+                                        .tipo(notificacion)
+                                        .mensaje(jsonData)
+                                        .build())
+                                        .onErrorMap(JsonProcessingException.class, e -> {
+                                            log.error("Error processing JSON", e);
+                                            return new Exception("Error processing JSON");
+                                        }));
     }
 }
 
