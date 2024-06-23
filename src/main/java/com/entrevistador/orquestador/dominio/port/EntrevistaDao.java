@@ -28,5 +28,5 @@ public interface EntrevistaDao {
 
     Flux<Entrevista> consultarUltimasEntrevistas(String username);
 
-    Mono<Void> terminarEntrevista(String id);
+    Mono<Void> terminarEntrevista(String id,String feedbackUsuario);
 }

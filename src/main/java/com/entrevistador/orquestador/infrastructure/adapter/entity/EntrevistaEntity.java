@@ -34,5 +34,7 @@ public class EntrevistaEntity {
     @Setter
     private String estadoEntrevista;
     private LocalDateTime fechaCreacion;
+    @Setter
+    private String feedbackUsuario;
 
 }

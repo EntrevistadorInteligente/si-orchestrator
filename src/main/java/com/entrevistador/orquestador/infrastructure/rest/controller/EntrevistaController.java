@@ -1,6 +1,7 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
 import com.entrevistador.orquestador.infrastructure.adapter.dto.EstadoEntrevistaDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.FeedbackUsuarioDto;
 import com.entrevistador.orquestador.infrastructure.adapter.dto.FormularioDto;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
@@ -60,8 +61,10 @@ public class EntrevistaController {
     }
 
     @PutMapping(value = "/{id}/terminar")
-    public Mono<ResponseEntity<GenericResponse>> terminarEntrevista(@PathVariable String id) {
-        return this.solicitudEntrevista.terminarEntrevista(SanitizeStringUtil.sanitize(id))
+    public Mono<ResponseEntity<GenericResponse>> terminarEntrevista(@PathVariable String id,
+                                                                    @RequestBody(required = false) FeedbackUsuarioDto feedbackUsuarioDto) {
+        return this.solicitudEntrevista.terminarEntrevista(SanitizeStringUtil.sanitize(id),
+                        SanitizeStringUtil.sanitize(feedbackUsuarioDto.getMensaje()))
                 .then(Mono.just(ResponseEntity.status(HttpStatus.OK)
                         .body(GenericResponse.builder()
                                 .message("Entrevista terminada con exito")

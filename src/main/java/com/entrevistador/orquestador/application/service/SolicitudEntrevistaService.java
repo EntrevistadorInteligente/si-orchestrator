@@ -46,8 +46,8 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
     }
 
     @Override
-    public Mono<Void> terminarEntrevista(String id) {
-        return entrevistaDao.terminarEntrevista(id);
+    public Mono<Void> terminarEntrevista(String id, String feedbackUsuario) {
+        return entrevistaDao.terminarEntrevista(id, feedbackUsuario);
     }
 
     private Mono<Void> procesarHojaDeVida(String idHojaDeVidaRag, String username, Formulario formulario) {

@@ -11,5 +11,5 @@ public interface SolicitudEntrevista {
 
     Mono<EstadoEntrevista> obtenerEstadoEntrevistaPorId(String id);
 
-    Mono<Void> terminarEntrevista(String id);
+    Mono<Void> terminarEntrevista(String id, String feedbackUsuario);
 }

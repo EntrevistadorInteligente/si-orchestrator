@@ -92,10 +92,11 @@ public class EntrevistaBdDao implements EntrevistaDao {
     }
 
     @Override
-    public Mono<Void> terminarEntrevista(String id) {
+    public Mono<Void> terminarEntrevista(String id, String feedbackUsuario) {
         return this.entrevistaRepository.findById(id)
                 .flatMap(entrevista -> {
                     entrevista.setEstadoEntrevista(EstadoEntrevistaEnum.FN.name());
+                    entrevista.setFeedbackUsuario(feedbackUsuario);
                     return entrevistaRepository.save(entrevista);
                 })
                 .then();
