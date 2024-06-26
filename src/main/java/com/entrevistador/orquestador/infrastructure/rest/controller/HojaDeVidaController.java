@@ -52,13 +52,11 @@ public class HojaDeVidaController {
     }
 
     @PostMapping("/cargas")
-    public Mono<ResponseEntity<GenericResponse>> cargarHojaDeVida(
+    public Mono<ResponseEntity<PerfilDto>> cargarHojaDeVida(
             @RequestPart("file") Mono<FilePart> file,
             @NotNull(message = ValidationsMessagesData.NOT_NULL_MESSAGE) @RequestPart("username") String username) {
         return this.hojaDeVida.generarSolicitudHojaDeVida(file, SanitizeStringUtil.sanitize(username))
-                .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
-                        .body(GenericResponse.builder()
-                                        .message("Archivo PDF cargado con exito")
-                                        .build())));
+                .flatMap(hojaDeVidaModel -> Mono.just(ResponseEntity.status(HttpStatus.CREATED)
+                        .body(this.mapper.mapHojaDeVidaToPerfilDto(hojaDeVidaModel))));
     }
 }

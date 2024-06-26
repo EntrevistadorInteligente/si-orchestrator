@@ -9,6 +9,7 @@ import com.entrevistador.orquestador.application.usescases.HojaDeVida;
 import com.entrevistador.orquestador.application.usescases.OrquestadorEntrevista;
 import com.entrevistador.orquestador.dominio.service.ActualizarEstadoProcesoEntrevistaService;
 import com.entrevistador.orquestador.dominio.excepciones.ErrorDeserializarJson;
+import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMapper;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.HojaDeVidaMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +29,7 @@ public class JmsListenerAdapter {
     private final ActualizarEstadoProcesoEntrevistaService actualizarEstadoProcesoEntrevistaService;
     private final HojaDeVida hojaDeVida;
     private final HojaDeVidaMapper mapper;
+    private final EntrevistaMapper mapperEntrevista;
 
     @KafkaListener(topics = "hojaDeVidaListenerTopic", groupId = "resumeGroup2")
     public void receptorHojaDevida(String mensajeJson) {

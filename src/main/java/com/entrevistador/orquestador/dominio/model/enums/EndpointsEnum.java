@@ -4,7 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum EndpointsEnum {
-    NOTIFICADOR("webFluxNotificaciones");
+    NOTIFICADOR("webFluxNotificaciones"),
+    ANALIZADOR("webFluxAnalizador");
+
     public final String descripcion;
 
     EndpointsEnum(String descripcion) {
