@@ -56,7 +56,7 @@ public class HojaDeVidaController {
             @RequestPart("file") Mono<FilePart> file,
             @NotNull(message = ValidationsMessagesData.NOT_NULL_MESSAGE) @RequestPart("username") String username) {
         return this.hojaDeVida.generarSolicitudHojaDeVida(file, SanitizeStringUtil.sanitize(username))
-                .flatMap(hojaDeVidaModel -> Mono.just(ResponseEntity.status(HttpStatus.CREATED)
-                        .body(this.mapper.mapHojaDeVidaToPerfilDto(hojaDeVidaModel))));
+                .map(this.mapper::mapHojaDeVidaToPerfilDto)
+                .map(perfilDto -> ResponseEntity.status(HttpStatus.CREATED).body(perfilDto));
     }
 }

@@ -42,7 +42,7 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
     }
 
     @Override
-    public Mono<Void> actualizarDatosPerfil(String uuid, Perfil perfil) {
+    public Mono<HojaDeVidaModel> actualizarDatosPerfil(String uuid, Perfil perfil) {
         return this.hojaDeVidaRepository.findById(uuid)
                 .flatMap(hojaDeVidaEntity -> this.hojaDeVidaRepository.save(HojaDeVidaEntity.builder()
                         .uuid(hojaDeVidaEntity.getUuid())
@@ -60,6 +60,7 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
                         .otrasHabilidades(perfil.getOtrasHabilidades())
                         .fechaCreacion(hojaDeVidaEntity.getFechaCreacion())
                         .estadoHojaDeVida(hojaDeVidaEntity.getEstadoHojaDeVida())
-                        .build())).then();
+                        .build()))
+                .map(this.mapper::mapHojaDeVidaEntityToHojaDeVida);
     }
 }

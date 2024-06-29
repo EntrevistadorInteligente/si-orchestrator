@@ -63,7 +63,7 @@ public class HojaDeVidaService implements HojaDeVida {
     }
 
     @Override
-    public Mono<Void> actualizarDatosPerfil(String uuid, Perfil perfil) {
+    public Mono<HojaDeVidaModel> actualizarDatosPerfil(String uuid, Perfil perfil) {
         return this.hojaDeVidaDao.actualizarDatosPerfil(uuid, perfil);
     }
 

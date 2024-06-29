@@ -39,6 +39,7 @@ public class AnalizadorRestClient implements AnalizadorClient {
                                     return Mono.error(new RuntimeException(error));
                                 }))
                 .bodyToMono(HojaDeVidaDto.class)
-                .flatMap(hojaDeVidaDto -> Mono.just(this.mapper.mapHojaDeVidaDtoToHojaDeVida(hojaDeVidaDto)));
+                .timeout(java.time.Duration.ofSeconds(50))
+                .map(this.mapper::mapHojaDeVidaDtoToHojaDeVida);
     }
 }

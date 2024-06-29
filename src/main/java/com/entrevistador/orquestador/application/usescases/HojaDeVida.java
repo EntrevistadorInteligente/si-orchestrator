@@ -12,5 +12,5 @@ public interface HojaDeVida {
 
     Mono<Void> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel);
 
-    Mono<Void> actualizarDatosPerfil(String uuid, Perfil perfil);
+    Mono<HojaDeVidaModel> actualizarDatosPerfil(String uuid, Perfil perfil);
 }

@@ -8,5 +8,5 @@ public interface HojaDeVidaDao {
     Mono<HojaDeVidaModel> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel);
     Mono<HojaDeVidaModel> obtenerHojaDeVidaPorNombreUsuario(String username);
     Mono<String> obtenerIdHojaDeVidaRag(String nombre);
-    Mono<Void> actualizarDatosPerfil(String uuid, Perfil perfil);
+    Mono<HojaDeVidaModel> actualizarDatosPerfil(String uuid, Perfil perfil);
 }
