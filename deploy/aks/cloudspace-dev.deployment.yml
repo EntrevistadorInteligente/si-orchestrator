@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orquestador
+  namespace: entrevistador-inteligente
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orquestador
+  template:
+    metadata:
+      labels:
+        app: orquestador
+    spec:
+      containers:
+        - name: orquestador
+          image: jamilton1017227239/orquestador:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081 # Asegúrate de que el puerto coincida con el puerto que tu aplicación escucha
+          env:
+            - name: "KAFKA_UPSTAR_USER"
+              value: ${{ secrets.KAFKA_UPSTAR_USER }}
+            - name: "KAFKA_UPSTAR_PASSWORD"
+              value: ${{ secrets.KAFKA_UPSTAR_PASSWORD }}
+            - name: "MONGO_ATLAS_CLUSTER"
+              value: ${{ secrets.MONGO_ATLAS_CLUSTER }}
+            - name: "MONGO_ATLAS_PASSWORD"
+              value: ${{ secrets.MONGO_ATLAS_PASSWORD }}
+            - name: "MONGO_ATLAS_USER"
+              value: ${{ secrets.MONGO_ATLAS_USER }}
+            - name: "KAFKA_UPSTAR_SERVER"
+              value: ${{ secrets.KAFKA_UPSTAR_SERVER }}
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orquestador
+  namespace: entrevistador-inteligente
+  labels:
+    app: orquestador
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+  selector:
+    app: orquestador
+
