@@ -3,12 +3,6 @@ name: Build and Deploy Docker Image to any AKS Cluster
 on:
   workflow_dispatch:
 
-  workflow_run:
-    workflows:
-      - "Java CI with Maven"
-    types:
-      - completed
-
 jobs:
   build_push_docker_image:
     runs-on: ubuntu-latest
