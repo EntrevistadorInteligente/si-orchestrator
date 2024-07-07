@@ -15,6 +15,7 @@ on:
 jobs:
   build_push_docker_image:
     runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'main' || 'develop' }}
 
     steps:
       - name: Checkout code
@@ -52,6 +53,7 @@ jobs:
   k8s_deploy:
     needs: [ build_push_docker_image ]
     runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'main' || 'develop' }}
 
     steps:
       - name: Checkout code
