@@ -82,4 +82,4 @@ jobs:
           strategy: basic
           namespace: entrevistador-inteligente
           manifests: |
-            ./deploy/aks/cloudspace-dev.deployment.yml
+            ./deploy/aks/cloudspace.deployment.yml
