@@ -21,17 +21,17 @@ spec:
             - containerPort: 8081 # Asegúrate de que el puerto coincida con el puerto que tu aplicación escucha
           env:
             - name: "KAFKA_UPSTAR_USER"
-              value: ${{ secrets.KAFKA_UPSTAR_USER }}
+              value: $KAFKA_UPSTAR_USER
             - name: "KAFKA_UPSTAR_PASSWORD"
-              value: ${{ secrets.KAFKA_UPSTAR_PASSWORD }}
+              value: $KAFKA_UPSTAR_PASSWORD
             - name: "MONGO_ATLAS_CLUSTER"
-              value: ${{ secrets.MONGO_ATLAS_CLUSTER }}
+              value: $MONGO_ATLAS_CLUSTER
             - name: "MONGO_ATLAS_PASSWORD"
-              value: ${{ secrets.MONGO_ATLAS_PASSWORD }}
+              value: $MONGO_ATLAS_PASSWORD
             - name: "MONGO_ATLAS_USER"
-              value: ${{ secrets.MONGO_ATLAS_USER }}
+              value: $MONGO_ATLAS_USER
             - name: "KAFKA_UPSTAR_SERVER"
-              value: ${{ secrets.KAFKA_UPSTAR_SERVER }}
+              value: $KAFKA_UPSTAR_SERVER
           resources:
             requests:
               memory: "256Mi"
