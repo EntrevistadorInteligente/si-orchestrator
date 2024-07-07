@@ -74,12 +74,6 @@ jobs:
         run: |
           kubectl get namespace entrevistador-inteligente || kubectl create namespace entrevistador-inteligente
 
-      - name: Secrets to Kubernetes
-        run: |
-          kubectl create secret generic kafka-upstar --from-literal=KAFKA_UPSTAR_USER=${{ secrets.KAFKA_UPSTAR_USER }} --from-literal=KAFKA_UPSTAR_PASSWORD=${{ secrets.KAFKA_UPSTAR_PASSWORD }} --namespace entrevistador-inteligente
-          kubectl create secret generic mongo-atlas --from-literal=MONGO_ATLAS_CLUSTER=${{ secrets.MONGO_ATLAS_CLUSTER }} --from-literal=MONGO_ATLAS_PASSWORD=${{ secrets.MONGO_ATLAS_PASSWORD }} --from-literal=MONGO_ATLAS_USER=${{ secrets.MONGO_ATLAS_USER }} --namespace entrevistador-inteligente
-          kubectl create secret generic kafka-upstar-server --from-literal=KAFKA_UPSTAR_SERVER=${{ secrets.KAFKA_UPSTAR_SERVER }} --namespace entrevistador-inteligente
-
       - name: Deploy
         uses: Azure/k8s-deploy@v5
         with:
@@ -88,3 +82,10 @@ jobs:
           namespace: entrevistador-inteligente
           manifests: |
             ./deploy/aks/cloudspace.deployment.yml
+        env:
+          KAFKA_UPSTAR_SERVER: ${{ secrets.KAFKA_UPSTAR_SERVER }}
+          KAFKA_UPSTAR_USER: ${{ secrets.KAFKA_UPSTAR_USER }}
+          KAFKA_UPSTAR_PASSWORD: ${{ secrets.KAFKA_UPSTAR_PASSWORD }}
+          MONGO_ATLAS_CLUSTER: ${{ secrets.MONGO_ATLAS_CLUSTER }}
+          MONGO_ATLAS_USER: ${{ secrets.MONGO_ATLAS_USER }}
+          MONGO_ATLAS_PASSWORD: ${{ secrets.MONGO_ATLAS_PASSWORD }}
