@@ -13,7 +13,7 @@ on:
 jobs:
   build_push_docker_image:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    #    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     environment: ${{ github.ref == 'refs/heads/main' && 'main' || 'develop' }}
 
     steps:
@@ -79,7 +79,6 @@ jobs:
           kubectl create secret generic kafka-upstar --from-literal=KAFKA_UPSTAR_USER=${{ secrets.KAFKA_UPSTAR_USER }} --from-literal=KAFKA_UPSTAR_PASSWORD=${{ secrets.KAFKA_UPSTAR_PASSWORD }} --namespace entrevistador-inteligente
           kubectl create secret generic mongo-atlas --from-literal=MONGO_ATLAS_CLUSTER=${{ secrets.MONGO_ATLAS_CLUSTER }} --from-literal=MONGO_ATLAS_PASSWORD=${{ secrets.MONGO_ATLAS_PASSWORD }} --from-literal=MONGO_ATLAS_USER=${{ secrets.MONGO_ATLAS_USER }} --namespace entrevistador-inteligente
           kubectl create secret generic kafka-upstar-server --from-literal=KAFKA_UPSTAR_SERVER=${{ secrets.KAFKA_UPSTAR_SERVER }} --namespace entrevistador-inteligente
-
 
       - name: Deploy
         uses: Azure/k8s-deploy@v5
