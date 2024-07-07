@@ -74,10 +74,15 @@ jobs:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
+      - name: Create namespace if not exists
+        run: |
+          kubectl get namespace entrevistador-inteligente || kubectl create namespace entrevistador-inteligente
+
       - name: Deploy
         uses: Azure/k8s-deploy@v5
         with:
           action: deploy
           strategy: basic
+          namespace: entrevistador-inteligente
           manifests: |
             ./deploy/aks/cloudspace-dev.deployment.yml
