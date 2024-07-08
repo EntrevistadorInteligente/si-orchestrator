@@ -1,6 +1,7 @@
 name: Build and Deploy Docker Image to any AKS Cluster
 
 on:
+
   pull_request:
     branches:
       - develop
@@ -40,6 +41,8 @@ jobs:
           context: .
           push: true
           tags: jamilton1017227239/${{ github.event.repository.name }}:latest
+          cache-from: type=registry,ref=jamilton1017227239/${{ github.event.repository.name }}:latest
+          cache-to: type=inline
 
   k8s_deploy:
     needs: [ build_push_docker_image ]
