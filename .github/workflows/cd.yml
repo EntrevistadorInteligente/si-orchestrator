@@ -1,10 +1,10 @@
 name: Build and Deploy Docker Image to any AKS Cluster
 
 on:
-
-  pull_request:
+  push:
     branches:
       - develop
+      - main
   workflow_dispatch:
 
 jobs:
