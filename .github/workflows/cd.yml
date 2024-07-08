@@ -95,7 +95,8 @@ jobs:
         env:
           DOCKER_IMAGE_TAG: ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
         run: |
-          sed -i 's|${DOCKER_IMAGE_TAG}|$DOCKER_IMAGE_TAG|g' ./deploy/k8s/deployment.yml
+          sed -i "s|\${DOCKER_IMAGE_TAG}|$DOCKER_IMAGE_TAG|g" ./deploy/k8s/deployment.yml
+          cat ./deploy/k8s/deployment.yml
         shell: bash
 
       - name: Deploy
