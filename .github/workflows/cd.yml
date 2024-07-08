@@ -1,6 +1,9 @@
 name: Build and Deploy Docker Image to any K8S Cluster
 
 on:
+  pull_request:
+    branches:
+      - develop
   push:
     branches:
       - develop
