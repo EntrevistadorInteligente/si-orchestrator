@@ -5,6 +5,10 @@ on:
     branches:
       - develop
       - main
+    paths:
+      - 'src/**'
+      - 'pom.xml'
+
   workflow_dispatch:
 
 jobs:
