@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: orquestador
-          image: jamilton1017227239/orquestador:latest
+          image: ${DOCKER_IMAGE_TAG}
           imagePullPolicy: Always
           ports:
             - containerPort: 8081 # Asegúrate de que el puerto coincida con el puerto que tu aplicación escucha

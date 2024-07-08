@@ -40,8 +40,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: jamilton1017227239/${{ github.event.repository.name }}:latest
-          cache-from: type=registry,ref=jamilton1017227239/${{ github.event.repository.name }}:latest
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
           cache-to: type=inline
 
   k8s_deploy:
@@ -87,6 +87,13 @@ jobs:
           --from-literal=MONGO_ATLAS_USER=${{ secrets.MONGO_ATLAS_USER }} \
           --namespace entrevistador-inteligente \
           --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Update vars deployment file
+        env:
+          DOCKER_IMAGE_TAG: ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+        run: |
+          sed -i 's|${DOCKER_IMAGE_TAG}|$DOCKER_IMAGE_TAG|g' deployment.yml
+        shell: bash
 
       - name: Deploy
         uses: Azure/k8s-deploy@v5
