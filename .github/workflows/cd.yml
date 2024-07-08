@@ -1,4 +1,4 @@
-name: Build and Deploy Docker Image to any AKS Cluster
+name: Build and Deploy Docker Image to any K8S Cluster
 
 on:
   push:
