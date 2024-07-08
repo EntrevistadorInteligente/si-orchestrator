@@ -32,7 +32,6 @@ public class OrquestadorEntrevistaService implements OrquestadorEntrevista {
                 .flatMap(ragsIdsDto -> enviarInformacionEntrevistaAPreparador(ragsIdsDto, idEntrevista));
     }
 
-
     @Override
     public Mono<Void> receptorHojaDeVidaMatch(MensajeValidacionMatch mensajeValidacionMatch) {
         log.info(String.format("Recibiendo informacion validacion hoja de vida para entervista id : %s", mensajeValidacionMatch.getIdEntrevista()));

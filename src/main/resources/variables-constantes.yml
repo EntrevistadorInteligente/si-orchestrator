@@ -7,3 +7,7 @@ const:
         urlBase: ${URL_NOTIFICACIONES}
         endpoints:
           enviarEvento: /v1/eventos/enviar/
+      webFluxAnalizador:
+        urlBase: ${URL_ANALIZADOR}
+        endpoints:
+          enviarEvento: /v1/analizador/

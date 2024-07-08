@@ -7,6 +7,7 @@ import com.entrevistador.orquestador.dominio.model.Perfil;
 import com.entrevistador.orquestador.dominio.model.SolicitudHojaDeVida;
 import com.entrevistador.orquestador.dominio.model.enums.TipoNotificacionEnum;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
+import com.entrevistador.orquestador.dominio.port.client.AnalizadorClient;
 import com.entrevistador.orquestador.dominio.port.client.NotificacionesClient;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
 import com.entrevistador.orquestador.dominio.service.ValidadorPdfService;
@@ -23,19 +24,21 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class HojaDeVidaService implements HojaDeVida {
 
-    private final JmsPublisherClient jmsPublisherClient;
     private final ValidadorPdfService validadorPdfService;
     private final HojaDeVidaDao hojaDeVidaDao;
     private final NotificacionesClient notificacionesClient;
+    private final AnalizadorClient analizadorClient;
 
     @Override
-    public Mono<Void> generarSolicitudHojaDeVida(Mono<FilePart> file, String username) {
+    public Mono<HojaDeVidaModel> generarSolicitudHojaDeVida(Mono<FilePart> file, String username) {
         return file.flatMap(this.validadorPdfService::ejecutar)
-                .flatMap(bytes -> this.procesarHojaDeVida(bytes, username));
+                .flatMap(bytes -> this.procesarHojaDeVida(bytes, username))
+                .flatMap(hojaDeVidaModel -> this.hojaDeVidaDao.guardarHojaDeVida(hojaDeVidaModel)
+                        .then(Mono.just(hojaDeVidaModel)));
     }
 
-    private Mono<Void> procesarHojaDeVida(byte[] hojaDeVidaBytes, String username) {
-        return this.jmsPublisherClient.enviarHojaDeVida(
+    private Mono<HojaDeVidaModel> procesarHojaDeVida(byte[] hojaDeVidaBytes, String username) {
+        return this.analizadorClient.enviar(
                 SolicitudHojaDeVida.builder()
                         .username(username)
                         .hojaDeVida(hojaDeVidaBytes)
@@ -60,7 +63,7 @@ public class HojaDeVidaService implements HojaDeVida {
     }
 
     @Override
-    public Mono<Void> actualizarDatosPerfil(String uuid, Perfil perfil) {
+    public Mono<HojaDeVidaModel> actualizarDatosPerfil(String uuid, Perfil perfil) {
         return this.hojaDeVidaDao.actualizarDatosPerfil(uuid, perfil);
     }
 
