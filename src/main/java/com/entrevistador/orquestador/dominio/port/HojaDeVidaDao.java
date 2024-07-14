@@ -1,12 +1,12 @@
 package com.entrevistador.orquestador.dominio.port;
 
-import com.entrevistador.orquestador.dominio.model.dto.HojaDeVidaDto;
-import com.entrevistador.orquestador.dominio.model.dto.PerfilDto;
+import com.entrevistador.orquestador.dominio.model.HojaDeVidaModel;
+import com.entrevistador.orquestador.dominio.model.Perfil;
 import reactor.core.publisher.Mono;
 
 public interface HojaDeVidaDao {
-    Mono<Void> guardarHojaDeVida(HojaDeVidaDto hojaDeVidaDto);
-    Mono<HojaDeVidaDto> obtenerHojaDeVidaPorNombreUsuario(String username);
+    Mono<HojaDeVidaModel> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel);
+    Mono<HojaDeVidaModel> obtenerHojaDeVidaPorNombreUsuario(String username);
     Mono<String> obtenerIdHojaDeVidaRag(String nombre);
-    Mono<Void> actualizarDatosPerfil(String uuid, PerfilDto perfilDto);
+    Mono<HojaDeVidaModel> actualizarDatosPerfil(String uuid, Perfil perfil);
 }

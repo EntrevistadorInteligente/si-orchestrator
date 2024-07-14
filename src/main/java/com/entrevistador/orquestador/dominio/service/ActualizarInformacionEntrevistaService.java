@@ -1,7 +1,7 @@
 package com.entrevistador.orquestador.dominio.service;
 
 import com.entrevistador.orquestador.dominio.model.Entrevista;
-import com.entrevistador.orquestador.dominio.model.dto.InformacionEmpresaDto;
+import com.entrevistador.orquestador.dominio.model.InformacionEmpresa;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -15,10 +15,10 @@ public class ActualizarInformacionEntrevistaService {
         return entrevistaDao.actualizarEstadoHojaDeVida(idEntrevista, esEntrevistaValida);
     }
 
-    public Mono<Void> actualizarInformacionEmpresa(String idEntrevista, InformacionEmpresaDto info) {
+    public Mono<Void> actualizarInformacionEmpresa(String idEntrevista, InformacionEmpresa info) {
         Entrevista entrevista = Entrevista.builder()
                 .uuid(idEntrevista)
-                .informacionEmpresaDto(info)
+                .informacionEmpresa(info)
                 .build();
         return entrevistaDao.actualizarEntrevista(entrevista);
     }

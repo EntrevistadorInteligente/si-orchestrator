@@ -31,7 +31,10 @@ public class EntrevistaEntity {
     private String descripcionVacante;
     @Setter
     private boolean hojaDeVidaValida;
+    @Setter
     private String estadoEntrevista;
     private LocalDateTime fechaCreacion;
+    @Setter
+    private String feedbackUsuario;
 
 }

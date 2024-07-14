@@ -1,7 +1,11 @@
 package com.entrevistador.orquestador.infrastructure.adapter.jms;
 
-import com.entrevistador.orquestador.dominio.model.dto.*;
+import com.entrevistador.orquestador.dominio.model.PosicionEntrevista;
+import com.entrevistador.orquestador.dominio.model.SolicitudGeneracionEntrevista;
+import com.entrevistador.orquestador.dominio.model.SolicitudHojaDeVida;
+import com.entrevistador.orquestador.dominio.model.SolicitudMatch;
 import com.entrevistador.orquestador.dominio.port.jms.JmsPublisherClient;
+import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
 public final class JmsPublisherAdapter implements JmsPublisherClient {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final EntrevistaMapper mapper;
     private static final String SENT_MESSAGE = "Sent message=[";
     private static final String WITH_OFFSET = "] with offset=[";
     private static final String UNABLE_SEND_MESSAGE = "Unable to send message=[";
@@ -37,23 +42,31 @@ public final class JmsPublisherAdapter implements JmsPublisherClient {
     private String topicValidador;
 
     @Override
-    public Mono<Void> enviarHojaDeVida(SolicitudHojaDeVidaDto solicitudHojaDeVidaDto) {
-        return enviarMensaje(hojaDeVidaPublisherTopic, solicitudHojaDeVidaDto, solicitudHojaDeVidaDto.getUsername());
+    public Mono<Void> enviarHojaDeVida(SolicitudHojaDeVida solicitudHojaDeVida) {
+        return Mono.just(this.mapper.mapSolicitudHojaDeVidaSolicitudHojaDeVidaDto(solicitudHojaDeVida))
+                .flatMap(solicitudHojaDeVidaDto ->
+                        enviarMensaje(hojaDeVidaPublisherTopic, solicitudHojaDeVidaDto, solicitudHojaDeVidaDto.getUsername()));
     }
 
     @Override
-    public Mono<Void> enviarInformacionEmpresa(PosicionEntrevistaDto perfil) {
-        return enviarMensaje(topicEmpresa, perfil, perfil.getIdEntrevista());
+    public Mono<Void> enviarInformacionEmpresa(PosicionEntrevista posicionEntrevista) {
+        return Mono.just(this.mapper.mapPosicionEntrevistaToPosicionEntrevistaDto(posicionEntrevista))
+                .flatMap(posicionEntrevistaDto ->
+                        enviarMensaje(topicEmpresa, posicionEntrevistaDto, posicionEntrevistaDto.getIdEntrevista()));
     }
 
     @Override
-    public Mono<Void> generarEntrevista(SolicitudGeneracionEntrevistaDto solicitudGeneracionEntrevista) {
-        return enviarMensaje(topicGenerador, solicitudGeneracionEntrevista, solicitudGeneracionEntrevista.getIdEntrevista());
+    public Mono<Void> generarEntrevista(SolicitudGeneracionEntrevista generacionEntrevista) {
+        return Mono.just(this.mapper.mapSolicitudGeneracionEntrevistaToSolicitudGeneracionEntrevistaDto(generacionEntrevista))
+                .flatMap(solicitudGeneracionEntrevistaDto ->
+                        enviarMensaje(topicGenerador, solicitudGeneracionEntrevistaDto, solicitudGeneracionEntrevistaDto.getIdEntrevista()));
     }
 
     @Override
-    public Mono<Void> validarmatchHojaDeVida(SolicitudMatchDto solicitudMatchDto) {
-        return enviarMensaje(topicValidador, solicitudMatchDto, solicitudMatchDto.getIdEntrevista());
+    public Mono<Void> validarmatchHojaDeVida(SolicitudMatch solicitudMatch) {
+        return Mono.just(this.mapper.mapSolicitudMatchToSolicitudMatchDto(solicitudMatch))
+                .flatMap(solicitudMatchDto ->
+                        enviarMensaje(topicValidador, solicitudMatchDto, solicitudMatchDto.getIdEntrevista()));
     }
 
     private <T> Mono<Void> enviarMensaje(String topic, T mensaje, String identificador) {

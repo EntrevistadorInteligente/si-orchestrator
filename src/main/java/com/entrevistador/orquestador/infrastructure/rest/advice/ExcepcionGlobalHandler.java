@@ -1,9 +1,10 @@
 package com.entrevistador.orquestador.infrastructure.rest.advice;
 
-import com.entrevistador.orquestador.dominio.model.dto.ErrorResponse;
+import com.entrevistador.orquestador.dominio.excepciones.PdfException;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.ErrorResponse;
 import com.entrevistador.orquestador.dominio.model.enums.CodigoErrorEnum;
-import com.entrevistador.orquestador.infrastructure.adapter.exceptions.EntrevistaProcesoException;
-import com.entrevistador.orquestador.infrastructure.adapter.exceptions.LimiteEntrevistaException;
+import com.entrevistador.orquestador.dominio.excepciones.EntrevistaProcesoException;
+import com.entrevistador.orquestador.dominio.excepciones.LimiteEntrevistaException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +26,12 @@ public class ExcepcionGlobalHandler {
     @ExceptionHandler(EntrevistaProcesoException.class)
     public Mono<ResponseEntity<ErrorResponse>> handleEntrevistaProcesoException(EntrevistaProcesoException ex) {
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(),ex.getCode(), ex.getMessage());
+        return Mono.just(new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST));
+    }
+
+    @ExceptionHandler(PdfException.class)
+    public Mono<ResponseEntity<ErrorResponse>> handleHojaDeVidaInvalidaException(PdfException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), ex.getCode(), ex.getMessage());
         return Mono.just(new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST));
     }
 

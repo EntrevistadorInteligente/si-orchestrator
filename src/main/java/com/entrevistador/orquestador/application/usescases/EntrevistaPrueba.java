@@ -1,12 +1,12 @@
 package com.entrevistador.orquestador.application.usescases;
 
-import com.entrevistador.orquestador.dominio.model.dto.IdEntrevistaDto;
-import com.entrevistador.orquestador.dominio.model.dto.SoloPerfilImp;
+import com.entrevistador.orquestador.dominio.model.IdEntrevista;
+import com.entrevistador.orquestador.dominio.model.SoloPerfil;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface EntrevistaPrueba {
-    Flux<SoloPerfilImp> getPerfiles();
+    Flux<SoloPerfil> getPerfiles();
 
-    Mono<IdEntrevistaDto> getIdEntrevista(String perfil);
+    Mono<IdEntrevista> getIdEntrevista(String perfil);
 }
