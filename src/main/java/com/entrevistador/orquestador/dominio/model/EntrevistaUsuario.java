@@ -1,12 +1,12 @@
 package com.entrevistador.orquestador.dominio.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Builder
+@AllArgsConstructor
 public class EntrevistaUsuario {
     private String uuid;
     private String empresa;

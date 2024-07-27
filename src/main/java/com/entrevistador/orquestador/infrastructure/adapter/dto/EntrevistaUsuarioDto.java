@@ -1,9 +1,6 @@
 package com.entrevistador.orquestador.infrastructure.adapter.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-
-import java.util.List;
 
 @Builder
 @Getter
