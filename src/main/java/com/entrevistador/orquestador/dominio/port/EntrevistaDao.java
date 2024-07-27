@@ -1,5 +1,6 @@
 package com.entrevistador.orquestador.dominio.port;
 
+import com.entrevistador.orquestador.dominio.model.EntrevistaUsuario;
 import com.entrevistador.orquestador.infrastructure.adapter.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.model.Entrevista;
 import com.entrevistador.orquestador.dominio.model.EstadoEntrevista;
@@ -29,4 +30,6 @@ public interface EntrevistaDao {
     Flux<Entrevista> consultarUltimasEntrevistas(String username);
 
     Mono<Void> terminarEntrevista(String id,String feedbackUsuario);
+
+    Mono<EntrevistaUsuario> obtenerEntrevistaPorId(String id);
 }

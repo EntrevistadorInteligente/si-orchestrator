@@ -1,18 +1,7 @@
 package com.entrevistador.orquestador.infrastructure.adapter.mapper;
 
-import com.entrevistador.orquestador.dominio.model.SolicitudGeneracionEntrevista;
-import com.entrevistador.orquestador.dominio.model.SolicitudHojaDeVida;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.EstadoEntrevistaDto;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.FormularioDto;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.PosicionEntrevistaDto;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.SolicitudGeneracionEntrevistaDto;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.SolicitudHojaDeVidaDto;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.SolicitudMatchDto;
-import com.entrevistador.orquestador.dominio.model.Entrevista;
-import com.entrevistador.orquestador.dominio.model.EstadoEntrevista;
-import com.entrevistador.orquestador.dominio.model.Formulario;
-import com.entrevistador.orquestador.dominio.model.PosicionEntrevista;
-import com.entrevistador.orquestador.dominio.model.SolicitudMatch;
+import com.entrevistador.orquestador.dominio.model.*;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.*;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
 import com.entrevistador.orquestador.infrastructure.adapter.entity.EntrevistaEntity;
 import org.mapstruct.Mapper;
@@ -67,4 +56,8 @@ public interface EntrevistaMapper {
     SolicitudHojaDeVidaDto mapSolicitudHojaDeVidaSolicitudHojaDeVidaDto(SolicitudHojaDeVida solicitudHojaDeVida);
 
     SolicitudGeneracionEntrevistaDto mapSolicitudGeneracionEntrevistaToSolicitudGeneracionEntrevistaDto(SolicitudGeneracionEntrevista solicitudGeneracionEntrevista);
+
+    EntrevistaUsuarioDto mapEntrevistaUsuarioToEntrevistaUsuarioDto(EntrevistaUsuario entrevistaUsuario);
+
+    EntrevistaUsuario mapEntrevistaEntityToEntrevistaUsuario(EntrevistaEntity entrevistaEntity);
 }

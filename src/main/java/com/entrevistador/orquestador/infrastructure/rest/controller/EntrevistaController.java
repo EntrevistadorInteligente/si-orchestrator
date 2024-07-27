@@ -1,11 +1,8 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
-import com.entrevistador.orquestador.infrastructure.adapter.dto.EstadoEntrevistaDto;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.FeedbackUsuarioDto;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.FormularioDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.*;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
-import com.entrevistador.orquestador.infrastructure.adapter.dto.GenericResponse;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMapper;
 import com.entrevistador.orquestador.infrastructure.adapter.util.SanitizeStringUtil;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +45,7 @@ public class EntrevistaController {
                                 .build())));
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}/estado")
     public Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorId(@PathVariable String id) {
         return this.solicitudEntrevista.obtenerEstadoEntrevistaPorId(SanitizeStringUtil.sanitize(id))
                 .map(this.mapper::mapEstadoEntrevistaToEstadoEntrevistaDto);
@@ -70,4 +67,12 @@ public class EntrevistaController {
                                 .message("Entrevista terminada con exito")
                                 .build())));
     }
+
+
+    @GetMapping(value = "/{id}")
+    public Mono<EntrevistaUsuarioDto> obtenerEntrevistaPorId(@RequestParam String id) {
+        return this.solicitudEntrevista.obtenerEntrevistaPorId(SanitizeStringUtil.sanitize(id))
+                .map(this.mapper::mapEntrevistaUsuarioToEntrevistaUsuarioDto);
+    }
+
 }

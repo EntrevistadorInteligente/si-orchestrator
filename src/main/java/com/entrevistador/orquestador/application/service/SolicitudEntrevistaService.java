@@ -1,12 +1,7 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
-import com.entrevistador.orquestador.dominio.model.EstadoEntrevista;
-import com.entrevistador.orquestador.dominio.model.Formulario;
-import com.entrevistador.orquestador.dominio.model.InformacionEmpresa;
-import com.entrevistador.orquestador.dominio.model.PosicionEntrevista;
-import com.entrevistador.orquestador.dominio.model.ProcesoEntrevista;
-import com.entrevistador.orquestador.dominio.model.SolicitudMatch;
+import com.entrevistador.orquestador.dominio.model.*;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
@@ -48,6 +43,11 @@ public class SolicitudEntrevistaService implements SolicitudEntrevista {
     @Override
     public Mono<Void> terminarEntrevista(String id, String feedbackUsuario) {
         return entrevistaDao.terminarEntrevista(id, feedbackUsuario);
+    }
+
+    @Override
+    public Mono<EntrevistaUsuario> obtenerEntrevistaPorId(String id) {
+        return this.entrevistaDao.obtenerEntrevistaPorId(id);
     }
 
     private Mono<Void> procesarHojaDeVida(String idHojaDeVidaRag, String username, Formulario formulario) {
