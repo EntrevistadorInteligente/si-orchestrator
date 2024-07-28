@@ -1,7 +1,13 @@
 package com.entrevistador.orquestador.application.service;
 
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
-import com.entrevistador.orquestador.dominio.model.*;
+import com.entrevistador.orquestador.dominio.model.EntrevistaUsuario;
+import com.entrevistador.orquestador.dominio.model.EstadoEntrevista;
+import com.entrevistador.orquestador.dominio.model.Formulario;
+import com.entrevistador.orquestador.dominio.model.InformacionEmpresa;
+import com.entrevistador.orquestador.dominio.model.PosicionEntrevista;
+import com.entrevistador.orquestador.dominio.model.ProcesoEntrevista;
+import com.entrevistador.orquestador.dominio.model.SolicitudMatch;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
 import com.entrevistador.orquestador.dominio.port.HojaDeVidaDao;
 import com.entrevistador.orquestador.dominio.port.ProcesoEntrevistaDao;
