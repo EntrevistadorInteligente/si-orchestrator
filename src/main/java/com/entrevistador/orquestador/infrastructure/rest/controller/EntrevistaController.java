@@ -70,7 +70,7 @@ public class EntrevistaController {
 
 
     @GetMapping(value = "/{id}")
-    public Mono<EntrevistaUsuarioDto> obtenerEntrevistaPorId(@RequestParam String id) {
+    public Mono<EntrevistaUsuarioDto> obtenerEntrevistaPorId(@PathVariable String id) {
         return this.solicitudEntrevista.obtenerEntrevistaPorId(SanitizeStringUtil.sanitize(id))
                 .map(this.mapper::mapEntrevistaUsuarioToEntrevistaUsuarioDto);
     }
