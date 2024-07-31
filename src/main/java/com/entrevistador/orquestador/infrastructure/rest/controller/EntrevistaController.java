@@ -1,8 +1,12 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
-import com.entrevistador.orquestador.infrastructure.adapter.dto.*;
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
 import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.EntrevistaUsuarioDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.EstadoEntrevistaDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.FeedbackUsuarioDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.FormularioDto;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.GenericResponse;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMapper;
 import com.entrevistador.orquestador.infrastructure.adapter.util.SanitizeStringUtil;
 import lombok.RequiredArgsConstructor;
