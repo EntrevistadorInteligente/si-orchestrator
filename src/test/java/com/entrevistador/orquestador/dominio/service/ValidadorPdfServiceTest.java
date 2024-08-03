@@ -1,5 +1,6 @@
 package com.entrevistador.orquestador.dominio.service;
 
+import com.entrevistador.orquestador.dominio.excepciones.PdfException;
 import com.entrevistador.orquestador.utils.CustomFilePart;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.buffer.DefaultDataBuffer;
@@ -33,5 +34,36 @@ class ValidadorPdfServiceTest {
                 .verifyComplete();
     }
 
+    @Test
+    void testEjecutarTest_PdfException_HojaDeVidaInvalida() {
+        byte[] bytes = "any".getBytes();
+        DefaultDataBuffer defaultDataBuffer = new DefaultDataBufferFactory().wrap(bytes);
+        FilePart filePart = new CustomFilePart("file", defaultDataBuffer);
 
+        Mono<byte[]> publisher = this.validadorPdfService.ejecutar(filePart);
+
+        StepVerifier
+                .create(publisher)
+                .expectError(PdfException.class)
+                .verify();
+    }
+
+    @Test
+    void testEjecutarTest_PdfException_SizeHojaDeVidaExcedido() {
+        byte[] bytes = new byte[4 * 1024 * 1024];
+        bytes[0] = "%".getBytes()[0];
+        bytes[1] = "P".getBytes()[0];
+        bytes[2] = "D".getBytes()[0];
+        bytes[3] = "F".getBytes()[0];
+        bytes[4] = "-".getBytes()[0];
+        DefaultDataBuffer defaultDataBuffer = new DefaultDataBufferFactory().wrap(bytes);
+        FilePart filePart = new CustomFilePart("file", defaultDataBuffer);
+
+        Mono<byte[]> publisher = this.validadorPdfService.ejecutar(filePart);
+
+        StepVerifier
+                .create(publisher)
+                .expectError(PdfException.class)
+                .verify();
+    }
 }

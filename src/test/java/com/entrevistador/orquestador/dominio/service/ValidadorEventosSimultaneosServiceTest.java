@@ -1,7 +1,7 @@
 package com.entrevistador.orquestador.dominio.service;
 
-import com.entrevistador.orquestador.infrastructure.adapter.dto.RagsIdsDto;
 import com.entrevistador.orquestador.dominio.port.EntrevistaDao;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.RagsIdsDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,8 +26,6 @@ class ValidadorEventosSimultaneosServiceTest {
 
     @Test
     void testEjecutar() {
-
-        String result = "result";
         ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
         Map<String, String> map = Map.of(
                 "idHojaDeVidaRag", "theTitle",
@@ -44,5 +42,4 @@ class ValidadorEventosSimultaneosServiceTest {
                 .expectNext(projection)
                 .verifyComplete();
     }
-
 }

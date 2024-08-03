@@ -67,4 +67,9 @@ public interface EntrevistaMapper {
     SolicitudHojaDeVidaDto mapSolicitudHojaDeVidaSolicitudHojaDeVidaDto(SolicitudHojaDeVida solicitudHojaDeVida);
 
     SolicitudGeneracionEntrevistaDto mapSolicitudGeneracionEntrevistaToSolicitudGeneracionEntrevistaDto(SolicitudGeneracionEntrevista solicitudGeneracionEntrevista);
+
+    @Mapping(target = "idEvento", ignore = true)
+    @Mapping(target = "isHojaDeVidaValida", ignore = true)
+    @Mapping(target = "informacionEmpresa", ignore = true)
+    Entrevista mapOutEntrevistaEntityToEntrevista(EntrevistaEntity entrevistaEntity);
 }
