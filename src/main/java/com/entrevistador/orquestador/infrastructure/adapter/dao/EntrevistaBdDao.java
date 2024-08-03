@@ -84,11 +84,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
     @Override
     public Flux<Entrevista> consultarUltimasEntrevistas(String username) {
         return this.entrevistaRepository.findByUsernameOrderByFechaCreacionDesc(username)
-                .map(entrevistaEntity -> Entrevista.builder()
-                        .uuid(entrevistaEntity.getUuid())
-                        .idHojaDeVidaRag(entrevistaEntity.getIdHojaDeVidaRag())
-                        .fechaCreacion(entrevistaEntity.getFechaCreacion())
-                        .build());
+                .map(this.mapper::mapOutEntrevistaEntityToEntrevista);
     }
 
     @Override
