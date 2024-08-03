@@ -74,4 +74,9 @@ public interface EntrevistaMapper {
     EntrevistaUsuarioDto mapEntrevistaUsuarioToEntrevistaUsuarioDto(EntrevistaUsuario entrevistaUsuario);
 
     EntrevistaUsuario mapEntrevistaEntityToEntrevistaUsuario(EntrevistaEntity entrevistaEntity);
+
+    @Mapping(target = "idEvento", ignore = true)
+    @Mapping(target = "isHojaDeVidaValida", ignore = true)
+    @Mapping(target = "informacionEmpresa", ignore = true)
+    Entrevista mapOutEntrevistaEntityToEntrevista(EntrevistaEntity entrevistaEntity);
 }
