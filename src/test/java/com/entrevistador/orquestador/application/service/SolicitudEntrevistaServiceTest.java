@@ -1,5 +1,6 @@
 package com.entrevistador.orquestador.application.service;
 
+import com.entrevistador.orquestador.dominio.model.EntrevistaUsuario;
 import com.entrevistador.orquestador.dominio.model.EstadoEntrevista;
 import com.entrevistador.orquestador.dominio.model.Formulario;
 import com.entrevistador.orquestador.dominio.model.ProcesoEntrevista;
@@ -103,5 +104,21 @@ class SolicitudEntrevistaServiceTest {
                 .verifyComplete();
 
         verify(this.entrevistaDao, times(1)).terminarEntrevista(anyString(), anyString());
+    }
+
+    @Test
+    void testObtenerEntrevistaPorId() {
+        EntrevistaUsuario entrevistaUsuario = EntrevistaUsuario.builder().build();
+
+        when(this.entrevistaDao.obtenerEntrevistaPorId(anyString())).thenReturn(Mono.just(entrevistaUsuario));
+
+        Mono<EntrevistaUsuario> publisher = this.solicitudEntrevistaService.obtenerEntrevistaPorId("1");
+
+        StepVerifier
+                .create(publisher)
+                .expectNext(entrevistaUsuario)
+                .verifyComplete();
+
+        verify(this.entrevistaDao, times(1)).obtenerEntrevistaPorId(anyString());
     }
 }

@@ -1,7 +1,9 @@
 package com.entrevistador.orquestador.infrastructure.rest.controller;
 
 import com.entrevistador.orquestador.application.usescases.SolicitudEntrevista;
+import com.entrevistador.orquestador.dominio.model.EntrevistaUsuario;
 import com.entrevistador.orquestador.dominio.model.Formulario;
+import com.entrevistador.orquestador.infrastructure.adapter.dto.EntrevistaUsuarioDto;
 import com.entrevistador.orquestador.infrastructure.adapter.dto.FeedbackUsuarioDto;
 import com.entrevistador.orquestador.infrastructure.adapter.dto.FormularioDto;
 import com.entrevistador.orquestador.infrastructure.adapter.dto.GenericResponse;
@@ -62,7 +64,7 @@ class EntrevistaControllerTest {
 
         this.webTestClient
                 .get()
-                .uri(URL.append("/1").toString())
+                .uri(URL.append("/1/estado").toString())
                 .exchange()
                 .expectStatus().isOk();
     }
@@ -95,5 +97,23 @@ class EntrevistaControllerTest {
                 .expectStatus().isOk()
                 .expectBody(GenericResponse.class)
                 .value(GenericResponse::getMessage, equalTo("Entrevista terminada con exito"));
+    }
+
+    @Test
+    @DisplayName("Debe obtener la entrevista por id")
+    void shouldGetInterviewById_WhenGet() {
+        EntrevistaUsuarioDto entrevistaUsuarioDto = EntrevistaUsuarioDto.builder().uuid("any").build();
+
+        when(this.solicitudEntrevista.obtenerEntrevistaPorId(any()))
+                .thenReturn(Mono.just(EntrevistaUsuario.builder().build()));
+        when(this.mapper.mapEntrevistaUsuarioToEntrevistaUsuarioDto(any())).thenReturn(entrevistaUsuarioDto);
+
+        this.webTestClient
+                .get()
+                .uri(URL.append("/1").toString())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(EntrevistaUsuarioDto.class)
+                .value(EntrevistaUsuarioDto::getUuid, equalTo(entrevistaUsuarioDto.getUuid()));
     }
 }
