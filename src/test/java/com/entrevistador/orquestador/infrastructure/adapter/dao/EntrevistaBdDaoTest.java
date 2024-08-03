@@ -2,6 +2,7 @@ package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
 import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.Entrevista;
+import com.entrevistador.orquestador.dominio.model.EntrevistaUsuario;
 import com.entrevistador.orquestador.dominio.model.EstadoEntrevista;
 import com.entrevistador.orquestador.dominio.model.Formulario;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
@@ -216,5 +217,23 @@ class EntrevistaBdDaoTest {
 
         verify(this.entrevistaRepository, times(1)).findById(anyString());
         verify(this.entrevistaRepository, times(1)).save(any());
+    }
+
+    @Test
+    void testObtenerEntrevistaPorId() {
+        EntrevistaUsuario entrevistaUsuario = EntrevistaUsuario.builder().build();
+
+        when(this.entrevistaRepository.findById(anyString())).thenReturn(Mono.just(EntrevistaEntity.builder().build()));
+        when(this.mapper.mapEntrevistaEntityToEntrevistaUsuario(any())).thenReturn(entrevistaUsuario);
+
+        Mono<EntrevistaUsuario> publisher = this.entrevistaBdDao.obtenerEntrevistaPorId("any");
+
+        StepVerifier
+                .create(publisher)
+                .expectNext(entrevistaUsuario)
+                .verifyComplete();
+
+        verify(this.entrevistaRepository, times(1)).findById(anyString());
+        verify(this.mapper, times(1)).mapEntrevistaEntityToEntrevistaUsuario(any());
     }
 }
