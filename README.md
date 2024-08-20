@@ -46,26 +46,26 @@ hexagonal (puertos y adaptadores):
 
  ```
 src/ 
-├── main/ 
-│ ├── java/ 
-│ │ └── com/ 
-│ │ └── entrevistador/ 
-│ │ └── orquestador/ 
-│ │ ├── application/ # Capa de aplicación 
-│ │ │ ├── service/ # Servicios de aplicación 
-│ │ │ └── usecases/ # Casos de usos de aplicación
-│ │ ├── dominio/ # Capa de dominio 
-│ │ │ ├── excepciones/ # Excepciones de dominio 
-│ │ │ ├── model/ # Modelos de dominio 
-│ │ │ ├── port/ # (puertos) 
-│ │ │ └── service/ # Servicios de dominio 
-│ │ ├── infrastructure/ # Capa de infraestructura 
-│ │ │ ├── adapter/ # Adaptadores (implementaciones de puertos) 
-│ │ │ ├── beanconfiguration/ # Configuraciones de Spring 
-│ │ │ ├── properties/ # Propiedades de la aplicación
-│ │ │ └── rest/ # Enpoints REST HTTP 
-│ ├── resources/ 
-│ │ └── application.properties 
+└── main/ 
+    ├── java/ 
+    │   └── com/ 
+    │       └── entrevistador/ 
+    │           └── orquestador/ 
+    │               ├── application/ # Capa de aplicación 
+    │               │   ├── service/ # Servicios de aplicación 
+    │               │   └── usecases/ # Casos de usos de aplicación
+    │               ├── dominio/ # Capa de dominio 
+    │               │   ├── excepciones/ # Excepciones de dominio 
+    │               │   ├── model/ # Modelos de dominio 
+    │               │   ├── port/ # (puertos) 
+    │               │   └── service/ # Servicios de dominio 
+    │               └── infrastructure/ # Capa de infraestructura 
+    │                   ├── adapter/ # Adaptadores (implementaciones de puertos) 
+    │                   ├── beanconfiguration/ # Configuraciones de Spring 
+    │                   ├── properties/ # Propiedades de la aplicación
+    │                   └── rest/ # Enpoints REST HTTP 
+    └── resources/ 
+        └── application.properties 
  ```
 
 ## Requisitos Previos
