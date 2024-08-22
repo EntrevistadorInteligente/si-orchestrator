@@ -2,13 +2,12 @@ package com.entrevistador.orquestador.infrastructure.adapter.dto;
 
 
 import com.entrevistador.orquestador.infrastructure.adapter.constants.ValidationsMessagesData;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
