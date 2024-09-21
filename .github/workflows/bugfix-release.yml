@@ -1,0 +1,57 @@
+name: Bugfix Release Preparation
+
+on:
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  update-release:
+    if: github.event.pull_request.merged == true && contains(github.base_ref, 'release/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Remove -SNAPSHOT from pom.xml in release branch
+        run: |
+          sed -i 's/-SNAPSHOT//g' pom.xml
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add pom.xml
+          git commit -m "Remove -SNAPSHOT from version"
+          git push origin ${{ github.base_ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch latest changes
+        run: |
+          BRANCH_NAME=${{ github.base_ref }}
+          echo "Fetching latest changes from $BRANCH_NAME"
+          git fetch origin $BRANCH_NAME
+          git checkout $BRANCH_NAME
+
+      - name: Read version from pom.xml in release branch
+        id: read_pom_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create GitHub release
+        run: |
+          TAG_NAME=${{env.VERSION}}
+
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
+
+          gh release create "$TAG_NAME" --title "Release v$TAG_NAME" --notes "Release version $TAG_NAME"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,79 @@
+name: Bugfix Preparation
+
+on:
+  create:
+    branches:
+      - 'bugfix/**'
+
+jobs:
+  update-release:
+    if: github.event.ref_type == 'branch' && startsWith(github.ref, 'refs/heads/bugfix/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Read version from pom.xml in release branch
+        id: extract_version
+        run: |
+          RELEASE_BRANCH=$(git branch -r | grep -E 'release/[0-9]+\.[0-9]+' | sort -V | tail -n 1 | sed 's/origin\///')
+          
+          echo "Base branch is $RELEASE_BRANCH"
+          
+          git checkout $RELEASE_BRANCH
+          
+          POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Current pom version from release branch: $POM_VERSION"
+          echo "::set-output name=POM_VERSION::$POM_VERSION"
+
+      - name: Increment pom patch version in release branch
+        run: |
+          MAJOR=$(echo ${{ steps.extract_version.outputs.POM_VERSION }} | cut -d. -f1)
+          MINOR=$(echo ${{ steps.extract_version.outputs.POM_VERSION }} | cut -d. -f2)
+          PATCH=$(echo ${{ steps.extract_version.outputs.POM_VERSION }} | cut -d. -f3)
+          NEXT_PATCH=$((PATCH + 1))
+          NEW_POM_VERSION="${MAJOR}.${MINOR}.${NEXT_PATCH}-SNAPSHOT"
+          
+          echo "NEW_POM_VERSION=$NEW_POM_VERSION" >> $GITHUB_ENV
+          mvn versions:set -DnewVersion=$NEW_POM_VERSION -DgenerateBackupPoms=false
+          echo "::set-output name=NEW_POM_VERSION::$NEW_POM_VERSION"
+
+      - name: Commit and push changes
+        run: |
+          NEW_POM_VERSION=${{env.NEW_POM_VERSION}}
+          
+          echo "New pom version in release branch: $NEW_POM_VERSION"
+          
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add pom.xml
+          git commit -m "Bump version to $NEW_POM_VERSION for bugfix"
+          git push origin HEAD
+
+  update-bugfix:
+    runs-on: ubuntu-latest
+    needs: update-release
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Pull changes from release branch
+        run: |
+          RELEASE_BRANCH=$(git branch -r | grep -E 'release/[0-9]+\.[0-9]+' | sort -V | tail -n 1 | sed 's/origin\///')
+          
+          echo "Base branch is $RELEASE_BRANCH"
+          echo "Destination branch is ${{github.ref_name}}"
+          
+          git pull origin $RELEASE_BRANCH
+
+      - name: Push changes to bugfix branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git push origin HEAD

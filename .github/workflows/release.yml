@@ -1,0 +1,83 @@
+name: Release Preparation
+
+on:
+  create:
+    branches:
+      - 'release/[0-9]+.[0-9]+'
+
+jobs:
+  update-develop:
+    if: github.event.ref_type == 'branch' && startsWith(github.ref, 'refs/heads/release/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Increment minor version in develop branch
+        run: |
+          git checkout develop
+          CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
+          MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
+          NEXT_MINOR=$((MINOR + 1))
+          NEW_VERSION="${MAJOR}.${NEXT_MINOR}.0-SNAPSHOT"
+          mvn versions:set -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add pom.xml
+          git commit -m "Bump pom version from $CURRENT_VERSION to $NEW_VERSION"
+          git push origin develop
+
+  update-release:
+    runs-on: ubuntu-latest
+    needs: update-develop
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Remove `-SNAPSHOT` from version in release branch
+        run: |
+          git checkout ${{ github.ref_name }}
+          sed -i 's/-SNAPSHOT//g' pom.xml
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add pom.xml
+          git commit -m "Remove -SNAPSHOT from version"
+          git push origin ${{ github.ref_name }}
+
+      - name: Read version from pom.xml
+        id: read_pom_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        run: |
+          TAG_NAME=${{env.VERSION}}
+
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
+
+          gh release create "$TAG_NAME" --title "Release v$TAG_NAME" --notes "Release version $TAG_NAME"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
