@@ -9,6 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class EntrevistaUsuario {
     private String uuid;
+    private String username;
     private String empresa;
     private String perfilEmpresa;
     private String seniorityEmpresa;
