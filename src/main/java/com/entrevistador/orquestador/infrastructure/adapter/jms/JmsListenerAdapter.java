@@ -97,7 +97,7 @@ public class JmsListenerAdapter {
         final ObjectMapper objectMapper = new ObjectMapper();
         try {
             EntrevistaDto entrevistaDto = objectMapper.readValue(jsonData, EntrevistaDto.class);
-            Mono.just(this.mapper.mapEntrevistaDtoToEntrevistaModel(entrevistaDto))
+            Mono.just(this.mapper.mapEntrevistaDtoToEntrevistaModel(entrevistaDto   ))
                     .flatMap(this.orquestadorEntrevista::actualizarEstadoEntrevistaPorPreguntas)
                     .block();
         } catch (JsonProcessingException e) {

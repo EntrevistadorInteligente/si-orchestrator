@@ -13,4 +13,5 @@ public class EstadoEntrevistaDto {
     private String idEntrevista;
     @JsonProperty("estadoEntrevista")
     private String estadoEntrevista;
+    private String username;
 }

@@ -18,4 +18,5 @@ public class EntrevistaUsuarioDto {
     private String pais;
     private String descripcionVacante;
     private String estadoEntrevista;
+    private String username;
 }

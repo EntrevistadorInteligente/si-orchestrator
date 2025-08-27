@@ -5,10 +5,7 @@ import com.entrevistador.orquestador.infrastructure.adapter.dto.IdEntrevistaDto;
 import com.entrevistador.orquestador.infrastructure.adapter.dto.SoloPerfilDto;
 import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaPruebaMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -18,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 @RestController
 @RequestMapping("/v1/entrevistador/public")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class VistaPreviaEntrevistaController {
 
     private final EntrevistaPrueba entrevistaPrueba;
