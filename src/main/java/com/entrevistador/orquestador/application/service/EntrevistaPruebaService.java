@@ -6,6 +6,7 @@ import com.entrevistador.orquestador.dominio.model.SoloPerfil;
 import com.entrevistador.orquestador.dominio.port.EntrevistaPruebaDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -21,6 +22,7 @@ public class EntrevistaPruebaService implements EntrevistaPrueba {
     }
 
     @Override
+    @Transactional
     public Mono<IdEntrevista> getIdEntrevista(String perfil) {
         return this.entrevistaPruebaDao.getIdEntrevistaByPerfil(perfil);
     }

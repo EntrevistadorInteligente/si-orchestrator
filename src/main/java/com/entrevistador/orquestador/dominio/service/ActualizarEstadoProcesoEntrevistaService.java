@@ -7,9 +7,10 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
-public class ActualizarEstadoProcesoEntrevistaService {
-    private final ProcesoEntrevistaDao procesoEntrevistaDao;
 
+public class ActualizarEstadoProcesoEntrevistaService {
+
+    private final ProcesoEntrevistaDao procesoEntrevistaDao;
     public Mono<Void> ejecutar(ProcesoEntrevista procesoEntrevista) {
         return this.procesoEntrevistaDao
                 .obtenerEventoPorId(procesoEntrevista.getUuid())

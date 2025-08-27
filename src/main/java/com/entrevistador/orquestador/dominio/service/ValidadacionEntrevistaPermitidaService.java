@@ -70,7 +70,9 @@ public class ValidadacionEntrevistaPermitidaService {
 
     private Mono<EstadoEntrevistaDto> obtenerEstadoEntrevistaPorUsuario(String username) {
         return entrevistaDao.obtenerEstadoEntrevistaPorUsuario(username)
-                .map(entrevista -> new EstadoEntrevistaDto(entrevista.getIdEntrevista(), entrevista.getEstadoEntrevista()))
+                .map(entrevista -> new EstadoEntrevistaDto(entrevista.getIdEntrevista(),
+                        entrevista.getEstadoEntrevista(),
+                        entrevista.getUsername()))
                 .switchIfEmpty(Mono.empty());
     }
 }

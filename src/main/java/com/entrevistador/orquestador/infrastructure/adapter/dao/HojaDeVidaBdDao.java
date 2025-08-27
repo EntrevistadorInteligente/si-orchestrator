@@ -19,6 +19,7 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
     private final HojaDeVidaRepository hojaDeVidaRepository;
     private final HojaDeVidaMapper mapper;
 
+    @Override
     public Mono<HojaDeVidaModel> guardarHojaDeVida(HojaDeVidaModel hojaDeVidaModel){
         HojaDeVidaEntity entity = this.mapper.mapHojaDeVidaModelToHojaDeVidaEntity(hojaDeVidaModel);
 
@@ -27,15 +28,18 @@ public class HojaDeVidaBdDao implements HojaDeVidaDao {
                 .map(this.mapper::mapHojaDeVidaEntityToHojaDeVida);
     }
 
+    @Override
     public Mono<String> obtenerIdHojaDeVidaRag(String username){
         final String usernameError = "Username no encontrado. Username: %s";
         final String idRagError = "El campo idHojaDeVidaRag del username \"%s\" es nulo";
         return this.hojaDeVidaRepository.findFirstByUsernameOrderByFechaCreacionDesc(username)
                 .switchIfEmpty(Mono.error(new UsernameNoEncontradoException(String.format(usernameError, username))))
+                .filter(hojaDeVidaEntity -> hojaDeVidaEntity.getIdHojaDeVidaRag() != null)
                 .map(HojaDeVidaEntity::getIdHojaDeVidaRag)
                 .switchIfEmpty(Mono.error(new IdHojaDeVidaRagNuloException(String.format(idRagError, username))));
     }
 
+    @Override
     public Mono<HojaDeVidaModel> obtenerHojaDeVidaPorNombreUsuario(String username){
         return this.hojaDeVidaRepository.findFirstByUsernameAndEstadoHojaDeVida(username,EstadoHojaDeVidaEnum.US.name())
                 .map(this.mapper::mapHojaDeVidaEntityToHojaDeVida);

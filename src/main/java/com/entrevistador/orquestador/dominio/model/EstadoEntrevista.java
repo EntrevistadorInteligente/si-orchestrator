@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class EstadoEntrevista {
     private String idEntrevista;
     private String estadoEntrevista;
+    private String username;
 }

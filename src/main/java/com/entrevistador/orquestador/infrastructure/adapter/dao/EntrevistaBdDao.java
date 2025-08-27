@@ -2,6 +2,7 @@ package com.entrevistador.orquestador.infrastructure.adapter.dao;
 
 import com.entrevistador.orquestador.dominio.excepciones.IdNoEncontradoException;
 import com.entrevistador.orquestador.dominio.model.Entrevista;
+import com.entrevistador.orquestador.dominio.model.EntrevistaUsuario;
 import com.entrevistador.orquestador.dominio.model.EstadoEntrevista;
 import com.entrevistador.orquestador.dominio.model.Formulario;
 import com.entrevistador.orquestador.dominio.model.enums.EstadoEntrevistaEnum;
@@ -12,6 +13,7 @@ import com.entrevistador.orquestador.infrastructure.adapter.mapper.EntrevistaMap
 import com.entrevistador.orquestador.infrastructure.adapter.repository.EntrevistaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -30,6 +32,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
     }
 
     @Override
+    @Transactional
     public Mono<Void> actualizarEntrevista(Entrevista entrevista) {
         return this.entrevistaRepository.findById(entrevista.getUuid())
                 .switchIfEmpty(Mono.error(new IdNoEncontradoException(String.format(ID_DE_ESTADO_NO_ENCONTRADO_ID, entrevista.getUuid()))))
@@ -44,6 +47,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
     }
 
     @Override
+    @Transactional
     public Mono<Void> actualizarEstadoHojaDeVida(String idEntrevista, boolean esEntrevistaValida) {
         return this.entrevistaRepository.findById(idEntrevista)
                 .flatMap(entrevista -> {
@@ -55,6 +59,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
 
 
     @Override
+    @Transactional
     public Mono<Void> actualizarIdInformacionEmpresaRag(String idEntrevista, String idInformacionEmpresaRag) {
         return this.entrevistaRepository.findById(idEntrevista)
                 .flatMap(entrevista -> {
@@ -77,6 +82,7 @@ public class EntrevistaBdDao implements EntrevistaDao {
     }
 
     @Override
+    @Transactional
     public Mono<Void> actualizarEstadoEntrevista(String idEntrevista, EstadoEntrevistaEnum estadoEntrevistaEnum) {
         return this.entrevistaRepository.actualizarEstadoEntrevistaPorId(idEntrevista, estadoEntrevistaEnum.name());
     }
@@ -84,14 +90,11 @@ public class EntrevistaBdDao implements EntrevistaDao {
     @Override
     public Flux<Entrevista> consultarUltimasEntrevistas(String username) {
         return this.entrevistaRepository.findByUsernameOrderByFechaCreacionDesc(username)
-                .map(entrevistaEntity -> Entrevista.builder()
-                        .uuid(entrevistaEntity.getUuid())
-                        .idHojaDeVidaRag(entrevistaEntity.getIdHojaDeVidaRag())
-                        .fechaCreacion(entrevistaEntity.getFechaCreacion())
-                        .build());
+                .map(this.mapper::mapOutEntrevistaEntityToEntrevista);
     }
 
     @Override
+    @Transactional
     public Mono<Void> terminarEntrevista(String id, String feedbackUsuario) {
         return this.entrevistaRepository.findById(id)
                 .flatMap(entrevista -> {
@@ -100,6 +103,12 @@ public class EntrevistaBdDao implements EntrevistaDao {
                     return entrevistaRepository.save(entrevista);
                 })
                 .then();
+    }
+
+    @Override
+    public Mono<EntrevistaUsuario> obtenerEntrevistaPorId(String id) {
+        return this.entrevistaRepository.findById(id)
+                .map(this.mapper::mapEntrevistaEntityToEntrevistaUsuario);
     }
 
 }
